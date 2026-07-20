@@ -1,0 +1,13 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/kumospace-api-openapi.json
+summary:
+  types:
+  - http
+schemes:
+- name: firebase
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  sources:
+  - openapi/kumospace-api-openapi.json
