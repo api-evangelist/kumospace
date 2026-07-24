@@ -1,0 +1,604 @@
+openapi: 3.0.0
+info:
+  title: '@kumo/api Account Chat API'
+  contact: {}
+servers:
+- url: /
+tags:
+- name: Chat
+paths:
+  /v1/chat/channel:
+    post:
+      operationId: CreateChatChannel
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiCreateChatChannelResponse'
+      description: 'Create a persistent chat channel. This can be used to create
+
+        any type of persistent chat channel, space, floor, dm, etc.'
+      summary: Create a persistent chat channel.
+      tags:
+      - Chat
+      security:
+      - firebase: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiCreateChatChannelRequest'
+  /v1/chat/channel/{channelUrl}/preferences:
+    post:
+      operationId: SetChannelPreferences
+      responses:
+        '204':
+          description: No content
+      tags:
+      - Chat
+      security:
+      - firebase: []
+      parameters:
+      - in: path
+        name: channelUrl
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiSetChannelPrefencesRequest'
+  /v1/chat/channel/{channelUrl}:
+    patch:
+      operationId: UpdateCustomChannel
+      responses:
+        '200':
+          description: Updated
+      tags:
+      - Chat
+      security:
+      - firebase: []
+      parameters:
+      - in: path
+        name: channelUrl
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiUpdateCustomChannelRequest'
+    delete:
+      operationId: DeleteCustomChannel
+      responses:
+        '200':
+          description: ''
+      tags:
+      - Chat
+      security:
+      - firebase: []
+      parameters:
+      - in: path
+        name: channelUrl
+        required: true
+        schema:
+          type: string
+  /v1/chat/channel/{channelUrl}/unarchive:
+    put:
+      operationId: UnarchiveChannel
+      responses:
+        '200':
+          description: ''
+      tags:
+      - Chat
+      security:
+      - firebase: []
+      parameters:
+      - in: path
+        name: channelUrl
+        required: true
+        schema:
+          type: string
+  /v1/chat/channel/{channelUrl}/file-messages/{messageId}:
+    delete:
+      operationId: SoftDeleteFileMessage
+      responses:
+        '200':
+          description: ''
+      description: 'Soft delete file messages. Sendbird UI Kit doesn''t allow
+
+        deleting file messages, so we have to do it using their API.'
+      summary: Soft delete file messages.
+      tags:
+      - Chat
+      security:
+      - firebase: []
+      parameters:
+      - in: path
+        name: channelUrl
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: messageId
+        required: true
+        schema:
+          type: string
+  /v1/chat/channel/{channelUrl}/messages/{messageId}:
+    get:
+      operationId: GetChatMessage
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatMessageBase'
+      tags:
+      - Chat
+      security:
+      - firebase: []
+      parameters:
+      - in: path
+        name: channelUrl
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: messageId
+        required: true
+        schema:
+          type: string
+    delete:
+      operationId: DeleteMessages
+      responses:
+        '200':
+          description: ''
+      description: 'We delete previous soft deleted messages, in case
+
+        all thread replies are also deleted.'
+      summary: Hard deletes soft deleted messages.
+      tags:
+      - Chat
+      security:
+      - firebase: []
+      parameters:
+      - in: path
+        name: channelUrl
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: messageId
+        required: true
+        schema:
+          type: string
+  /v1/chat/channel/{channelUrl}/members:
+    put:
+      operationId: UpdateChannelMembers
+      responses:
+        '204':
+          description: No content
+      description: Adds users to a custom private channe;
+      summary: Adds users to a custom private channel
+      tags:
+      - Chat
+      security:
+      - firebase: []
+      parameters:
+      - in: path
+        name: channelUrl
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The space Uid, users to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateChannelMembersRequest'
+              description: The space Uid, users to add
+  /v1/chat/search:
+    get:
+      operationId: SearchChatMessages
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse_ApiSearchMessagesResponse_'
+      tags:
+      - Chat
+      security:
+      - firebase: []
+      parameters:
+      - in: query
+        name: query
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: spaceUid
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: next
+        required: false
+        schema:
+          type: string
+components:
+  schemas:
+    ApiCreateChatChannelResponse:
+      properties:
+        channelUrl:
+          type: string
+      required:
+      - channelUrl
+      type: object
+    MessageLinkInfo:
+      properties:
+        url:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        previewImageUrl:
+          type: string
+      required:
+      - url
+      - title
+      - description
+      type: object
+      additionalProperties: false
+    ChatMessageBase:
+      properties:
+        id:
+          type: string
+        parentMessageId:
+          type: string
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        unread:
+          type: boolean
+        edited:
+          type: boolean
+        linkInfo:
+          $ref: '#/components/schemas/MessageLinkInfo'
+        reactions:
+          items:
+            $ref: '#/components/schemas/MessageReactionInfo'
+          type: array
+        threadInfo:
+          allOf:
+          - $ref: '#/components/schemas/MessageThreadInfo'
+          nullable: true
+        files:
+          items:
+            $ref: '#/components/schemas/ChatMessageFile'
+          type: array
+        type:
+          type: string
+          enum:
+          - chat
+          nullable: false
+        customType:
+          type: string
+        data:
+          $ref: '#/components/schemas/Record_string.unknown_'
+        isAdmin:
+          type: boolean
+        senderName:
+          type: string
+        sendbirdProfileUrl:
+          type: string
+        range:
+          $ref: '#/components/schemas/ChatMessageBaseRange'
+        senderId:
+          type: string
+      required:
+      - id
+      - timestamp
+      - unread
+      - type
+      - senderName
+      - range
+      - senderId
+      type: object
+      additionalProperties: false
+    Record_string.unknown_:
+      properties: {}
+      type: object
+      description: Construct a type with a set of properties K of type T
+    ApiCreateGroupDmsChannelRequest:
+      properties:
+        userIds:
+          items:
+            type: string
+          type: array
+          description: 'The user ids to create the group_dms
+
+            channel with'
+        spaceUid:
+          type: string
+          description: The stable uid for a space
+        channelType:
+          type: string
+          enum:
+          - group_dms
+          nullable: false
+          description: The type of channel to create
+      required:
+      - userIds
+      - spaceUid
+      - channelType
+      type: object
+    ApiSearchChannel:
+      properties:
+        url:
+          type: string
+        name:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/Record_string.never_'
+      required:
+      - url
+      - name
+      - metadata
+      type: object
+      additionalProperties: false
+    Range.room:
+      enum:
+      - room
+      type: string
+    ChatMessageBaseRange:
+      anyOf:
+      - $ref: '#/components/schemas/Range.custom'
+      - $ref: '#/components/schemas/Range.room'
+      - $ref: '#/components/schemas/Range.space'
+      - $ref: '#/components/schemas/Range.user'
+    Range.user:
+      enum:
+      - user
+      type: string
+    ApiCreateCustomChannelRequest:
+      properties:
+        isPrivate:
+          type: boolean
+          description: 'Whether the channel is private or not. Public channels contain all space members,
+
+            and whenever a member is added to the space, they are added to public channels. Private
+
+            channels'' members are added manually.'
+        name:
+          type: string
+          description: Name of the new channel
+        spaceUid:
+          type: string
+          description: The stable uid for a space
+        channelType:
+          type: string
+          enum:
+          - custom
+          nullable: false
+          description: The type of channel to create
+      required:
+      - name
+      - spaceUid
+      - channelType
+      type: object
+    MessageThreadInfo:
+      properties:
+        replyCount:
+          type: number
+          format: double
+        lastRepliedAt:
+          type: number
+          format: double
+        replyUsers:
+          items:
+            $ref: '#/components/schemas/MessageThreadUserInfo'
+          type: array
+      required:
+      - replyCount
+      - lastRepliedAt
+      - replyUsers
+      type: object
+      additionalProperties: false
+    PaginatedResponse_ApiSearchMessagesResponse_:
+      description: A page of items.  Useful for breaking up a large dataset into smaller chunks.
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/ApiSearchMessagesResponse'
+          type: array
+          description: The page of items.
+        metadata:
+          properties:
+            count:
+              type: number
+              format: double
+              description: The number of items sent.
+            next:
+              type: string
+              description: 'A pagination cursor.  If specified, there is another page of results that
+
+                can be requested by appending this value as a query parameter called
+
+                "next".'
+          required:
+          - count
+          type: object
+          description: 'Metadata about the page of items.  Contains a pagination cursor called
+
+            "next" if there is another page of items.'
+      required:
+      - items
+      - metadata
+      type: object
+      additionalProperties: false
+    MessageReactionInfo:
+      properties:
+        key:
+          type: string
+        updatedAt:
+          type: number
+          format: double
+        users:
+          items:
+            $ref: '#/components/schemas/UserInfo'
+          type: array
+        imageUrl:
+          type: string
+      required:
+      - key
+      - updatedAt
+      - users
+      type: object
+      additionalProperties: false
+    Range.custom:
+      enum:
+      - custom
+      type: string
+    ApiUpdateCustomChannelRequest:
+      properties:
+        newName:
+          type: string
+          description: New name for the channel
+      required:
+      - newName
+      type: object
+      additionalProperties: false
+    ApiCreateChatChannelRequest:
+      anyOf:
+      - $ref: '#/components/schemas/ApiCreateUserChannelRequest'
+      - $ref: '#/components/schemas/ApiCreateCustomChannelRequest'
+      - $ref: '#/components/schemas/ApiCreateGroupDmsChannelRequest'
+    UserInfo:
+      properties:
+        firebaseUid:
+          type: string
+        nickname:
+          type: string
+      required:
+      - firebaseUid
+      - nickname
+      type: object
+      additionalProperties: false
+    ApiSearchMessagesResponse:
+      properties:
+        message:
+          $ref: '#/components/schemas/ChatMessageBase'
+        channel:
+          $ref: '#/components/schemas/ApiSearchChannel'
+      required:
+      - message
+      - channel
+      type: object
+      additionalProperties: false
+    Record_string.never_:
+      properties: {}
+      type: object
+      description: Construct a type with a set of properties K of type T
+    ChatMessageFile:
+      properties:
+        fileSize:
+          type: number
+          format: double
+        fileName:
+          type: string
+        mimeType:
+          type: string
+        fileUrl:
+          type: string
+      required:
+      - fileSize
+      - fileName
+      - mimeType
+      - fileUrl
+      type: object
+      additionalProperties: false
+    MessageThreadUserInfo:
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        profileUrl:
+          type: string
+      required:
+      - id
+      - name
+      - profileUrl
+      type: object
+      additionalProperties: false
+    ApiCreateUserChannelRequest:
+      properties:
+        userIds:
+          items:
+            type: string
+          type: array
+          description: 'The user ids to create the direct_message
+
+            channel with.'
+        spaceUid:
+          type: string
+          description: The stable uid for a space
+        channelType:
+          type: string
+          enum:
+          - user
+          nullable: false
+          description: The type of channel to create
+      required:
+      - userIds
+      - spaceUid
+      - channelType
+      type: object
+    ApiSetChannelPrefencesRequest:
+      properties:
+        isMuted:
+          type: boolean
+        isHidden:
+          type: boolean
+      required:
+      - isMuted
+      type: object
+      additionalProperties: false
+    Range.space:
+      enum:
+      - space
+      type: string
+    UpdateChannelMembersRequest:
+      properties:
+        memberIdsToRemove:
+          items:
+            type: string
+          type: array
+        memberIdsToAdd:
+          items:
+            type: string
+          type: array
+      required:
+      - memberIdsToRemove
+      - memberIdsToAdd
+      type: object
+  securitySchemes:
+    firebase:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

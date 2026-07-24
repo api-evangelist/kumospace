@@ -1,0 +1,116 @@
+openapi: 3.0.0
+info:
+  title: '@kumo/api Account Demo API'
+  contact: {}
+servers:
+- url: /
+tags:
+- name: Demo
+paths:
+  /v1/demo:
+    post:
+      operationId: Create
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiCreateDemoSpaceResponse'
+      tags:
+      - Demo
+      security:
+      - firebase: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiCreateDemoSpaceRequest'
+  /v1/demo/claim:
+    post:
+      operationId: ClaimDemoSpace
+      responses:
+        '204':
+          description: No content
+      description: Claims a space. Only users with no spaces can claim a space.
+      summary: Claims a space.
+      tags:
+      - Demo
+      security:
+      - firebase: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiClaimDemoSpaceRequest'
+components:
+  schemas:
+    ApiClaimDemoSpaceRequest:
+      description: A request for a user to claim a demo space
+      properties:
+        spaceName:
+          type: string
+          description: The name of the space to claim
+          example: demo-space-1
+        newSpaceName:
+          type: string
+        newDisplayName:
+          type: string
+        newUseCase:
+          $ref: '#/components/schemas/UseCase'
+      required:
+      - spaceName
+      - newSpaceName
+      - newDisplayName
+      - newUseCase
+      type: object
+      additionalProperties: false
+    ApiCreateDemoSpaceResponse:
+      properties:
+        spaceName:
+          type: string
+        uid:
+          type: string
+      required:
+      - spaceName
+      - uid
+      type: object
+      additionalProperties: false
+    ApiCreateDemoSpaceRequest:
+      description: A request to create a new space.
+      properties:
+        useCase:
+          $ref: '#/components/schemas/UseCase'
+          description: The main purpose of this space.
+        roomTemplateId:
+          type: string
+          description: 'The template to use for the default room.  Defaults to a template
+
+            matching the request''s useCase property.'
+        isDryRun:
+          type: boolean
+          description: If true, perform all validation, but don't actually create the space.
+      type: object
+      additionalProperties: false
+    UseCase:
+      description: How the user plans to use the space.
+      enum:
+      - culture
+      - productivity
+      - communication
+      - visibility
+      - engagement
+      - other
+      - events
+      - education
+      - friends
+      type: string
+  securitySchemes:
+    firebase:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

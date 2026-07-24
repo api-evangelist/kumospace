@@ -1,0 +1,106 @@
+openapi: 3.0.0
+info:
+  title: '@kumo/api Account MusicTrack API'
+  contact: {}
+servers:
+- url: /
+tags:
+- name: MusicTrack
+paths:
+  /v1/musicTracks:
+    post:
+      operationId: CreateMusicTrack
+      responses:
+        '201':
+          description: Created
+      description: Creates a new music track. Can only be called by kumospace admins.
+      summary: Adds a new music track to the available tracks collection.
+      tags:
+      - MusicTrack
+      security:
+      - firebase: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiCreateMusicTrackRequest'
+  /v1/musicTracks/{id}:
+    put:
+      operationId: UpdateMusicTrack
+      responses:
+        '204':
+          description: No content
+      description: Updates an existing music track. Can only be called by kumospace admins.
+      summary: Updates the provided fields on an existing music track. Fields omitted are untouched.
+      tags:
+      - MusicTrack
+      security:
+      - firebase: []
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiUpdateMusicTrackRequest'
+components:
+  schemas:
+    ApiCreateMusicTrackRequest:
+      properties:
+        category:
+          $ref: '#/components/schemas/MusicTrackCategory'
+          description: A categorical type for the track. e.g. piano music, dance music, general.
+        volumeModifier:
+          type: number
+          format: double
+          description: 'Normalizes the volume level for tracks. This is to keep some tracks from playing
+
+            either too quiet or too loud.'
+        url:
+          type: string
+          description: CDN URL for the track audio file.
+        name:
+          type: string
+          description: User-visible name of the track.
+      required:
+      - category
+      - volumeModifier
+      - url
+      - name
+      type: object
+    MusicTrackCategory:
+      enum:
+      - piano
+      - dance
+      - general
+      type: string
+    ApiUpdateMusicTrackRequest:
+      properties:
+        category:
+          $ref: '#/components/schemas/MusicTrackCategory'
+          description: A categorical type for the track. e.g. piano music, dance music, general.
+        volumeModifier:
+          type: number
+          format: double
+          description: 'Normalizes the volume level for tracks. This is to keep some tracks from playing
+
+            either too quiet or too loud.'
+        url:
+          type: string
+          description: CDN URL for the track audio file.
+        name:
+          type: string
+          description: User-visible name of the track.
+      type: object
+  securitySchemes:
+    firebase:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

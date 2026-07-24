@@ -1,0 +1,757 @@
+openapi: 3.0.0
+info:
+  title: '@kumo/api Account Furniture API'
+  contact: {}
+servers:
+- url: /
+tags:
+- name: Furniture
+paths:
+  /v1/spaces/{name}/rooms/{id}/furniture:
+    post:
+      operationId: CreateFurniture
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: string
+                required:
+                - id
+                type: object
+      description: Add a new piece of furniture to a room.
+      summary: Add furniture to a room.
+      tags:
+      - Furniture
+      security:
+      - firebase: []
+      parameters:
+      - description: The name of the space.
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: The room id.
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiCreateFurnitureRequest'
+  /v1/spaces/{name}/rooms/{roomId}/furniture/{id}:
+    put:
+      operationId: UpdateFurniture
+      responses:
+        '204':
+          description: No content
+      description: 'Update an existing piece of furniture by its id.  Any fields that are not
+
+        sent will be preserved.'
+      summary: Update furniture.
+      tags:
+      - Furniture
+      security:
+      - firebase: []
+      parameters:
+      - description: The name of the space.
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: The room id containing the furniture.
+        in: path
+        name: roomId
+        required: true
+        schema:
+          type: string
+      - description: The furniture id.
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The new furniture fields.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiUpdateFurnitureRequest'
+              description: The new furniture fields.
+    delete:
+      operationId: DeleteFurniture
+      responses:
+        '204':
+          description: No content
+      description: Delete an existing piece of furniture by its id.
+      summary: Delete furniture.
+      tags:
+      - Furniture
+      security:
+      - firebase: []
+      parameters:
+      - description: The name of the space.
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: The room id containing the furniture.
+        in: path
+        name: roomId
+        required: true
+        schema:
+          type: string
+      - description: The furniture id.
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+components:
+  schemas:
+    FurnitureBehaviorType.youtube:
+      enum:
+      - youtube
+      type: string
+    ApiCreateFurnitureRequest:
+      properties:
+        rotation:
+          $ref: '#/components/schemas/FurnitureRotation'
+          description: The rotation of this furniture.  Defaults to '0°'.
+        elevation:
+          type: number
+          format: double
+          description: The elevation of the furniture.  Defaults to stock funiture's value.
+          minimum: 0
+          maximum: 10
+        y:
+          type: number
+          format: double
+          description: The y-position of the center of the furniture.  (0,0) is the top left of the room.
+        x:
+          type: number
+          format: double
+          description: The x-position of the center of the furniture.  (0,0) is the top left of the room.
+        stockFurnitureId:
+          type: string
+          description: The stock furniture whose attributes (width, height, image) to copy.
+          minLength: 1
+      required:
+      - y
+      - x
+      - stockFurnitureId
+      type: object
+      description: A request to add a piece of stock furniture to a room.
+    FurnitureSoundEffectAction:
+      type: string
+      enum:
+      - playSound
+      - showConfetti
+      - none
+    DrinkType:
+      enum:
+      - boba
+      - beer
+      - champagne
+      - coffee
+      - cola
+      - cookieMitten
+      - cookieStar
+      - cookieTree
+      - cupcakeBlue
+      - cupcakeGreen
+      - cupcakePink
+      - cupcakeRed
+      - donutBlue
+      - donutChocolate
+      - donutGlazed
+      - donutStrawberry
+      - juice
+      - margarita
+      - redWine
+      - water
+      - whiskey
+      - hawaiianPizza
+      - plainPizza
+      - pepperoniPizza
+      - supremePizza
+      - veggiePizza
+      type: string
+    FurnitureBehaviorType.link:
+      enum:
+      - link
+      type: string
+    FurnitureRotation:
+      type: number
+      enum:
+      - 0
+      - 90
+      - 180
+      - 270
+      description: Rotation in clockwise-degrees.
+    LinkType.metroretro:
+      enum:
+      - metroretro
+      type: string
+    ApiUpdateFurnitureRequest:
+      properties:
+        behavior:
+          $ref: '#/components/schemas/ApiBehaviorWrite'
+          description: The new behavior of the furniture.
+        rotation:
+          $ref: '#/components/schemas/FurnitureRotation'
+          description: The new rotation of this furniture.
+        elevation:
+          type: number
+          format: double
+          description: The new elevation of this furniture.  Value should be between 0 and 10 inclusive.
+          minimum: 0
+          maximum: 10
+        y:
+          type: number
+          format: double
+          description: The new y-position of the center of the furniture.  (0,0) is the top left of the room.
+        x:
+          type: number
+          format: double
+          description: The new x-position of the center of the furniture.  (0,0) is the top left of the room.
+        stockFurnitureId:
+          type: string
+          description: The stock furniture whose attributes (width, height, image) to copy.
+      type: object
+      description: 'A request to update an existing piece of furniture.  Any fields not sent are
+
+        preserved.'
+    FurnitureBehaviorType.staticMusic:
+      enum:
+      - staticMusic
+      type: string
+    FurnitureBehaviorType.crossword:
+      enum:
+      - crossword
+      type: string
+    FurnitureBehaviorType.drink:
+      enum:
+      - drink
+      type: string
+    FurnitureBehaviorType.pictureFrame:
+      enum:
+      - pictureFrame
+      type: string
+    FurnitureBehaviorType.soundEffect:
+      enum:
+      - soundEffect
+      type: string
+    Range.nearby:
+      enum:
+      - nearby
+      type: string
+    Range.room:
+      enum:
+      - room
+      type: string
+    LinkType.legacy:
+      enum:
+      - legacy
+      type: string
+    FurnitureBehaviorType.customText:
+      enum:
+      - customText
+      type: string
+    LinkType.miro:
+      enum:
+      - miro
+      type: string
+    ApiCustomLinkWrite:
+      anyOf:
+      - properties:
+          data:
+            properties:
+              openInNewTab:
+                type: boolean
+              url:
+                type: string
+                pattern: ^https://
+              text:
+                type: string
+            required:
+            - url
+            type: object
+          type:
+            $ref: '#/components/schemas/LinkType.custom'
+        required:
+        - data
+        - type
+        type: object
+      - properties:
+          data:
+            properties:
+              openInNewTab:
+                type: boolean
+              url:
+                type: string
+                pattern: ^https://miro.com/app/
+            required:
+            - url
+            type: object
+          type:
+            $ref: '#/components/schemas/LinkType.miro'
+        required:
+        - data
+        - type
+        type: object
+      - properties:
+          data:
+            properties:
+              openInNewTab:
+                type: boolean
+              url:
+                type: string
+                pattern: ^https://metroretro.io
+            required:
+            - url
+            type: object
+          type:
+            $ref: '#/components/schemas/LinkType.metroretro'
+        required:
+        - data
+        - type
+        type: object
+    FurnitureBehaviorType.stickyNote:
+      enum:
+      - stickyNote
+      type: string
+    ApiBehaviorWrite:
+      anyOf:
+      - properties:
+          type:
+            $ref: '#/components/schemas/FurnitureBehaviorType.none'
+        required:
+        - type
+        type: object
+      - properties:
+          data:
+            properties:
+              allowedDrinks:
+                items:
+                  $ref: '#/components/schemas/DrinkType'
+                type: array
+            required:
+            - allowedDrinks
+            type: object
+          type:
+            $ref: '#/components/schemas/FurnitureBehaviorType.drink'
+        required:
+        - data
+        - type
+        type: object
+      - properties:
+          data:
+            properties:
+              width:
+                type: number
+                format: double
+                description: The new width of the custom image. Used for resizing
+              height:
+                type: number
+                format: double
+                description: The new height of the custom image. Used for resizing
+              lockAspectRatio:
+                type: boolean
+                deprecated: true
+              openInNewTab:
+                type: boolean
+              href:
+                type: string
+                pattern: ^https://
+              imageUrl:
+                type: string
+                pattern: ^https://
+            required:
+            - imageUrl
+            type: object
+          type:
+            $ref: '#/components/schemas/FurnitureBehaviorType.customImage'
+        required:
+        - data
+        - type
+        type: object
+      - properties:
+          data:
+            properties:
+              text:
+                type: string
+            required:
+            - text
+            type: object
+          type:
+            anyOf:
+            - $ref: '#/components/schemas/FurnitureBehaviorType.customText'
+            - $ref: '#/components/schemas/FurnitureBehaviorType.stickyNote'
+        required:
+        - data
+        - type
+        type: object
+      - properties:
+          data:
+            properties:
+              audioRange:
+                anyOf:
+                - $ref: '#/components/schemas/Range.nearby'
+                - $ref: '#/components/schemas/Range.room'
+              autoplay:
+                type: boolean
+              loop:
+                type: boolean
+              videoUrl:
+                type: string
+                pattern: ^https://
+            required:
+            - audioRange
+            - autoplay
+            - loop
+            - videoUrl
+            type: object
+          type:
+            $ref: '#/components/schemas/FurnitureBehaviorType.youtube'
+        required:
+        - data
+        - type
+        type: object
+      - properties:
+          data:
+            properties:
+              spaceNames:
+                items:
+                  type: string
+                type: array
+            required:
+            - spaceNames
+            type: object
+          type:
+            $ref: '#/components/schemas/FurnitureBehaviorType.elevator'
+        required:
+        - data
+        - type
+        type: object
+      - properties:
+          type:
+            $ref: '#/components/schemas/FurnitureBehaviorType.whiteboard'
+        required:
+        - type
+        type: object
+      - properties:
+          data:
+            properties:
+              url:
+                type: string
+                pattern: ^https://open.spotify.com
+            required:
+            - url
+            type: object
+          type:
+            $ref: '#/components/schemas/FurnitureBehaviorType.spotify'
+        required:
+        - data
+        - type
+        type: object
+      - properties:
+          data:
+            properties:
+              url:
+                type: string
+                nullable: true
+                pattern: ^https://
+            required:
+            - url
+            type: object
+          type:
+            $ref: '#/components/schemas/FurnitureBehaviorType.staticMusic'
+        required:
+        - data
+        - type
+        type: object
+      - properties:
+          type:
+            $ref: '#/components/schemas/FurnitureBehaviorType.horsepaste'
+        required:
+        - type
+        type: object
+      - properties:
+          type:
+            $ref: '#/components/schemas/FurnitureBehaviorType.chess'
+        required:
+        - type
+        type: object
+      - properties:
+          data:
+            anyOf:
+            - $ref: '#/components/schemas/ApiCustomLinkWrite'
+            - $ref: '#/components/schemas/LegacyApiCustomLinkWrite'
+          type:
+            $ref: '#/components/schemas/FurnitureBehaviorType.link'
+        required:
+        - data
+        - type
+        type: object
+      - properties:
+          data:
+            properties:
+              width:
+                type: number
+                format: double
+              height:
+                type: number
+                format: double
+              alt:
+                type: string
+              imageUrl:
+                type: string
+                pattern: ^https://
+              webPUrl:
+                type: string
+                pattern: ^https://
+            required:
+            - width
+            - height
+            - alt
+            - imageUrl
+            type: object
+          type:
+            $ref: '#/components/schemas/FurnitureBehaviorType.gif'
+        required:
+        - data
+        - type
+        type: object
+      - properties:
+          data:
+            properties:
+              isOverlay:
+                type: boolean
+              isSynced:
+                type: boolean
+              initialTime:
+                type: number
+                format: double
+            required:
+            - isSynced
+            - initialTime
+            type: object
+          type:
+            $ref: '#/components/schemas/FurnitureBehaviorType.timer'
+        required:
+        - data
+        - type
+        type: object
+      - properties:
+          data:
+            properties:
+              audioRange:
+                anyOf:
+                - $ref: '#/components/schemas/Range.nearby'
+                - $ref: '#/components/schemas/Range.room'
+              action:
+                $ref: '#/components/schemas/FurnitureSoundEffectAction'
+            required:
+            - audioRange
+            type: object
+          type:
+            $ref: '#/components/schemas/FurnitureBehaviorType.soundEffect'
+        required:
+        - data
+        - type
+        type: object
+      - properties:
+          data:
+            properties:
+              audioRange:
+                anyOf:
+                - $ref: '#/components/schemas/Range.nearby'
+                - $ref: '#/components/schemas/Range.room'
+              url:
+                type: string
+                description: 'pattern: ^https://soundcloud.com'
+              autoplay:
+                type: boolean
+            required:
+            - url
+            - autoplay
+            type: object
+          type:
+            $ref: '#/components/schemas/FurnitureBehaviorType.soundCloud'
+        required:
+        - data
+        - type
+        type: object
+      - properties:
+          data:
+            properties:
+              gameId:
+                type: string
+              puzzle:
+                $ref: '#/components/schemas/CrosswordPuzzle'
+            required:
+            - gameId
+            - puzzle
+            type: object
+          type:
+            $ref: '#/components/schemas/FurnitureBehaviorType.crossword'
+        required:
+        - data
+        - type
+        type: object
+      - properties:
+          data:
+            properties:
+              tutorial:
+                type: string
+            required:
+            - tutorial
+            type: object
+          type:
+            $ref: '#/components/schemas/FurnitureBehaviorType.kiosk'
+        required:
+        - data
+        - type
+        type: object
+      - properties:
+          data:
+            properties:
+              openInNewTab:
+                type: boolean
+              href:
+                type: string
+                pattern: ^https://
+              imageUrl:
+                type: string
+                pattern: ^https://
+            required:
+            - imageUrl
+            type: object
+          type:
+            $ref: '#/components/schemas/FurnitureBehaviorType.pictureFrame'
+        required:
+        - data
+        - type
+        type: object
+      description: Schema for setting the behavior on a piece of furniture.
+    FurnitureBehaviorType.chess:
+      enum:
+      - chess
+      type: string
+    FurnitureBehaviorType.gif:
+      enum:
+      - giphy
+      type: string
+    FurnitureBehaviorType.whiteboard:
+      enum:
+      - whiteboard
+      type: string
+    FurnitureBehaviorType.spotify:
+      enum:
+      - spotify
+      type: string
+    FurnitureBehaviorType.none:
+      enum:
+      - none
+      type: string
+    FurnitureBehaviorType.horsepaste:
+      enum:
+      - horsepaste
+      type: string
+    FurnitureBehaviorType.elevator:
+      enum:
+      - elevator
+      type: string
+    FurnitureBehaviorType.kiosk:
+      enum:
+      - kiosk
+      type: string
+    FurnitureBehaviorType.soundCloud:
+      enum:
+      - soundcloud
+      type: string
+    LegacyApiCustomLinkWrite:
+      properties:
+        openInNewTab:
+          type: boolean
+        text:
+          type: string
+        url:
+          type: string
+        type:
+          $ref: '#/components/schemas/LinkType.legacy'
+      required:
+      - url
+      type: object
+    CrosswordPuzzle:
+      properties:
+        stats:
+          properties:
+            numSolves:
+              type: number
+              format: double
+          required:
+          - numSolves
+          type: object
+        isPublic:
+          type: boolean
+        content:
+          properties:
+            info:
+              properties:
+                type:
+                  type: string
+                  enum:
+                  - Mini Puzzle
+                  - Daily Puzzle
+                title:
+                  type: string
+                description:
+                  type: string
+                author:
+                  type: string
+              required:
+              - type
+              - title
+              - description
+              - author
+              type: object
+          required:
+          - info
+          type: object
+        pid:
+          type: string
+      required:
+      - stats
+      - content
+      - pid
+      type: object
+    LinkType.custom:
+      enum:
+      - custom
+      type: string
+    FurnitureBehaviorType.customImage:
+      enum:
+      - customImage
+      type: string
+    FurnitureBehaviorType.timer:
+      enum:
+      - timer
+      type: string
+  securitySchemes:
+    firebase:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

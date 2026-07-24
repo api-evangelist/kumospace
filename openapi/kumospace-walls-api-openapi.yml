@@ -1,0 +1,109 @@
+openapi: 3.0.0
+info:
+  title: '@kumo/api Account Walls API'
+  contact: {}
+servers:
+- url: /
+tags:
+- name: Walls
+paths:
+  /v1/spaces/{name}/rooms/{roomId}/zones/{zoneId}/walls/{wallId}:
+    put:
+      operationId: UpdateZone
+      responses:
+        '204':
+          description: ''
+      description: Update a wall segment.
+      summary: Update a wall segment.
+      tags:
+      - Walls
+      security:
+      - firebase: []
+      parameters:
+      - description: The name of the space.
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: The room id.
+        in: path
+        name: roomId
+        required: true
+        schema:
+          type: string
+      - description: The zone id.
+        in: path
+        name: zoneId
+        required: true
+        schema:
+          type: string
+      - description: The id of the wall segment to update
+        in: path
+        name: wallId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The fields to update.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiUpdateWallSegmentRequest'
+              description: The fields to update.
+components:
+  schemas:
+    DbWallBehavior:
+      allOf:
+      - properties:
+          disableCollision:
+            type: boolean
+        type: object
+      - anyOf:
+        - properties:
+            type:
+              $ref: '#/components/schemas/WallBehaviorType.none'
+          required:
+          - type
+          type: object
+        - properties:
+            data:
+              properties:
+                hinge:
+                  type: string
+                  enum:
+                  - left
+                  - right
+              required:
+              - hinge
+              type: object
+            type:
+              $ref: '#/components/schemas/WallBehaviorType.door'
+          required:
+          - data
+          - type
+          type: object
+    WallBehaviorType.none:
+      enum:
+      - none
+      type: string
+    ApiUpdateWallSegmentRequest:
+      properties:
+        stockWallId:
+          type: string
+        behavior:
+          $ref: '#/components/schemas/ApiWallBehavior'
+      type: object
+      additionalProperties: false
+    WallBehaviorType.door:
+      enum:
+      - door
+      type: string
+    ApiWallBehavior:
+      $ref: '#/components/schemas/DbWallBehavior'
+  securitySchemes:
+    firebase:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

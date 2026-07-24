@@ -1,0 +1,332 @@
+openapi: 3.0.0
+info:
+  title: '@kumo/api Account Zones API'
+  contact: {}
+servers:
+- url: /
+tags:
+- name: Zones
+paths:
+  /v1/spaces/{name}/rooms/{roomId}/zones:
+    post:
+      operationId: CreateRoom
+      responses:
+        '201':
+          description: Created
+      description: Create a zone inside a room (inside a space).
+      summary: Create a zone.
+      tags:
+      - Zones
+      security:
+      - firebase: []
+      parameters:
+      - description: The name of the space.
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: The room id.
+        in: path
+        name: roomId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiCreateZoneRequest'
+  /v1/spaces/{name}/rooms/{roomId}/zones/{id}:
+    put:
+      operationId: UpdateZone
+      responses:
+        '204':
+          description: ''
+      description: Update an existing zone.  Any fields not sent will be preserved.
+      summary: Update a zone.
+      tags:
+      - Zones
+      security:
+      - firebase: []
+      parameters:
+      - description: The name of the space.
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: The room id.
+        in: path
+        name: roomId
+        required: true
+        schema:
+          type: string
+      - description: The zone id.
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The zone fields to update.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiUpdateZoneRequest'
+              description: The zone fields to update.
+    delete:
+      operationId: DeleteZone
+      responses:
+        '204':
+          description: No content
+      description: Delete an existing zone by its id.
+      summary: Delete a zone.
+      tags:
+      - Zones
+      security:
+      - firebase: []
+      parameters:
+      - description: The name of the space.
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: The room id containing the zone.
+        in: path
+        name: roomId
+        required: true
+        schema:
+          type: string
+      - description: The zone id.
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      - description: whether the zone's furniture should be deleted too
+        in: query
+        name: deleteFurniture
+        required: false
+        schema:
+          type: boolean
+  /v1/space/{spaceName}/conferenceRooms:
+    get:
+      operationId: GetConferenceRooms
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/CalendarIntegrationZone'
+                type: array
+      tags:
+      - Zones
+      security:
+      - firebase: []
+      parameters:
+      - in: path
+        name: spaceName
+        required: true
+        schema:
+          type: string
+  /v1/calendarResource/{resourceId}:
+    get:
+      operationId: GetCalendarResource
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalendarResource'
+      tags:
+      - Zones
+      security:
+      - firebase: []
+      parameters:
+      - in: path
+        name: resourceId
+        required: true
+        schema:
+          type: string
+    delete:
+      operationId: DeleteCalendarResource
+      responses:
+        '204':
+          description: No content
+      tags:
+      - Zones
+      security:
+      - firebase: []
+      parameters:
+      - in: path
+        name: resourceId
+        required: true
+        schema:
+          type: string
+  /v1/calendarResource/{spaceName}/bulk:
+    post:
+      operationId: CreateCalendarResources
+      responses:
+        '201':
+          description: ''
+      tags:
+      - Zones
+      security:
+      - firebase: []
+      parameters:
+      - in: path
+        name: spaceName
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              items:
+                $ref: '#/components/schemas/ApiCreateCalendarResource'
+              type: array
+components:
+  schemas:
+    ApiUpdateZoneRequest:
+      properties:
+        editorIds:
+          items:
+            type: string
+          type: array
+        moveFurnitureWithZone:
+          type: boolean
+        stockBackgroundId:
+          type: string
+          description: The background to apply to the zone.
+          minLength: 1
+        displayName:
+          type: string
+        type:
+          $ref: '#/components/schemas/ZoneType'
+        muteOnEnter:
+          type: boolean
+        status:
+          $ref: '#/components/schemas/ZoneStatus'
+        height:
+          type: integer
+          format: int32
+        width:
+          type: integer
+          format: int32
+        y:
+          type: integer
+          format: int32
+        x:
+          type: integer
+          format: int32
+      type: object
+      description: A request to update a zone within a room.
+    CalendarIntegrationZone:
+      properties:
+        spaceName:
+          type: string
+        floorId:
+          type: string
+        floorName:
+          type: string
+        roomId:
+          type: string
+        roomName:
+          type: string
+        resourceId:
+          type: string
+      required:
+      - spaceName
+      - floorId
+      - floorName
+      - roomId
+      - roomName
+      type: object
+      additionalProperties: false
+    ZoneOrientation:
+      enum:
+      - 0
+      - 90
+      - 180
+      - 270
+      type: number
+    ApiCreateCalendarResource:
+      properties:
+        floorId:
+          type: string
+        resourceId:
+          type: string
+        roomId:
+          type: string
+      required:
+      - floorId
+      - resourceId
+      - roomId
+      type: object
+      additionalProperties: false
+    ApiCreateZoneRequest:
+      properties:
+        orientation:
+          $ref: '#/components/schemas/ZoneOrientation'
+        stockZoneId:
+          type: string
+        status:
+          $ref: '#/components/schemas/ZoneStatus'
+        y:
+          type: number
+          format: double
+        x:
+          type: number
+          format: double
+      required:
+      - stockZoneId
+      - y
+      - x
+      type: object
+      description: A request to create a new zone within a room.
+    ZoneType:
+      enum:
+      - office
+      - conferenceRoom
+      type: string
+    ZoneStatus:
+      enum:
+      - open
+      - closed
+      type: string
+    CalendarResource:
+      description: Information required for a calendar integration regarding a Kumospace resource
+      properties:
+        resourceId:
+          type: string
+          description: Auto-generated resource ID by the calendar provider
+        floorId:
+          type: string
+          description: Kumospace floor ID this resource is tied into
+        spaceName:
+          type: string
+          description: Kumospace space this resource is tied into
+        roomId:
+          type: string
+          description: Kumospace room ID this resource is tied into
+      required:
+      - resourceId
+      - floorId
+      - spaceName
+      - roomId
+      type: object
+      additionalProperties: false
+  securitySchemes:
+    firebase:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

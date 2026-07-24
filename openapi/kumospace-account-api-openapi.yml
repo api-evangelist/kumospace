@@ -1,0 +1,167 @@
+openapi: 3.0.0
+info:
+  title: '@kumo/api Account API'
+  contact: {}
+servers:
+- url: /
+tags:
+- name: Account
+paths:
+  /v1/account:
+    delete:
+      operationId: DeleteAccount
+      responses:
+        '204':
+          description: No content
+      description: 'Delete the user''s account and all associated data.  This operation cannot
+
+        be undone.'
+      summary: Delete the user's account.
+      tags:
+      - Account
+      security:
+      - firebase: []
+      parameters: []
+  /v1/account/token:
+    post:
+      operationId: CreateAccount
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiCustomKumoToken'
+      description: Create a kumospace access token from a well-known identity provider.
+      summary: Create an access token for SSO.
+      tags:
+      - Account
+      security: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiCreateCustomTokenRequest'
+  /v1/account/desktop/token:
+    post:
+      operationId: CreateDesktopToken
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiCustomKumoToken'
+      description: Create a kumospace access token for usage in the desktop app
+      summary: Create an access token for desktop app usage.
+      tags:
+      - Account
+      security:
+      - firebase: []
+      parameters: []
+  /v1/account/integration/token/{type}:
+    post:
+      operationId: CreateIntegrationToken
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiIntegrationToken'
+      description: Create a token to pass to oauth providers
+      summary: Create a token to pass to oauth providers to identify the user after redirect
+      tags:
+      - Account
+      security:
+      - firebase: []
+      parameters:
+      - in: path
+        name: type
+        required: true
+        schema:
+          $ref: '#/components/schemas/Integration'
+  /v1/account/resetPassword:
+    post:
+      operationId: ResetPassword
+      responses:
+        '204':
+          description: No content
+      description: Send reset password email for account corresponding to given email
+      summary: Send reset password email for account corresponding to given email
+      tags:
+      - Account
+      security: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiResetPasswordRequest'
+  /v1/account/onCreate:
+    post:
+      operationId: OnCreate
+      responses:
+        '204':
+          description: No content
+      description: 'Accepts all invites for a given user. We can''t simply listen to
+
+        user creation since anonymous users signing up doesn''t create a new account.'
+      summary: Accepts all invites for a given user.
+      tags:
+      - Account
+      security:
+      - firebase: []
+      parameters: []
+components:
+  schemas:
+    ApiCustomKumoToken:
+      properties:
+        idToken:
+          type: string
+      required:
+      - idToken
+      type: object
+      additionalProperties: false
+    ApiResetPasswordRequest:
+      properties:
+        email:
+          type: string
+      required:
+      - email
+      type: object
+      additionalProperties: false
+    ApiIntegrationToken:
+      properties:
+        stateToken:
+          type: string
+      required:
+      - stateToken
+      type: object
+      additionalProperties: false
+    Integration:
+      enum:
+      - microsoft-teams-status
+      - zoom-status
+      - google-calendar
+      - microsoft-outlook
+      type: string
+    ApiCreateCustomTokenRequest:
+      properties:
+        idToken:
+          type: string
+          description: 'Third-party id token.  It must contain an "iss" field and we must have an
+
+            associated public key in our firestore issuers table.'
+      required:
+      - idToken
+      type: object
+      additionalProperties: false
+  securitySchemes:
+    firebase:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

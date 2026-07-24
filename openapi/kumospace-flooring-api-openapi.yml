@@ -1,0 +1,187 @@
+openapi: 3.0.0
+info:
+  title: '@kumo/api Account Flooring API'
+  contact: {}
+servers:
+- url: /
+tags:
+- name: Flooring
+paths:
+  /v1/stockBackgrounds:
+    get:
+      operationId: GetStockRoomBackgrounds
+      responses:
+        '200':
+          description: A paginated list of stock room backgrounds.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse_ApiStockBackground_'
+      description: 'Get a paginated list of stock room backgrounds.
+
+
+        Subsequent pages can be requested with the "next" parameter, which is
+
+        returned in the response metadata object if another page exists.'
+      summary: Get stock room backgrounds.
+      tags:
+      - Flooring
+      security: []
+      parameters:
+      - description: 'An opaque cursor used to request the next page of results.
+
+          It is provided in the previous response from the api.'
+        in: query
+        name: next
+        required: false
+        schema:
+          type: string
+    post:
+      operationId: CreateStockBackground
+      responses:
+        '201':
+          description: Created
+      description: 'Creates a new stock background for a room.  (i.e., flooring).  Can only be
+
+        called by kumospace admins.'
+      summary: Create a stock room background.
+      tags:
+      - Flooring
+      security:
+      - firebase: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiCreateStockBackgroundRequest'
+components:
+  schemas:
+    BackgroundType.singleTile:
+      enum:
+      - singleTile
+      type: string
+    ApiCreateStockBackgroundRequest:
+      allOf:
+      - properties:
+          thumbnailUrl:
+            type: string
+            description: A url with a 200x200 thumbnail of this background.
+            pattern: ^https://
+          description:
+            type: string
+            description: The description of this background.
+            minLength: 1
+          title:
+            type: string
+            description: A short title.
+            minLength: 1
+        required:
+        - thumbnailUrl
+        - description
+        - title
+        type: object
+      - properties:
+          data:
+            $ref: '#/components/schemas/SingleTileBackground'
+            description: Data associated with the background type.
+          type:
+            $ref: '#/components/schemas/BackgroundType.singleTile'
+            description: The background type.
+        required:
+        - data
+        - type
+        type: object
+      description: A request to create a new room background.
+    ApiStockBackground:
+      allOf:
+      - properties:
+          thumbnailUrl:
+            type: string
+            description: A url with a 200x200 thumbnail of this background.
+          description:
+            type: string
+            description: The description of this background.
+          title:
+            type: string
+            description: A short title.
+          id:
+            type: string
+            description: The unique id of this background.
+        required:
+        - thumbnailUrl
+        - description
+        - title
+        - id
+        type: object
+      - properties:
+          data:
+            $ref: '#/components/schemas/SingleTileBackground'
+            description: Data associated with the background type.
+          type:
+            $ref: '#/components/schemas/BackgroundType.singleTile'
+            description: The background type.
+        required:
+        - data
+        - type
+        type: object
+      description: A stock background that can be used as a room background.
+    SingleTileBackground:
+      description: A background with a single tile repeated across the room.
+      properties:
+        tileUrl:
+          type: string
+          description: A url with the full-size image of the tile.
+          pattern: ^https://
+        width:
+          type: number
+          format: double
+          description: The width of the tile, in pixels.
+        height:
+          type: number
+          format: double
+          description: The height of the tile, in pixels.
+      required:
+      - tileUrl
+      - width
+      - height
+      type: object
+      additionalProperties: false
+    PaginatedResponse_ApiStockBackground_:
+      description: A page of items.  Useful for breaking up a large dataset into smaller chunks.
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/ApiStockBackground'
+          type: array
+          description: The page of items.
+        metadata:
+          properties:
+            count:
+              type: number
+              format: double
+              description: The number of items sent.
+            next:
+              type: string
+              description: 'A pagination cursor.  If specified, there is another page of results that
+
+                can be requested by appending this value as a query parameter called
+
+                "next".'
+          required:
+          - count
+          type: object
+          description: 'Metadata about the page of items.  Contains a pagination cursor called
+
+            "next" if there is another page of items.'
+      required:
+      - items
+      - metadata
+      type: object
+      additionalProperties: false
+  securitySchemes:
+    firebase:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

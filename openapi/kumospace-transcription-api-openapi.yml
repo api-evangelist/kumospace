@@ -1,0 +1,183 @@
+openapi: 3.0.0
+info:
+  title: '@kumo/api Account Transcription API'
+  contact: {}
+servers:
+- url: /
+tags:
+- name: Transcription
+paths:
+  /v1/transcription/started:
+    post:
+      operationId: HandleTranscriptionStarted
+      responses:
+        '201':
+          description: Created
+      tags:
+      - Transcription
+      security:
+      - firebase: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiHandleTranscriptionStartedRequest'
+  /v1/transcription/stopped:
+    post:
+      operationId: HandleTranscriptionStopped
+      responses:
+        '204':
+          description: No content
+      tags:
+      - Transcription
+      security:
+      - firebase: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiHandleTranscriptionStoppedRequest'
+  /v1/transcription:
+    get:
+      operationId: GetTranscription
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiTranscription'
+      tags:
+      - Transcription
+      security:
+      - firebase: []
+      parameters:
+      - in: query
+        name: recordingGroupId
+        required: true
+        schema:
+          type: string
+  /v1/transcription/{id}/summary:
+    get:
+      operationId: GetSummary
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                properties:
+                  summary:
+                    type: string
+                required:
+                - summary
+                type: object
+      tags:
+      - Transcription
+      security:
+      - firebase: []
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+  /v1/transcription/{id}/vtt:
+    get:
+      operationId: GetVtt
+      responses:
+        '302':
+          description: Redirect
+      tags:
+      - Transcription
+      security:
+      - firebase: []
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+components:
+  schemas:
+    ApiTranscription:
+      properties:
+        recordingGroupId:
+          type: string
+        summaryJob:
+          properties:
+            status:
+              type: string
+              enum:
+              - in-progress
+              - error
+              - finished
+            id:
+              type: string
+          required:
+          - status
+          - id
+          type: object
+        endTimestamp:
+          type: number
+          format: double
+        startTimestamp:
+          type: number
+          format: double
+        ownerFirebaseUid:
+          type: string
+        roomId:
+          type: string
+        spaceUid:
+          type: string
+        id:
+          type: string
+      required:
+      - startTimestamp
+      - ownerFirebaseUid
+      - roomId
+      - spaceUid
+      - id
+      type: object
+    ApiHandleTranscriptionStoppedRequest:
+      properties:
+        endTimestamp:
+          type: number
+          format: double
+        id:
+          type: string
+      required:
+      - endTimestamp
+      - id
+      type: object
+    ApiHandleTranscriptionStartedRequest:
+      properties:
+        recordingGroupId:
+          type: string
+        startTimestamp:
+          type: number
+          format: double
+        ownerFirebaseUid:
+          type: string
+        roomId:
+          type: string
+        spaceUid:
+          type: string
+        id:
+          type: string
+      required:
+      - startTimestamp
+      - ownerFirebaseUid
+      - roomId
+      - spaceUid
+      - id
+      type: object
+  securitySchemes:
+    firebase:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

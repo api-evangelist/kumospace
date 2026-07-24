@@ -1,0 +1,284 @@
+openapi: 3.0.0
+info:
+  title: '@kumo/api Account Integrations API'
+  contact: {}
+servers:
+- url: /
+tags:
+- name: Integrations
+paths:
+  /v1/users/me/integrations:
+    get:
+      operationId: GetSelfIntegrations
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/APIUserIntegration'
+                type: array
+      description: 'Lists connected integrations for the current user which
+
+        can be disconnected with DELETE /integrations/{integrationId}'
+      summary: List connected integrations
+      tags:
+      - Integrations
+      security:
+      - firebase: []
+      parameters: []
+  /v1/integrations/{integrationId}:
+    delete:
+      operationId: DisconnectOwnIntegration
+      responses:
+        '204':
+          description: No content
+      description: Disconnect a user integration. This also deletes the integration doc.
+      summary: Disconnect a user integration. This also deletes the integration doc.
+      tags:
+      - Integrations
+      security:
+      - firebase: []
+      parameters:
+      - in: path
+        name: integrationId
+        required: true
+        schema:
+          type: string
+  /v1/integrations/microsoft-outlook/handle-redirect:
+    post:
+      operationId: HandleConnectOutlookIntegration
+      responses:
+        '204':
+          description: No content
+      description: Handles the redirect from the microsoft graph authorize URL for connecting Microsoft Outlook integration.
+      summary: Handles the redirect from the microsoft graph authorize URL. This is a redirect endpoint, shouldn't be called by us
+      tags:
+      - Integrations
+      security: []
+      parameters: []
+  /v1/integrations/microsoft-teams-status/handle-redirect:
+    post:
+      operationId: HandleConnectTeamsInCallStatus
+      responses:
+        '204':
+          description: No content
+      description: Handles the redirect from the microsoft graph authorize URL
+      summary: Handles the redirect from the microsoft graph authorize URL. This is a redirect endpoint, shouldn't be called by us
+      tags:
+      - Integrations
+      security: []
+      parameters: []
+  /v1/integrations/microsoft-teams-status/webhook/presence-subscription/{id}:
+    post:
+      operationId: Handle
+      responses:
+        '204':
+          description: No content
+      description: Handles the subscription to the microsoft presence API
+      summary: Handles the subscription to the microsoft presence API. This is a webhook endpoint, shouldn't be called by us
+      tags:
+      - Integrations
+      security: []
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {}
+  /v1/integrations/zoom-status/handle-redirect:
+    get:
+      operationId: HandleConnectZoomInCallStatus
+      responses:
+        '204':
+          description: No content
+      description: Handles the redirect from the zoom authorize URL
+      summary: Handles the redirect from the zoom oauth. This is a redirect endpoint, shouldn't be called by us
+      tags:
+      - Integrations
+      security: []
+      parameters:
+      - in: query
+        name: code
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: state
+        required: true
+        schema:
+          type: string
+  /v1/integrations/zoom-status/webhook/participant-update:
+    post:
+      operationId: HandleParticipantUpdate
+      responses:
+        '200':
+          description: OK
+        '204':
+          description: accepted
+          content:
+            application/json:
+              schema:
+                properties:
+                  encryptedToken:
+                    type: string
+                  plainToken:
+                    type: string
+                required:
+                - encryptedToken
+                - plainToken
+                type: object
+      description: Handles the zoom participant updates to determine if a user is in a call
+      summary: Handles the zoom participant updates. This is a webhook endpoint, shouldn't be called by us
+      tags:
+      - Integrations
+      security: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - $ref: '#/components/schemas/ZoomValidationEvent'
+              - $ref: '#/components/schemas/ZoomParticipantUpdateEvent'
+  /v1/integrations/zoom-status/deauthorize:
+    post:
+      operationId: DeauthorizeZoomIntegration
+      responses:
+        '204':
+          description: Accepted
+      tags:
+      - Integrations
+      security: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ZoomDeauthorizedEvent'
+components:
+  schemas:
+    ZoomValidationEvent:
+      properties:
+        payload:
+          properties:
+            plainToken:
+              type: string
+          required:
+          - plainToken
+          type: object
+        event_ts:
+          type: number
+          format: double
+        event:
+          type: string
+          enum:
+          - endpoint.url_validation
+          nullable: false
+      required:
+      - payload
+      - event_ts
+      - event
+      type: object
+    ZoomDeauthorizedEvent:
+      properties:
+        payload:
+          properties:
+            client_id:
+              type: string
+            deauthorization_time:
+              type: string
+            signature:
+              type: string
+            user_id:
+              type: string
+            account_id:
+              type: string
+          required:
+          - client_id
+          - deauthorization_time
+          - signature
+          - user_id
+          - account_id
+          type: object
+        event:
+          type: string
+          enum:
+          - app_deauthorized
+          nullable: false
+      required:
+      - payload
+      - event
+      type: object
+    ZoomParticipantUpdateEvent:
+      properties:
+        payload:
+          properties:
+            object:
+              properties:
+                participant:
+                  properties:
+                    participant_user_id:
+                      type: string
+                  additionalProperties: {}
+                  required:
+                  - participant_user_id
+                  type: object
+              additionalProperties: {}
+              required:
+              - participant
+              type: object
+            account_id:
+              type: string
+          required:
+          - object
+          - account_id
+          type: object
+        event_ts:
+          type: number
+          format: double
+        event:
+          type: string
+          enum:
+          - meeting.participant_joined
+          - meeting.participant_left
+      required:
+      - payload
+      - event_ts
+      - event
+      type: object
+    Integration:
+      enum:
+      - microsoft-teams-status
+      - zoom-status
+      - google-calendar
+      - microsoft-outlook
+      type: string
+    APIUserIntegration:
+      properties:
+        connectedAccountName:
+          type: string
+        connected:
+          type: boolean
+        integrationType:
+          $ref: '#/components/schemas/Integration'
+        integrationId:
+          type: string
+      required:
+      - connected
+      - integrationType
+      - integrationId
+      type: object
+  securitySchemes:
+    firebase:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

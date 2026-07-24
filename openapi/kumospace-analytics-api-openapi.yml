@@ -1,0 +1,211 @@
+openapi: 3.0.0
+info:
+  title: '@kumo/api Account Analytics API'
+  contact: {}
+servers:
+- url: /
+tags:
+- name: Analytics
+paths:
+  /v1/analytics/attendance:
+    get:
+      operationId: GetAnalytics
+      responses:
+        '200':
+          description: a paginated list of attendance analytics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse_HostAnalyticsRoomStat_'
+      description: Returns room usage stats for a given space.
+      summary: Attendance analytics for a given space
+      tags:
+      - Analytics
+      security:
+      - firebase: []
+      parameters:
+      - description: the name of the space
+        in: query
+        name: space
+        required: true
+        schema:
+          type: string
+      - description: an ISO8601 date-time.  (YYYY-MM-DDThh:mm:ssZ)
+        in: query
+        name: start
+        required: true
+        schema:
+          format: date-time
+          type: string
+      - description: an ISO8601 date-time.  (YYYY-MM-DDThh:mm:ssZ)
+        in: query
+        name: end
+        required: true
+        schema:
+          format: date-time
+          type: string
+  /v1/analytics/status:
+    get:
+      operationId: GetStatusAnalytics
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse_AnalyticsEvent_'
+      tags:
+      - Analytics
+      security:
+      - firebase: []
+      parameters:
+      - in: query
+        name: space
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: start
+        required: true
+        schema:
+          format: date-time
+          type: string
+      - in: query
+        name: end
+        required: true
+        schema:
+          format: date-time
+          type: string
+      - in: query
+        name: userId
+        required: false
+        schema:
+          type: string
+components:
+  schemas:
+    Availability:
+      enum:
+      - available
+      - away
+      - focusing
+      type: string
+    AnalyticsEvent:
+      properties:
+        duration:
+          type: number
+          format: double
+        endTime:
+          type: number
+          format: double
+        startTime:
+          type: number
+          format: double
+        email:
+          type: string
+        displayName:
+          type: string
+        firebaseUid:
+          type: string
+        data:
+          $ref: '#/components/schemas/Availability'
+        type:
+          $ref: '#/components/schemas/HostAnalyticsType.statusSession'
+      required:
+      - startTime
+      - firebaseUid
+      - data
+      - type
+      type: object
+    PaginatedResponse_AnalyticsEvent_:
+      description: A page of items.  Useful for breaking up a large dataset into smaller chunks.
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/AnalyticsEvent'
+          type: array
+          description: The page of items.
+        metadata:
+          properties:
+            count:
+              type: number
+              format: double
+              description: The number of items sent.
+            next:
+              type: string
+              description: 'A pagination cursor.  If specified, there is another page of results that
+
+                can be requested by appending this value as a query parameter called
+
+                "next".'
+          required:
+          - count
+          type: object
+          description: 'Metadata about the page of items.  Contains a pagination cursor called
+
+            "next" if there is another page of items.'
+      required:
+      - items
+      - metadata
+      type: object
+      additionalProperties: false
+    HostAnalyticsRoomStat:
+      properties:
+        duration:
+          type: number
+          format: double
+        userEmail:
+          type: string
+        userDisplayName:
+          type: string
+        userId:
+          type: string
+        roomDisplayName:
+          type: string
+        roomId:
+          type: string
+      required:
+      - duration
+      - userId
+      - roomId
+      type: object
+    PaginatedResponse_HostAnalyticsRoomStat_:
+      description: A page of items.  Useful for breaking up a large dataset into smaller chunks.
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/HostAnalyticsRoomStat'
+          type: array
+          description: The page of items.
+        metadata:
+          properties:
+            count:
+              type: number
+              format: double
+              description: The number of items sent.
+            next:
+              type: string
+              description: 'A pagination cursor.  If specified, there is another page of results that
+
+                can be requested by appending this value as a query parameter called
+
+                "next".'
+          required:
+          - count
+          type: object
+          description: 'Metadata about the page of items.  Contains a pagination cursor called
+
+            "next" if there is another page of items.'
+      required:
+      - items
+      - metadata
+      type: object
+      additionalProperties: false
+    HostAnalyticsType.statusSession:
+      enum:
+      - statusSession
+      type: string
+  securitySchemes:
+    firebase:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

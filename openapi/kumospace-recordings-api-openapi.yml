@@ -1,0 +1,237 @@
+openapi: 3.0.0
+info:
+  title: '@kumo/api Account Recordings API'
+  contact: {}
+servers:
+- url: /
+tags:
+- name: Recordings
+paths:
+  /v1/recordings:
+    post:
+      operationId: CreateRecording
+      responses:
+        '201':
+          description: Created
+      description: 'Create a recording meta-data record. This is used to tie recordings to
+
+        an individual kumospace account.'
+      summary: Create a recording.
+      tags:
+      - Recordings
+      security:
+      - firebase: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiCreateRecordingRequest'
+  /v1/recordings/{recordingId}/share:
+    put:
+      operationId: ShareRecording
+      responses:
+        '200':
+          description: Updated
+      summary: Share recording with a list of users
+      tags:
+      - Recordings
+      security:
+      - firebase: []
+      parameters:
+      - description: The daily recording id to stop
+        in: path
+        name: recordingId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiShareRecordingRequest'
+  /v1/recordings/{recordingId}/stop:
+    post:
+      operationId: HandleRecordingStop
+      responses:
+        '204':
+          description: No content
+      description: Handle recording once it's been stopped.
+      summary: Handle post-recording behavior
+      tags:
+      - Recordings
+      security:
+      - firebase: []
+      parameters:
+      - description: The daily recording id to stop
+        in: path
+        name: recordingId
+        required: true
+        schema:
+          type: string
+  /v1/recordings/spaces/{spaceName}:
+    get:
+      operationId: GetRecordingsByUser
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiRecording'
+                type: array
+      description: Gets a list of recordings from the user for a given space
+      summary: Fetches recordings meta-data for the user for a given space
+      tags:
+      - Recordings
+      security:
+      - firebase: []
+      parameters:
+      - description: The space name to fetch recordings for
+        in: path
+        name: spaceName
+        required: true
+        schema:
+          type: string
+  /v1/recordings/{recordingId}:
+    get:
+      operationId: GetRecordingById
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRecording'
+      description: Gets a recording meta-data record by id.
+      summary: Fetches recording meta-data
+      tags:
+      - Recordings
+      security:
+      - firebase: []
+      parameters:
+      - description: The daily recording id to fetch meta-data for
+        in: path
+        name: recordingId
+        required: true
+        schema:
+          type: string
+  /v1/recordings/{recordingId}/accessLink:
+    get:
+      operationId: GetRecordingAccessLink
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                properties:
+                  accessLink:
+                    type: string
+                required:
+                - accessLink
+                type: object
+      description: Gets an access link to download a recording
+      summary: Fetches recording download access link
+      tags:
+      - Recordings
+      security:
+      - firebase: []
+      parameters:
+      - description: The daily recording id to fetch the access link for
+        in: path
+        name: recordingId
+        required: true
+        schema:
+          type: string
+components:
+  schemas:
+    ApiCreateRecordingRequest:
+      properties:
+        recordingGroupId:
+          type: string
+          description: ID to group recordings and transcriptions together
+          minLength: 1
+        roomId:
+          type: string
+          description: The name of the room that is recorded
+          minLength: 1
+        spaceName:
+          type: string
+          description: The name of the space the recording belongs to
+          minLength: 1
+        id:
+          type: string
+          description: The id of the daily recording, provided by the daily start-recording event.
+          format: uuid
+          minLength: 1
+      required:
+      - roomId
+      - spaceName
+      - id
+      type: object
+      description: A request to create a new recording meta-data record.
+    ApiShareRecordingRequest:
+      properties:
+        sharedWithFirebaseUids:
+          items:
+            type: string
+          type: array
+        visibility:
+          $ref: '#/components/schemas/RecordingVisibility'
+      required:
+      - sharedWithFirebaseUids
+      type: object
+    ApiRecording:
+      description: A recording as returned by the API
+      properties:
+        id:
+          type: string
+        firebaseUid:
+          type: string
+        status:
+          type: string
+          enum:
+          - in-progress
+          - finished
+        startTimestamp:
+          type: number
+          format: double
+        duration:
+          type: number
+          format: double
+        roomId:
+          type: string
+        spaceName:
+          type: string
+        visibility:
+          $ref: '#/components/schemas/RecordingVisibility'
+        sharedWithFirebaseUids:
+          items:
+            type: string
+          type: array
+        recordingGroupId:
+          type: string
+      required:
+      - id
+      - firebaseUid
+      - status
+      - roomId
+      - spaceName
+      - visibility
+      - sharedWithFirebaseUids
+      type: object
+      additionalProperties: false
+    RecordingVisibility:
+      type: string
+      enum:
+      - public
+      - private
+  securitySchemes:
+    firebase:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

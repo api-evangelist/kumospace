@@ -1,0 +1,391 @@
+openapi: 3.0.0
+info:
+  title: '@kumo/api Account Room Templates API'
+  contact: {}
+servers:
+- url: /
+tags:
+- name: Room Templates
+paths:
+  /v1/roomTemplates:
+    get:
+      operationId: GetRoomTemplates
+      responses:
+        '200':
+          description: A paginated list of room templates.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse_ApiRoomTemplate_'
+      description: 'Get a paginated list of room templates.
+
+
+        Subsequent pages can be requested with the "next" parameter, which is
+
+        returned in the response metadata object if another page exists.'
+      summary: Get room templates.
+      tags:
+      - Room Templates
+      security: []
+      parameters:
+      - description: Whether to include draft room templates in the results.  Defaults to false.
+        in: query
+        name: includeDraft
+        required: false
+        schema:
+          default: false
+          type: boolean
+      - description: 'An opaque cursor used to request the next page of results.
+
+          It is provided in the previous response from the api.'
+        in: query
+        name: next
+        required: false
+        schema:
+          type: string
+    post:
+      operationId: CreateRoomTemplate
+      responses:
+        '201':
+          description: Created
+      description: 'Creates a room template from an existing room.  Can only be called by
+
+        kumospace admins.'
+      summary: Create a room template.
+      tags:
+      - Room Templates
+      security:
+      - firebase: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiCreateRoomTemplateRequest'
+  /v1/roomTemplates/{id}:
+    get:
+      operationId: GetRoomTemplate
+      responses:
+        '200':
+          description: A paginated list of room templates.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRoomTemplate'
+      description: Get information about a specific room template.
+      summary: Get room templates.
+      tags:
+      - Room Templates
+      security:
+      - firebase: []
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+    put:
+      operationId: UpdateRoomTemplate
+      responses:
+        '204':
+          description: No content
+      description: Updates an existing room template.  Can only be called by kumospace admins.
+      summary: Update a room template.
+      tags:
+      - Room Templates
+      security:
+      - firebase: []
+      parameters:
+      - description: The room template id
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiUpdateRoomTemplateRequest'
+components:
+  schemas:
+    BackgroundType.singleTile:
+      enum:
+      - singleTile
+      type: string
+    PaginatedResponse_ApiRoomTemplate_:
+      description: A page of items.  Useful for breaking up a large dataset into smaller chunks.
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/ApiRoomTemplate'
+          type: array
+          description: The page of items.
+        metadata:
+          properties:
+            count:
+              type: number
+              format: double
+              description: The number of items sent.
+            next:
+              type: string
+              description: 'A pagination cursor.  If specified, there is another page of results that
+
+                can be requested by appending this value as a query parameter called
+
+                "next".'
+          required:
+          - count
+          type: object
+          description: 'Metadata about the page of items.  Contains a pagination cursor called
+
+            "next" if there is another page of items.'
+      required:
+      - items
+      - metadata
+      type: object
+      additionalProperties: false
+    FloorRole:
+      enum:
+      - floorManager
+      type: string
+    TemplateTag:
+      enum:
+      - festive
+      - fun
+      - lounge
+      - outdoor
+      - party
+      - professional
+      type: string
+    ApiCreateRoomTemplateRequest:
+      description: A request to create a new room template from an existing room.
+      properties:
+        spaceName:
+          type: string
+          description: The space name.
+          minLength: 6
+          maxLength: 20
+          pattern: ^[0-9a-z\-_]{6,20}$
+        roomId:
+          type: string
+          description: The room id from which to base the template.
+          minLength: 1
+        type:
+          $ref: '#/components/schemas/TemplateType'
+          description: The intended use for this template.
+        tags:
+          items:
+            $ref: '#/components/schemas/TemplateTag'
+          type: array
+          description: Tags used for grouping / filtering this template.
+        title:
+          type: string
+          description: The title of the template.  Defaults to the displayName of the copied room.
+          minLength: 1
+        isDraft:
+          type: boolean
+          description: 'Whether this template is in draft (i.e., not publicly available).
+
+            Defaults to false.'
+        thumbnails:
+          properties:
+            large:
+              type: string
+              description: A url with a 800x800 image of the room.
+              pattern: ^https://
+            small:
+              type: string
+              description: A url with a 200x200 image of the room.
+              pattern: ^https://
+          required:
+          - large
+          - small
+          type: object
+          description: Thumbnails for displaying the room in various sizes.
+      required:
+      - spaceName
+      - roomId
+      - type
+      - tags
+      - thumbnails
+      type: object
+      additionalProperties: false
+    ApiRoomTemplate:
+      allOf:
+      - $ref: '#/components/schemas/Omit_ApiRoom.-or-audioRange-or-privacySettings-or-features-or-isAccessRestricted-or-accessAllowList_'
+      - properties:
+          tags:
+            items:
+              $ref: '#/components/schemas/TemplateTag'
+            type: array
+          type:
+            $ref: '#/components/schemas/TemplateType'
+          isDraft:
+            type: boolean
+        required:
+        - tags
+        - type
+        - isDraft
+        type: object
+    Record_string.never_:
+      properties: {}
+      type: object
+      description: Construct a type with a set of properties K of type T
+    Pick_ApiRoom.Exclude_keyofApiRoom.-or-audioRange-or-privacySettings-or-features-or-isAccessRestricted-or-accessAllowList__:
+      properties:
+        id:
+          type: string
+          description: A globally unique id for the room.
+        displayName:
+          type: string
+          description: The name of the room.
+        width:
+          type: number
+          format: double
+          description: The width of the room, in pixels.
+        height:
+          type: number
+          format: double
+          description: The height of the room, in pixels.
+        capacity:
+          type: number
+          format: double
+          description: The maximum capacity of the room.
+        stockBackgroundId:
+          type: string
+          description: The id of the stock background used in this room.
+        backgroundType:
+          $ref: '#/components/schemas/BackgroundType.singleTile'
+          description: The background type.
+        backgroundData:
+          $ref: '#/components/schemas/SingleTileBackground'
+          description: Data associated with the background.  Varies based on the type.
+        thumbnails:
+          properties:
+            large:
+              type: string
+              description: A url with a 800x800 image of the room.
+            small:
+              type: string
+              description: A url with a 200x200 image of the room.
+          required:
+          - large
+          - small
+          type: object
+          description: Thumbnails for displaying the room in various sizes.
+        userRoles:
+          properties: {}
+          additionalProperties:
+            $ref: '#/components/schemas/FloorRole'
+          type: object
+          description: The room's user roles (floor managers)
+        disableMemberEditing:
+          type: boolean
+          description: The room's editing restrictions. If true, only floor managers can edit (can be overridden by explicit per-zone permissions)
+        roomTemplateId:
+          type: string
+          nullable: true
+          description: 'The template used to create this room.  If null, the room was created
+
+            before room templates existed.'
+      required:
+      - id
+      - displayName
+      - width
+      - height
+      - capacity
+      - stockBackgroundId
+      - backgroundType
+      - backgroundData
+      - thumbnails
+      type: object
+      description: From T, pick a set of properties whose keys are in the union K
+    TemplateType:
+      enum:
+      - room
+      - game
+      - office
+      type: string
+    SingleTileBackground:
+      description: A background with a single tile repeated across the room.
+      properties:
+        tileUrl:
+          type: string
+          description: A url with the full-size image of the tile.
+          pattern: ^https://
+        width:
+          type: number
+          format: double
+          description: The width of the tile, in pixels.
+        height:
+          type: number
+          format: double
+          description: The height of the tile, in pixels.
+      required:
+      - tileUrl
+      - width
+      - height
+      type: object
+      additionalProperties: false
+    Omit_ApiRoom.-or-audioRange-or-privacySettings-or-features-or-isAccessRestricted-or-accessAllowList_:
+      $ref: '#/components/schemas/Pick_ApiRoom.Exclude_keyofApiRoom.-or-audioRange-or-privacySettings-or-features-or-isAccessRestricted-or-accessAllowList__'
+      description: Construct a type with the properties of T except for those in type K.
+    ApiUpdateRoomTemplateRequest:
+      allOf:
+      - properties:
+          tags:
+            items:
+              $ref: '#/components/schemas/TemplateTag'
+            type: array
+            description: Tags used for grouping / filtering this template.
+          thumbnails:
+            properties:
+              large:
+                type: string
+                description: A url with a 800x800 image of the room.
+                pattern: ^https://
+              small:
+                type: string
+                description: A url with a 200x200 image of the room.
+                pattern: ^https://
+            required:
+            - large
+            - small
+            type: object
+            description: Thumbnails for displaying the room in various sizes.
+          isDraft:
+            type: boolean
+            description: Whether this template is in draft (i.e., not publicly available).
+          title:
+            type: string
+            description: The title of the template.
+            minLength: 1
+        type: object
+      - anyOf:
+        - properties:
+            roomId:
+              type: string
+              description: The room id from which to base the template.
+              minLength: 1
+            spaceName:
+              type: string
+              description: The space name.
+              minLength: 6
+              maxLength: 20
+              pattern: ^[0-9a-z\-_]{6,20}$
+          required:
+          - roomId
+          - spaceName
+          type: object
+        - $ref: '#/components/schemas/Record_string.never_'
+      description: 'A request to update an existing room template.  Fields not sent will be
+
+        preserved.'
+  securitySchemes:
+    firebase:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,0 +1,32 @@
+openapi: 3.0.0
+info:
+  title: '@kumo/api Account Daily (Webhook) API'
+  contact: {}
+servers:
+- url: /
+tags:
+- name: Daily (Webhook)
+paths:
+  /v1/integrations/daily/webhook:
+    post:
+      operationId: HandleDailyWebhook
+      responses:
+        '204':
+          description: No content
+      tags:
+      - Daily (Webhook)
+      security: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              type: object
+components:
+  securitySchemes:
+    firebase:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

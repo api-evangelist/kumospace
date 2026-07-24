@@ -1,0 +1,39 @@
+openapi: 3.0.0
+info:
+  title: '@kumo/api Account Redirects API'
+  contact: {}
+servers:
+- url: /
+tags:
+- name: Redirects
+paths:
+  /v1/redirects/jstris/{furnitureId}:
+    get:
+      operationId: GetJstrisRedirect
+      responses:
+        '302':
+          description: Found
+      description: Redirects an authenticated user to the jstris integration.
+      summary: Redirect to a puzzle game.
+      tags:
+      - Redirects
+      security: []
+      parameters:
+      - description: The furniture id that initiated this request.
+        in: path
+        name: furnitureId
+        required: true
+        schema:
+          type: string
+      - description: The idToken of the user.
+        in: query
+        name: idToken
+        required: true
+        schema:
+          type: string
+components:
+  securitySchemes:
+    firebase:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

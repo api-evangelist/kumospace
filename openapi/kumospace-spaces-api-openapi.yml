@@ -1,0 +1,1641 @@
+openapi: 3.0.0
+info:
+  title: '@kumo/api Account Spaces API'
+  contact: {}
+servers:
+- url: /
+tags:
+- name: Spaces
+paths:
+  /v1/spaces:
+    get:
+      operationId: GetSpacesByOwner
+      responses:
+        '200':
+          description: A paginated list of spaces.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse_ApiSpace-or-ApiSpacePublicInfo_'
+      description: Get spaces owned by the user.  For now, users can only have a single space.
+      summary: Get the user's spaces.
+      tags:
+      - Spaces
+      security:
+      - firebase: []
+      parameters:
+      - description: If true, also returns spaces the user is a member of.
+        in: query
+        name: members
+        required: false
+        schema:
+          type: boolean
+      - in: query
+        name: excludeDemo
+        required: false
+        schema:
+          type: boolean
+      - in: query
+        name: emailDomain
+        required: false
+        schema:
+          type: boolean
+    post:
+      operationId: CreateSpace
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                properties:
+                  uid:
+                    type: string
+                required:
+                - uid
+                type: object
+      description: 'Creates a new space.  Spaces must have a globally unique name, and each
+
+        user can only own one space.'
+      summary: Create a space.
+      tags:
+      - Spaces
+      security:
+      - firebase: []
+      parameters: []
+      requestBody:
+        description: The space.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiCreateSpaceRequest'
+              description: The space.
+  /v1/spaces/{name}:
+    get:
+      operationId: GetSpaceByName
+      responses:
+        '200':
+          description: The space.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiSpace'
+      description: 'Get a space by name.  Only returns a space if the user has permission to
+
+        join.'
+      summary: Get a space by name.
+      tags:
+      - Spaces
+      security:
+      - firebase: []
+      parameters:
+      - description: The name of the space.
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: Password
+        required: false
+        schema:
+          type: string
+      - in: header
+        name: InviteToken
+        required: false
+        schema:
+          type: string
+    put:
+      operationId: UpdateSpace
+      responses:
+        '204':
+          description: No content
+      description: 'Updates an existing space.  Can only be called by the owner of the space.
+
+        Any fields that are not sent will be preserved.'
+      summary: Update a space.
+      tags:
+      - Spaces
+      security:
+      - firebase: []
+      parameters:
+      - description: The name of the space.
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: New properties for the space.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiUpdateSpaceRequest'
+              description: New properties for the space.
+    delete:
+      operationId: DeleteSpace
+      responses:
+        '204':
+          description: No content
+      description: 'Deletes a space.  Can only be called by the owner of the space.  This
+
+        method will return success even if the space does not exist.'
+      summary: Delete a space.
+      tags:
+      - Spaces
+      security:
+      - firebase: []
+      parameters:
+      - description: The name of the space.
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+  /v1/spaces/{name}/publicInfo:
+    get:
+      operationId: GetSpacePublicInfoByName
+      responses:
+        '200':
+          description: Public information about the space.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiSpacePublicInfo'
+      description: Get public information about a space.
+      summary: Get public information about a space
+      tags:
+      - Spaces
+      security:
+      - firebase: []
+      parameters:
+      - description: The name of the space.
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+  /v1/spaces/{name}/chatConfig:
+    get:
+      operationId: GetSpaceChatConfigByName
+      responses:
+        '200':
+          description: The space's chat config
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiChatConfig'
+      description: 'Get a space''s chat config.  Only returns chat info if the user has permission
+
+        to access the space.'
+      summary: Get a space's chat config
+      tags:
+      - Spaces
+      security:
+      - firebase: []
+      parameters:
+      - description: The name of the space.
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+  /v1/spaces/{name}/channels:
+    get:
+      operationId: GetSpaceUserChannels
+      responses:
+        '200':
+          description: The space's chat channels
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiChatConfigChannel'
+                type: array
+      description: Get a space's chat channels
+      summary: Get a space's chat channels
+      tags:
+      - Spaces
+      security:
+      - firebase: []
+      parameters:
+      - description: The name of the space.
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: if true, only returns channels with unread messages
+        in: query
+        name: withUnreadMessagesOnly
+        required: false
+        schema:
+          type: boolean
+  /v1/spaces/{name}/customChannels:
+    get:
+      operationId: GetSpaceCustomChannels
+      responses:
+        '200':
+          description: All space's public channels and only the space's private channels a user belongs to.
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/SendbirdChannel'
+                type: array
+      description: 'Get a space''s custom channels. Returns all space''s public channels and only the
+
+        space''s private channels a user belongs to.'
+      summary: Get a space's custom channels
+      tags:
+      - Spaces
+      security:
+      - firebase: []
+      parameters:
+      - description: The name of the space.
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: includeArchived
+        required: false
+        schema:
+          type: boolean
+  /v1/spaces/{name}/home:
+    put:
+      operationId: UpdateHome
+      responses:
+        '204':
+          description: No content
+      description: Creates or updates a user's spawn home for a space
+      summary: Update a user's spawn home.
+      tags:
+      - Spaces
+      security:
+      - firebase: []
+      parameters:
+      - description: The space name.
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiUpdateHomeRequest'
+    delete:
+      operationId: DeleteHome
+      responses:
+        '204':
+          description: No content
+      description: Deletes an existing user's spawn home for a space
+      summary: Delete a user's spawn home.
+      tags:
+      - Spaces
+      security:
+      - firebase: []
+      parameters:
+      - description: The space name.
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+  /v1/spaces/{name}/trial:
+    put:
+      operationId: StartInternalFreeTrial
+      responses:
+        '204':
+          description: No content
+      description: Starts an internal free trial if the space never got one or a stripe free trial
+      summary: Start a free trial if space never got one
+      tags:
+      - Spaces
+      security:
+      - firebase: []
+      parameters:
+      - description: The space name.
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+    get:
+      operationId: GetFreeTrialInfo
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                properties:
+                  hasHadFreeTrial:
+                    type: boolean
+                required:
+                - hasHadFreeTrial
+                type: object
+      description: Retrieves free trial info
+      summary: Retrieves free trial info
+      tags:
+      - Spaces
+      security:
+      - firebase: []
+      parameters:
+      - description: The space name
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+  /v1/spaces/{name}/addMemberLink/{addMemberLinkId}:
+    get:
+      operationId: GetAddMemberLink
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddMemberLink'
+      description: Retrieves an Add Member Link for a space
+      summary: Start a free trial if space never got one
+      tags:
+      - Spaces
+      security:
+      - firebase: []
+      parameters:
+      - description: The space name.
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: The ID of the link to retrieve
+        in: path
+        name: addMemberLinkId
+        required: true
+        schema:
+          type: string
+  /v1/spaces/{name}/prospected:
+    put:
+      operationId: SetProspected
+      responses:
+        '204':
+          description: No content
+      description: 'Set a space as already prospected by Sales Team.
+
+        Can only be called by verified Kumospace users.'
+      summary: Set a space as already prospected by Sales Team.
+      tags:
+      - Spaces
+      security:
+      - firebase: []
+      parameters:
+      - description: The space name.
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiUpdateProspectStatusRequest'
+  /v1/spaces/{name}/ownerEmail:
+    get:
+      operationId: GetSpaceOwnerEmail
+      responses:
+        '200':
+          description: The space owner's email.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGetSpaceOwnerEmailResponse'
+      description: Returns the space owner's email
+      summary: Get a space owner's email.
+      tags:
+      - Spaces
+      security:
+      - firebase: []
+      parameters:
+      - description: The name of the space.
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+  /v1/spaces/{name}/defaultChannels:
+    put:
+      operationId: UpdateDefaultChannels
+      responses:
+        '204':
+          description: No content
+      description: 'Updates a space''s default channels. When a guest is promoted
+
+        to member, they are added to all the space''s default channels'
+      summary: Updates a custom channel's settings
+      tags:
+      - Spaces
+      security:
+      - firebase: []
+      parameters:
+      - in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Body of the request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiUpdateDefaultChannelsRequest'
+              description: Body of the request
+  /v1/spaces/{spaceName}/can-schedule-demo:
+    get:
+      operationId: GetCanSpaceScheduleDemo
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGetCanSpaceScheduleDemoResponse'
+      summary: 'Uses onboarding intake forms to determine if the space
+
+        is a small company or not.'
+      tags:
+      - Spaces
+      security:
+      - firebase: []
+      parameters:
+      - in: path
+        name: spaceName
+        required: true
+        schema:
+          type: string
+components:
+  schemas:
+    PrivacySettingType.public:
+      enum:
+      - public
+      type: string
+    RoomPrivacySettingType.closed:
+      enum:
+      - closed
+      type: string
+    BillingPeriod:
+      enum:
+      - monthly
+      - annually
+      type: string
+    PrivacySettingType.registeredUsers:
+      enum:
+      - registeredUsers
+      type: string
+    ChannelType:
+      type: string
+      enum:
+      - user
+      - custom
+      - group_dms
+    Pick_ApiPrivacySettings.type_:
+      properties:
+        type:
+          $ref: '#/components/schemas/PrivacySettingType.public'
+      required:
+      - type
+      type: object
+      description: From T, pick a set of properties whose keys are in the union K
+    AutomaticStripeSubscription:
+      properties:
+        subscriptionId:
+          type: string
+        customerId:
+          type: string
+        billingPeriod:
+          $ref: '#/components/schemas/BillingPeriod'
+        reverseTrialPaymentAdded:
+          type: boolean
+        latestPaymentFailed:
+          type: boolean
+        pastDue:
+          type: boolean
+        environment:
+          $ref: '#/components/schemas/SubscriptionEnvironment'
+        status:
+          type: string
+        cancelAtPeriodEnd:
+          type: boolean
+        periodEnd:
+          type: number
+          format: double
+      required:
+      - subscriptionId
+      - customerId
+      - billingPeriod
+      - pastDue
+      - environment
+      type: object
+      additionalProperties: false
+    UserRole:
+      description: The user's role and permissions within a space.
+      enum:
+      - admin
+      - banned
+      - cohost
+      - guest
+      - member
+      - floorManager
+      type: string
+    UserRole.member:
+      enum:
+      - member
+      type: string
+    SendBirdUser:
+      properties:
+        start_at:
+          type: number
+          format: double
+        end_at:
+          type: number
+          format: double
+        description:
+          type: string
+        is_created:
+          type: boolean
+        is_shadow_blocked:
+          type: boolean
+        is_hide_me_from_friends:
+          type: boolean
+        locale:
+          type: string
+        local:
+          type: string
+        phone_number:
+          type: string
+        created_at:
+          type: number
+          format: double
+        profile_url:
+          type: string
+        preferred_languages:
+          items:
+            type: string
+          type: array
+        session_tokens:
+          items:
+            type: string
+          type: array
+        discovery_keys:
+          items:
+            type: string
+          type: array
+        nickname:
+          type: string
+        last_seen_at:
+          type: number
+          format: double
+        is_active:
+          type: boolean
+        has_ever_logged_in:
+          type: boolean
+        access_token:
+          type: string
+        is_online:
+          type: boolean
+        require_auth_for_profile_image:
+          type: boolean
+        user_id:
+          type: string
+      required:
+      - user_id
+      type: object
+    ApiUpdateProspectStatusRequest:
+      properties:
+        threadTs:
+          type: string
+          nullable: true
+      type: object
+    Partial_ChatSettings_:
+      properties:
+        user:
+          type: boolean
+        nearby:
+          type: boolean
+        room:
+          type: boolean
+        space:
+          type: boolean
+        custom:
+          type: boolean
+        permissions:
+          properties:
+            manageChannel:
+              properties:
+                minimumRole:
+                  anyOf:
+                  - $ref: '#/components/schemas/UserRole.admin'
+                  - $ref: '#/components/schemas/UserRole.member'
+              required:
+              - minimumRole
+              type: object
+            createChannel:
+              properties:
+                minimumRole:
+                  anyOf:
+                  - $ref: '#/components/schemas/UserRole.admin'
+                  - $ref: '#/components/schemas/UserRole.member'
+              required:
+              - minimumRole
+              type: object
+          type: object
+      type: object
+      description: Make all properties in T optional
+    Record_Exclude_Range.Range.groupDm_.boolean_:
+      properties:
+        user:
+          type: boolean
+        nearby:
+          type: boolean
+        room:
+          type: boolean
+        space:
+          type: boolean
+        custom:
+          type: boolean
+      type: object
+      description: Construct a type with a set of properties K of type T
+    ApiUpdateSpaceRequest:
+      description: A request to update an existing space.
+      properties:
+        spaceName:
+          type: string
+          description: 'The new kumospace url path.  This changes the name of the space, and
+
+            subsequent updates should use the new name.'
+          minLength: 6
+          maxLength: 20
+          pattern: ^[0-9a-z\-_]{6,20}$
+        displayName:
+          type: string
+          description: An optional display name.
+          minLength: 1
+        privacySettings:
+          $ref: '#/components/schemas/ApiPrivacySettings'
+          description: Restricts user access to the space.  Defaults to public.
+        chatSettings:
+          $ref: '#/components/schemas/Partial_ChatSettings_'
+          description: Allowed ranges for chat messages sent in this space. Defaults to all.
+        migrateFromV1:
+          type: boolean
+          description: If specified, migrates a v1 space to a v2 space.
+        disableGuestPresent:
+          type: boolean
+          description: Whether guest's ability to present should be disabled.
+        setEmailDomain:
+          type: boolean
+          description: 'If true, everybody who joins the space with the same email domain as the owner
+
+            will automatically be added as a member'
+        spaceDescription:
+          type: string
+          description: Sets a new space description.
+          minLength: 0
+          maxLength: 180
+        requireDesktopApp:
+          type: boolean
+          description: Makes members of this space require the desktop app to join.
+      type: object
+      additionalProperties: false
+    ApiSpace:
+      description: A consolidated space model across v1 and v2.
+      properties:
+        name:
+          type: string
+          description: The name of the space. Used as a unique identifier.
+        displayName:
+          type: string
+          description: A user-specified description of the space.
+        privacySettings:
+          $ref: '#/components/schemas/ApiPrivacySettings'
+          description: Privacy settings applied to the space.
+        useCase:
+          allOf:
+          - $ref: '#/components/schemas/UseCase'
+          nullable: true
+          description: Privacy setting type applied to the space.
+        description:
+          type: string
+          description: Space description
+        uid:
+          type: string
+          description: The ID of the space (firebase ID). Used as a unique identifier.
+        version:
+          type: number
+          enum:
+          - 1
+          - 2
+          - 3
+          description: The version of the space.
+        ownerId:
+          type: string
+          description: The uid of the space's owner.
+        emailDomain:
+          type: string
+          description: The email domain that will be used to automatically add members to the space.
+        emailDomains:
+          items:
+            type: string
+          type: array
+          description: List of email domains that will be used to automatically add members to the space.
+        createdAt:
+          type: string
+          format: date-time
+          description: Date the space was created
+        chatSettings:
+          $ref: '#/components/schemas/ChatSettings'
+          description: Chat ranges allowed in this space
+        rooms:
+          items:
+            $ref: '#/components/schemas/ApiRoom'
+          type: array
+          description: The rooms in this space.
+        memberCount:
+          type: number
+          format: double
+          description: The number of users given member permissions for the space.
+        memberLimit:
+          type: number
+          format: double
+          description: 'The maxmimum number of users that can be made members. If undefined,
+
+            there is no member limit.'
+        memberMinimum:
+          type: number
+          format: double
+          description: The minimum number of users that should be billed as members.
+        tier:
+          $ref: '#/components/schemas/SubscriptionTier'
+          description: 'The subscription tier.  If the user cancels their subscription, this
+
+            reverts to ''free''.'
+        tierNameOverride:
+          type: string
+          description: An override for the customer facing name for the user's subscription tier.
+        subscription:
+          $ref: '#/components/schemas/AutomaticStripeSubscription'
+          description: Stripe subscription info, if the user is payment for an upgraded space.
+        hideInviteButton:
+          type: boolean
+          description: Whether the "invite" button should be viewable in the space
+        disableGuestPresent:
+          type: boolean
+          description: Whether guest's ability to present should be disabled.
+        permissions:
+          $ref: '#/components/schemas/ApiSpacePermissions'
+          description: A mapping of permissions this space has based on its subscription.
+        userRoles:
+          properties: {}
+          additionalProperties:
+            $ref: '#/components/schemas/UserRole'
+          type: object
+          description: 'User roles in the space.  If a user is not in this mapping, they are a
+
+            guest. Available only to members.'
+        hipaaEnabled:
+          type: boolean
+          description: Whether the HIPAA compliance mode is enabled in this space
+        spawnHomes:
+          properties: {}
+          additionalProperties:
+            $ref: '#/components/schemas/SpawnHome'
+          type: object
+          description: 'The room''s spawn homes for each user. Each user can only have one spawnHome
+
+            per space (rather than per room) - the idea is that they''d only have one office per space.'
+        isDemo:
+          type: boolean
+          description: Whether the space is a demo space.
+        guestLimitMs:
+          type: number
+          format: double
+          description: 'The number of milliseconds a guest account can be active in the space per week.
+
+            Lobby time is not counted against this limit.'
+        isInternalFreeTrialActive:
+          type: boolean
+        internalFreeTrialScheduledExpirationMs:
+          type: number
+          format: double
+          description: Scheduled internal free trial expiration in milliseconds
+        isReverseTrial:
+          type: boolean
+          description: 'Wether or not this space has been created with a reverse trial.
+
+            Reverse trials are cardless and starts when the space is created.'
+        cancelledReverseTrial:
+          type: boolean
+          description: Indicates if a space has a cancelled reverse trial subscription.
+        requireDesktopApp:
+          type: boolean
+          description: Requires members of this space to use the desktop app to join.
+      required:
+      - name
+      - displayName
+      - privacySettings
+      - uid
+      - version
+      - ownerId
+      - createdAt
+      - chatSettings
+      - rooms
+      - memberCount
+      - memberMinimum
+      - tier
+      - hideInviteButton
+      - disableGuestPresent
+      - permissions
+      - hipaaEnabled
+      type: object
+      additionalProperties: false
+    ApiChatConfigChannel:
+      properties:
+        user_ids:
+          items:
+            type: string
+          type: array
+        unread_mention_count:
+          type: number
+          format: double
+        unread_message_count:
+          type: number
+          format: double
+        custom_type:
+          $ref: '#/components/schemas/ChannelType'
+        channel_url:
+          type: string
+        name:
+          type: string
+      required:
+      - user_ids
+      - unread_mention_count
+      - unread_message_count
+      - custom_type
+      - channel_url
+      - name
+      type: object
+    ApiRoomFeatures:
+      properties:
+        zoom:
+          type: boolean
+        pan:
+          type: boolean
+        pathfinding:
+          type: boolean
+        map:
+          type: boolean
+        fog:
+          type: boolean
+      type: object
+    PrivacySettingType.emailDomain:
+      enum:
+      - emailDomain
+      type: string
+    ApiSpacePermissions:
+      properties:
+        advancedChat:
+          type: boolean
+        analytics:
+          type: boolean
+        broadcast:
+          type: boolean
+        presentLocalFile:
+          type: boolean
+        presentSecondaryCamera:
+          type: boolean
+        privacySettingEmailDomain:
+          type: boolean
+        privacySettingGuestList:
+          type: boolean
+        privacySettingJwt:
+          type: boolean
+        privacySettingSaml:
+          type: boolean
+        privacySettingPassword:
+          type: boolean
+        privacySettingPublic:
+          type: boolean
+        privacySettingRegisteredUsers:
+          type: boolean
+        privacySettingClosed:
+          type: boolean
+        recording:
+          type: boolean
+        sendbirdChat:
+          type: boolean
+      type: object
+    ApiPrivacySettings:
+      anyOf:
+      - properties:
+          type:
+            $ref: '#/components/schemas/PrivacySettingType.public'
+        required:
+        - type
+        type: object
+      - properties:
+          type:
+            $ref: '#/components/schemas/PrivacySettingType.registeredUsers'
+        required:
+        - type
+        type: object
+      - properties:
+          data:
+            properties:
+              password:
+                type: string
+                description: 'The password for this space.  Attendees will be prompted before
+
+                  joining.'
+                minLength: 4
+            required:
+            - password
+            type: object
+          type:
+            $ref: '#/components/schemas/PrivacySettingType.password'
+        required:
+        - data
+        - type
+        type: object
+      - properties:
+          data:
+            properties:
+              allowedDomains:
+                items:
+                  type: string
+                type: array
+                maxLength: 100
+            required:
+            - allowedDomains
+            type: object
+          type:
+            $ref: '#/components/schemas/PrivacySettingType.emailDomain'
+        required:
+        - data
+        - type
+        type: object
+      - properties:
+          data:
+            properties:
+              guestList:
+                items:
+                  type: string
+                type: array
+                maxLength: 2000
+            required:
+            - guestList
+            type: object
+          type:
+            $ref: '#/components/schemas/PrivacySettingType.guestList'
+        required:
+        - data
+        - type
+        type: object
+      - properties:
+          data:
+            properties:
+              guestList:
+                items:
+                  type: string
+                type: array
+                maxLength: 2000
+              issuerId:
+                type: string
+            required:
+            - guestList
+            - issuerId
+            type: object
+          type:
+            $ref: '#/components/schemas/PrivacySettingType.jwt'
+        required:
+        - data
+        - type
+        type: object
+      - properties:
+          data:
+            properties:
+              guestList:
+                items:
+                  type: string
+                type: array
+                maxLength: 2000
+              providerId:
+                type: string
+            required:
+            - guestList
+            - providerId
+            type: object
+          type:
+            $ref: '#/components/schemas/PrivacySettingType.saml'
+        required:
+        - data
+        - type
+        type: object
+      - properties:
+          type:
+            $ref: '#/components/schemas/PrivacySettingType.closed'
+        required:
+        - type
+        type: object
+      description: Privacy settings as returned by the api.
+    PrivacySettingType.jwt:
+      enum:
+      - jwt
+      type: string
+    ApiRoom:
+      description: A room within a space.
+      properties:
+        id:
+          type: string
+          description: A globally unique id for the room.
+        displayName:
+          type: string
+          description: The name of the room.
+        width:
+          type: number
+          format: double
+          description: The width of the room, in pixels.
+        height:
+          type: number
+          format: double
+          description: The height of the room, in pixels.
+        capacity:
+          type: number
+          format: double
+          description: The maximum capacity of the room.
+        features:
+          $ref: '#/components/schemas/ApiRoomFeatures'
+          description: Features (zoom, pathfinding, etc) that are enabled for this room.
+        stockBackgroundId:
+          type: string
+          description: The id of the stock background used in this room.
+        backgroundType:
+          $ref: '#/components/schemas/BackgroundType.singleTile'
+          description: The background type.
+        backgroundData:
+          $ref: '#/components/schemas/SingleTileBackground'
+          description: Data associated with the background.  Varies based on the type.
+        audioRange:
+          anyOf:
+          - type: number
+            format: double
+          - type: string
+            enum:
+            - room
+          description: The radius, in pixels, for which a user's voice can be heard.
+        thumbnails:
+          properties:
+            large:
+              type: string
+              description: A url with a 800x800 image of the room.
+            small:
+              type: string
+              description: A url with a 200x200 image of the room.
+          required:
+          - large
+          - small
+          type: object
+          description: Thumbnails for displaying the room in various sizes.
+        privacySettings:
+          $ref: '#/components/schemas/ApiResponseRoomPrivacySettings'
+          description: The privacy settings for this room.
+        userRoles:
+          properties: {}
+          additionalProperties:
+            $ref: '#/components/schemas/FloorRole'
+          type: object
+          description: The room's user roles (floor managers)
+        disableMemberEditing:
+          type: boolean
+          description: The room's editing restrictions. If true, only floor managers can edit (can be overridden by explicit per-zone permissions)
+        roomTemplateId:
+          type: string
+          nullable: true
+          description: 'The template used to create this room.  If null, the room was created
+
+            before room templates existed.'
+        isAccessRestricted:
+          type: boolean
+        accessAllowList:
+          items:
+            type: string
+          type: array
+      required:
+      - id
+      - displayName
+      - width
+      - height
+      - capacity
+      - features
+      - stockBackgroundId
+      - backgroundType
+      - backgroundData
+      - audioRange
+      - thumbnails
+      - privacySettings
+      - isAccessRestricted
+      - accessAllowList
+      type: object
+      additionalProperties: false
+    PrivacySettingType.password:
+      enum:
+      - password
+      type: string
+    SingleTileBackground:
+      description: A background with a single tile repeated across the room.
+      properties:
+        tileUrl:
+          type: string
+          description: A url with the full-size image of the tile.
+          pattern: ^https://
+        width:
+          type: number
+          format: double
+          description: The width of the tile, in pixels.
+        height:
+          type: number
+          format: double
+          description: The height of the tile, in pixels.
+      required:
+      - tileUrl
+      - width
+      - height
+      type: object
+      additionalProperties: false
+    ApiResponseRoomPrivacySettings:
+      anyOf:
+      - $ref: '#/components/schemas/RoomPrivacySettings'
+      - properties:
+          type:
+            $ref: '#/components/schemas/RoomPrivacySettingType.password'
+        required:
+        - type
+        type: object
+    UserRole.admin:
+      enum:
+      - admin
+      type: string
+    ApiSpacePublicInfo:
+      description: A model for parameters of a space that are accessible without authentication.
+      properties:
+        name:
+          type: string
+          description: The name of the space. Used as a unique identifier.
+        displayName:
+          type: string
+          description: A user-specified description of the space.
+        privacySettings:
+          $ref: '#/components/schemas/Pick_ApiPrivacySettings.type_'
+          description: Privacy setting type applied to the space.
+        useCase:
+          allOf:
+          - $ref: '#/components/schemas/UseCase'
+          nullable: true
+          description: Privacy setting type applied to the space.
+        description:
+          type: string
+          description: Space description
+      required:
+      - name
+      - displayName
+      - privacySettings
+      type: object
+      additionalProperties: false
+    SubscriptionTier:
+      enum:
+      - free
+      - professional
+      - business
+      - enterprise
+      - custom
+      type: string
+    ApiGetCanSpaceScheduleDemoResponse:
+      properties:
+        canScheduleDemo:
+          type: boolean
+      required:
+      - canScheduleDemo
+      type: object
+    SubscriptionEnvironment:
+      enum:
+      - test
+      - dev
+      - prod
+      type: string
+    UseCase:
+      description: How the user plans to use the space.
+      enum:
+      - culture
+      - productivity
+      - communication
+      - visibility
+      - engagement
+      - other
+      - events
+      - education
+      - friends
+      type: string
+    RoomPrivacySettingType.open:
+      enum:
+      - open
+      type: string
+    BackgroundType.singleTile:
+      enum:
+      - singleTile
+      type: string
+    ApiUpdateDefaultChannelsRequest:
+      properties:
+        channelUrls:
+          items:
+            type: string
+          type: array
+      required:
+      - channelUrls
+      type: object
+    FloorRole:
+      enum:
+      - floorManager
+      type: string
+    SpawnHome:
+      properties:
+        roomId:
+          type: string
+        x:
+          type: number
+          format: double
+        y:
+          type: number
+          format: double
+      required:
+      - roomId
+      - x
+      - y
+      type: object
+      additionalProperties: false
+    ApiCreateSpaceRequest:
+      description: A request to create a new space.
+      properties:
+        name:
+          type: string
+          description: A globally unique name for the space.
+          minLength: 6
+          maxLength: 20
+          pattern: ^[0-9a-z\-_]{6,20}$
+        useCase:
+          allOf:
+          - $ref: '#/components/schemas/UseCase'
+          nullable: true
+          description: The main purpose of this space.
+        createDefaultRoom:
+          type: boolean
+          description: Whether to create a demo room.  Defaults to false.
+        defaultRoomTemplate:
+          type: string
+          description: 'The template to use for the default room.  Defaults to a template
+
+            matching the request''s useCase property.'
+        displayName:
+          type: string
+          description: An optional display name.
+          minLength: 1
+        privacySettings:
+          $ref: '#/components/schemas/ApiPrivacySettings'
+          description: Restricts user access to the space.  Defaults to public
+        isDryRun:
+          type: boolean
+          description: If true, perform all validation, but don't actually create the space.
+        isDemo:
+          type: boolean
+          description: If true, configure the space as a demo space
+        setEmailDomain:
+          type: boolean
+          description: 'if true, everybody who joins the space with the same email domain as the owner
+
+            will automatically be added as a member'
+      required:
+      - name
+      - useCase
+      type: object
+      additionalProperties: false
+    ApiGetSpaceOwnerEmailResponse:
+      properties:
+        email:
+          type: string
+      type: object
+    ChannelMetadata:
+      properties:
+        spaceUid:
+          type: string
+        roomId:
+          type: string
+        nearbyChannelOwnerId:
+          type: string
+        userId:
+          type: string
+        status:
+          type: string
+          enum:
+          - new
+          - open
+          - closed
+          - hidden
+          description: "1. New - user just created account, no message sent yet.\n2. Open - after user send a message.\n3. Closed - after kumo employee closes the channel.\n4. Hidden - Allows for hiding a channel, used when user purchases a subscription.\n            We don't want to delete the channel, as we would lose all data related to it."
+        createdBy:
+          type: string
+        isPrivate:
+          type: string
+          description: 'Whether the channel is private or not. Public channels contain all space members,
+
+            and whenever a member is added to the space, they are added to public channels. Private
+
+            channels'' members are added manually. Must be string as all metadata properties.'
+        defaultChannelId:
+          type: string
+          description: 'Only channels created by default have this id (initialle #announcements and
+
+            #general). Default channels are created when a space goes from a free tier
+
+            to a paid one. This IDD is used to avoid re-creating the default channels
+
+            if a spaces goes from paid to free and then back to paid again'
+        isDefaultChannel:
+          type: string
+          description: 'Whether the channel is a default channel or not. When a guest is promoted to space
+
+            member, they are added to all a space''s default channels'
+      required:
+      - spaceUid
+      type: object
+      additionalProperties: false
+    PrivacySettingType.guestList:
+      enum:
+      - guestList
+      type: string
+    PrivacySettingType.saml:
+      enum:
+      - saml
+      type: string
+    ApiUpdateHomeRequest:
+      properties:
+        roomId:
+          type: string
+          description: The ID of the room where the home will be
+        y:
+          type: integer
+          format: int32
+          description: The home's location in the y axis in pixels
+        x:
+          type: integer
+          format: int32
+          description: The home's location in the x axis in pixels
+      required:
+      - roomId
+      - y
+      - x
+      type: object
+      description: A request to create or update a user's home in an existing room
+    RoomPrivacySettingType.password:
+      enum:
+      - password
+      type: string
+    PrivacySettingType.closed:
+      enum:
+      - closed
+      type: string
+    RoomPrivacySettings:
+      anyOf:
+      - properties:
+          type:
+            $ref: '#/components/schemas/RoomPrivacySettingType.open'
+        required:
+        - type
+        type: object
+      - properties:
+          type:
+            $ref: '#/components/schemas/RoomPrivacySettingType.closed'
+        required:
+        - type
+        type: object
+    SendbirdChannel:
+      properties:
+        ts_message_offset:
+          type: number
+          format: double
+        joined_ts:
+          type: number
+          format: double
+        freeze:
+          type: boolean
+        metadata:
+          $ref: '#/components/schemas/ChannelMetadata'
+        members:
+          items:
+            $ref: '#/components/schemas/SendBirdUser'
+          type: array
+        unread_mention_count:
+          type: number
+          format: double
+        unread_message_count:
+          type: number
+          format: double
+        created_at:
+          type: number
+          format: double
+        max_length_message:
+          type: number
+          format: double
+        joined_member_count:
+          type: number
+          format: double
+        member_count:
+          type: number
+          format: double
+        is_super:
+          type: boolean
+        is_public:
+          type: boolean
+        is_distinct:
+          type: boolean
+        custom_type:
+          $ref: '#/components/schemas/ChannelType'
+        channel_url:
+          type: string
+        name:
+          type: string
+      required:
+      - freeze
+      - unread_mention_count
+      - unread_message_count
+      - created_at
+      - max_length_message
+      - joined_member_count
+      - member_count
+      - is_super
+      - is_public
+      - is_distinct
+      - custom_type
+      - channel_url
+      - name
+      type: object
+    AddMemberLink:
+      properties:
+        createdAt:
+          type: number
+          format: double
+          description: Timestamp in milliseconds
+        guestName:
+          type: string
+          description: The name of the guest being invited.
+        guestUid:
+          type: string
+          description: The firebase id of the guest being invited.
+        adminUid:
+          type: string
+          description: The firebase id of the user inviting the guest
+        adminOrOwnerRole:
+          anyOf:
+          - $ref: '#/components/schemas/UserRole.admin'
+          - type: string
+            enum:
+            - owner
+        role:
+          $ref: '#/components/schemas/UserRole'
+        messageId:
+          type: string
+        spaceDisplayName:
+          type: string
+          description: this is to display the space name "Kumo HQ" to user via email invitation
+        spaceName:
+          type: string
+      required:
+      - createdAt
+      - guestName
+      - guestUid
+      - adminUid
+      - adminOrOwnerRole
+      - role
+      - messageId
+      - spaceDisplayName
+      - spaceName
+      type: object
+    ApiChatConfig:
+      properties:
+        channels:
+          items:
+            $ref: '#/components/schemas/ApiChatConfigChannel'
+          type: array
+          description: The space's channels with unread messages
+        sessionToken:
+          type: string
+          description: The user's Sendbird session token for chat login
+        userName:
+          type: string
+          description: The user's nickname in Sendbird
+        userId:
+          type: string
+          description: 'The user id to use for chat
+
+            TODO/Cleanup: If this will always be the same as the user
+
+            uid/firebaseid we may not need to return this.'
+        spaceUid:
+          type: string
+          description: The Space's Uid for which the config was fetched Id
+        appId:
+          type: string
+          description: The Sendbird Application Id
+      required:
+      - channels
+      - sessionToken
+      - userId
+      - spaceUid
+      - appId
+      type: object
+    ChatSettings:
+      allOf:
+      - $ref: '#/components/schemas/Record_Exclude_Range.Range.groupDm_.boolean_'
+      - properties:
+          permissions:
+            properties:
+              manageChannel:
+                properties:
+                  minimumRole:
+                    anyOf:
+                    - $ref: '#/components/schemas/UserRole.admin'
+                    - $ref: '#/components/schemas/UserRole.member'
+                required:
+                - minimumRole
+                type: object
+              createChannel:
+                properties:
+                  minimumRole:
+                    anyOf:
+                    - $ref: '#/components/schemas/UserRole.admin'
+                    - $ref: '#/components/schemas/UserRole.member'
+                required:
+                - minimumRole
+                type: object
+            type: object
+          undefined:
+            type: boolean
+        type: object
+      description: Chat ranges available for Guests
+    PaginatedResponse_ApiSpace-or-ApiSpacePublicInfo_:
+      description: A page of items.  Useful for breaking up a large dataset into smaller chunks.
+      properties:
+        items:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/ApiSpace'
+            - $ref: '#/components/schemas/ApiSpacePublicInfo'
+          type: array
+          description: The page of items.
+        metadata:
+          properties:
+            count:
+              type: number
+              format: double
+              description: The number of items sent.
+            next:
+              type: string
+              description: 'A pagination cursor.  If specified, there is another page of results that
+
+                can be requested by appending this value as a query parameter called
+
+                "next".'
+          required:
+          - count
+          type: object
+          description: 'Metadata about the page of items.  Contains a pagination cursor called
+
+            "next" if there is another page of items.'
+      required:
+      - items
+      - metadata
+      type: object
+      additionalProperties: false
+  securitySchemes:
+    firebase:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

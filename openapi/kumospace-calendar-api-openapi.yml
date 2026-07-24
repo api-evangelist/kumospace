@@ -1,0 +1,324 @@
+openapi: 3.0.0
+info:
+  title: '@kumo/api Account Calendar API'
+  contact: {}
+servers:
+- url: /
+tags:
+- name: Calendar
+paths:
+  /v1/calendar/integrate-gcal:
+    post:
+      operationId: IntegrateGcal
+      responses:
+        '200':
+          description: ''
+      summary: Enables Google Calendar integration for the user.
+      tags:
+      - Calendar
+      security:
+      - firebase: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiEnableGcalIntegrationRequest'
+  /v1/calendar/events/{queryDateYYYYMMDD}:
+    get:
+      operationId: GetEventsForDate
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiCalendarEvent'
+                type: array
+      summary: Fetches the user's GCal events.
+      tags:
+      - Calendar
+      security:
+      - firebase: []
+      parameters:
+      - in: path
+        name: queryDateYYYYMMDD
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: timeZone
+        required: true
+        schema:
+          type: string
+  /v1/calendar/events:
+    get:
+      operationId: GetEventsForRange
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiCalendarEvent'
+                type: array
+      tags:
+      - Calendar
+      security:
+      - firebase: []
+      parameters:
+      - in: query
+        name: startDateTime
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: endDateTime
+        required: true
+        schema:
+          type: string
+  /v1/calendar/update-event-reply:
+    post:
+      operationId: UpdateAttendance
+      responses:
+        '200':
+          description: ''
+      summary: Updates an event's reply status (accepted, declined, tentative).
+      tags:
+      - Calendar
+      security:
+      - firebase: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiUpdateCalendarEventReplyRequest'
+  /v1/calendar/update-connected-calendars:
+    post:
+      operationId: UpdateConnectedCalendars
+      responses:
+        '200':
+          description: ''
+      summary: Updates a user's connected calendar preferences.
+      tags:
+      - Calendar
+      security:
+      - firebase: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiUpdateConnectedCalendarsRequest'
+  /v1/calendar/sync-calendars:
+    post:
+      operationId: SyncCalendars
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiCalendar'
+                type: array
+      description: 'Syncs a user''s subscribed calendars in the external system (GCal or Outlook), with our integration doc.
+
+        This will always first check with [Gcal/Outlook] API to make sure we return the most up-to-date set
+
+        of calendars. We sync with our internal integration doc so that we can store any user isConnected preferences.'
+      summary: Syncs a user's subscribed calendars in [Gcal/Outlook], with our integration doc.
+      tags:
+      - Calendar
+      security:
+      - firebase: []
+      parameters: []
+  /v1/calendar/disconnect-calendar-integration:
+    post:
+      operationId: DisconnectCalendarIntegration1
+      responses:
+        '200':
+          description: ''
+      summary: 'Disconnect Calendar integration for the user.
+
+        This will delete the corresponding integration doc in firestore.'
+      tags:
+      - Calendar
+      security:
+      - firebase: []
+      parameters: []
+components:
+  schemas:
+    ApiCalendarEvent:
+      description: A Calendar Event.
+      properties:
+        id:
+          type: string
+        summary:
+          type: string
+        description:
+          type: string
+        status:
+          $ref: '#/components/schemas/CalendarEventStatus'
+        organizerEmail:
+          type: string
+        htmlLink:
+          type: string
+        location:
+          type: string
+        startTime:
+          type: string
+        endTime:
+          type: string
+        attendees:
+          items:
+            $ref: '#/components/schemas/ApiCalendarEventAttendee'
+          type: array
+        source:
+          $ref: '#/components/schemas/ApiCalendarSource'
+        isPrivate:
+          type: boolean
+        shouldShowAsBusy:
+          type: boolean
+        isAllDayEvent:
+          type: boolean
+        kumoRoom:
+          properties:
+            zoneId:
+              type: string
+            roomId:
+              type: string
+            spaceName:
+              type: string
+          required:
+          - zoneId
+          - roomId
+          - spaceName
+          type: object
+      required:
+      - id
+      - summary
+      - description
+      - status
+      - organizerEmail
+      - htmlLink
+      - location
+      - startTime
+      - endTime
+      - attendees
+      - source
+      - isPrivate
+      - shouldShowAsBusy
+      type: object
+      additionalProperties: false
+    ApiUpdateCalendarEventReplyRequest:
+      description: A request to update event reply status
+      properties:
+        eventId:
+          type: string
+        replyStatus:
+          $ref: '#/components/schemas/CalendarEventReplyStatus'
+      required:
+      - eventId
+      - replyStatus
+      type: object
+      additionalProperties: false
+    CalendarEventReplyStatus:
+      description: These calendar response statuses match the Google Calendar API.
+      enum:
+      - accepted
+      - declined
+      - tentative
+      - needsAction
+      type: string
+    ApiCalendarEventAttendee:
+      description: An object for attendee related information for the client.
+      properties:
+        email:
+          type: string
+        firebaseUid:
+          type: string
+        avatarUrl:
+          type: string
+        displayName:
+          type: string
+        replyStatus:
+          $ref: '#/components/schemas/CalendarEventReplyStatus'
+      required:
+      - email
+      - displayName
+      - replyStatus
+      type: object
+      additionalProperties: false
+    ApiEnableGcalIntegrationRequest:
+      description: A request to enable Google Calendar integration.
+      properties:
+        authCode:
+          type: string
+      type: object
+      additionalProperties: false
+    ApiCalendar:
+      description: 'ApiCalendar is a Calendar resource identifier, along with any state
+
+        we need. We persist this object as is in firestore, because we want to track the
+
+        `isConnected` field which is toggled by the user.'
+      properties:
+        id:
+          type: string
+        summary:
+          type: string
+        isConnected:
+          type: boolean
+        source:
+          $ref: '#/components/schemas/ApiCalendarSource'
+      required:
+      - id
+      - summary
+      - isConnected
+      - source
+      type: object
+      additionalProperties: false
+    CalendarEventStatus:
+      type: string
+      enum:
+      - confirmed
+      - tentative
+      - cancelled
+      description: These calendar statuses match the Google Calendar API.
+    ApiCalendarSource:
+      description: Identifies the external source where this calendar was fetched from.
+      enum:
+      - google-calendar
+      - microsoft-outlook
+      type: string
+    ApiUpdateConnectedCalendarsRequest:
+      description: A request to update the user's connected calendars preferences.
+      properties:
+        calendarIsConnectedUpdates:
+          items:
+            properties:
+              isConnected:
+                type: boolean
+              calendarId:
+                type: string
+            required:
+            - isConnected
+            - calendarId
+            type: object
+          type: array
+      required:
+      - calendarIsConnectedUpdates
+      type: object
+      additionalProperties: false
+  securitySchemes:
+    firebase:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

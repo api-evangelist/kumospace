@@ -1,0 +1,317 @@
+openapi: 3.0.0
+info:
+  title: '@kumo/api Account Payments API'
+  contact: {}
+servers:
+- url: /
+tags:
+- name: Payments
+paths:
+  /v1/payments/checkout:
+    post:
+      operationId: CreateCheckoutSession
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiCheckoutSession'
+      description: 'Creates a new checkout session (to upgrade a space by paying for the pro
+
+        plan)'
+      summary: Create a checkout session.
+      tags:
+      - Payments
+      security:
+      - firebase: []
+      parameters: []
+      requestBody:
+        description: Properties for the checkout.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiCreateCheckoutSessionRequest'
+              description: Properties for the checkout.
+  /v1/payments/billingPortal:
+    post:
+      operationId: CreatePortalSession
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiPortalSession'
+      description: Creates a new billing portal session (to manage existing subscriptions)
+      summary: Create a customer billing portal session.
+      tags:
+      - Payments
+      security:
+      - firebase: []
+      parameters: []
+      requestBody:
+        description: Properties for the billing portal session.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiCreatePortalSessionRequest'
+              description: Properties for the billing portal session.
+  /v1/payments/setup:
+    put:
+      operationId: SetPaymentSetupCompleted
+      responses:
+        '204':
+          description: No Content
+      description: Sets reverse trial payment method as added.
+      summary: Sets reverse trial payment method as added.
+      tags:
+      - Payments
+      security:
+      - firebase: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                spaceName:
+                  type: string
+              required:
+              - spaceName
+              type: object
+  /v1/payments/subscription/cancel:
+    post:
+      operationId: CancelSubscription
+      responses:
+        '201':
+          description: Created
+      description: Sets the space's subscription to cancel at the end of the billing period.
+      summary: Sets the space's subscription to cancel at the end of the billing period.
+      tags:
+      - Payments
+      security:
+      - firebase: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiCancelSubscriptionRequest'
+  /v1/payments/subscription/renew:
+    post:
+      operationId: RenewlSubscription
+      responses:
+        '201':
+          description: Created
+      description: Sets the space's subscription to renew at the end of the billing period.
+      summary: Sets the space's subscription to renew at the end of the billing period.
+      tags:
+      - Payments
+      security:
+      - firebase: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiRenewSubscriptionRequest'
+  /v1/payments/reverse-trial/setup:
+    put:
+      operationId: SetupSubscription
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: string
+      description: 'This will update the subscription payment information (member seats and
+
+        billing period), and then will return a stripe link to setup the payment
+
+        method and billing address for tax calculations'
+      summary: Updates subscription info and return link to setup payment method.
+      tags:
+      - Payments
+      security:
+      - firebase: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiUpdateReverseTrialSubscriptionRequest'
+  /v1/payments/config:
+    get:
+      operationId: GetSubscriptionConfig
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionConfig'
+      description: Get stripe config values for free member limits
+      summary: Gets stripe config values
+      tags:
+      - Payments
+      security:
+      - firebase: []
+      parameters: []
+components:
+  schemas:
+    ExitSurvey:
+      properties:
+        answeredQuestions:
+          properties: {}
+          additionalProperties:
+            $ref: '#/components/schemas/ExitSurveyAnsweredQuestion'
+          type: object
+      required:
+      - answeredQuestions
+      type: object
+      additionalProperties: false
+    BillingPeriod:
+      enum:
+      - monthly
+      - annually
+      type: string
+    SubscriptionTier.professional:
+      enum:
+      - professional
+      type: string
+    ExitSurveyAnswer:
+      properties:
+        selected:
+          type: boolean
+          enum:
+          - true
+          nullable: false
+        additionalText:
+          type: string
+      required:
+      - selected
+      type: object
+      additionalProperties: false
+    SubscriptionConfig:
+      properties:
+        defaultMinimumBillingMembers:
+          type: number
+          format: double
+        freeTierMemberSeats:
+          type: number
+          format: double
+      required:
+      - defaultMinimumBillingMembers
+      - freeTierMemberSeats
+      type: object
+      additionalProperties: false
+    ApiCreatePortalSessionRequest:
+      properties:
+        space:
+          type: string
+      required:
+      - space
+      type: object
+      additionalProperties: false
+    ApiCreateCheckoutSessionRequest:
+      description: A request to create a checkout session
+      properties:
+        space:
+          type: string
+        tier:
+          $ref: '#/components/schemas/AutoManagedSubscriptionTier'
+        capacity:
+          type: integer
+          format: int32
+          description: The desired space capacity.
+          minimum: 1
+          maximum: 10000
+        billingPeriod:
+          $ref: '#/components/schemas/BillingPeriod'
+        redirectToSpace:
+          type: boolean
+      required:
+      - space
+      - billingPeriod
+      type: object
+      additionalProperties: false
+    AutoManagedSubscriptionTier:
+      anyOf:
+      - $ref: '#/components/schemas/SubscriptionTier.professional'
+      - $ref: '#/components/schemas/SubscriptionTier.business'
+      - $ref: '#/components/schemas/SubscriptionTier.enterprise'
+    ApiRenewSubscriptionRequest:
+      properties:
+        space:
+          type: string
+      required:
+      - space
+      type: object
+      additionalProperties: false
+    SubscriptionTier.enterprise:
+      enum:
+      - enterprise
+      type: string
+    ExitSurveyAnsweredQuestion:
+      properties: {}
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/ExitSurveyAnswer'
+    ApiCheckoutSession:
+      properties:
+        checkoutUrl:
+          type: string
+      required:
+      - checkoutUrl
+      type: object
+      additionalProperties: false
+    ApiUpdateReverseTrialSubscriptionRequest:
+      properties:
+        billingPeriod:
+          $ref: '#/components/schemas/BillingPeriod'
+        spaceName:
+          type: string
+        memberCount:
+          type: number
+          format: double
+      required:
+      - billingPeriod
+      - spaceName
+      - memberCount
+      type: object
+      additionalProperties: false
+    SubscriptionTier.business:
+      enum:
+      - business
+      type: string
+    ApiPortalSession:
+      properties:
+        portalUrl:
+          type: string
+      required:
+      - portalUrl
+      type: object
+      additionalProperties: false
+    ApiCancelSubscriptionRequest:
+      properties:
+        space:
+          type: string
+        exitSurvey:
+          $ref: '#/components/schemas/ExitSurvey'
+      required:
+      - space
+      type: object
+      additionalProperties: false
+  securitySchemes:
+    firebase:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
