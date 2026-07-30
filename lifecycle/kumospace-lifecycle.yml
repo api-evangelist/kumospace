@@ -1,0 +1,31 @@
+generated: '2026-07-19'
+method: searched
+source: https://status.kumospace.com/
+versioning:
+  style: path
+  current: v1
+  evidence: openapi/kumospace-api-openapi.json — all 112 paths are prefixed /v1/
+  policy_published: false
+deprecation:
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  deprecated_operations: []
+  evidence: >-
+    No operation in the public spec carries `deprecated: true`, and Kumospace publishes no deprecation or
+    sunset policy. RFC 8594 Sunset/Deprecation headers were not observed.
+status_page:
+  url: https://status.kumospace.com/
+  provider: Better Stack (uptime.betterstack.com)
+  http_status: 200
+  verified: '2026-07-19'
+sla:
+  published: false
+support:
+  url: https://www.kumospace.com/contact
+  help_center: https://www.kumospace.com/help
+changelog:
+  published: false
+  evidence: >-
+    No dated API changelog or release-notes page was found on kumospace.com; the blog is marketing
+    content rather than a versioned change record.

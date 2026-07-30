@@ -1,0 +1,654 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/kumospace-api-openapi.json
+status: candidate
+notes: >-
+  Kumospace does not publish an official MCP server. This is a CANDIDATE tool surface derived
+  one-to-one from the operations in the public OpenAPI description served by the Swagger UI at
+  api.kumospace.com. Every tool below maps to a real operationId in that spec. All calls carry a
+  Firebase-issued bearer JWT, so a working server needs the caller to supply that credential.
+server:
+  name: kumospace
+  transport: http
+  auth: bearer-jwt (Firebase)
+  base_url: https://api.kumospace.com
+tool_count: 132
+tools:
+- name: delete_account
+  description: "Delete the user's account."
+  http: DELETE /v1/account
+  source_operation: openapi/kumospace-api-openapi.json#DeleteAccount
+  group: "Account"
+- name: create_account
+  description: "Create an access token for SSO."
+  http: POST /v1/account/token
+  source_operation: openapi/kumospace-api-openapi.json#CreateAccount
+  group: "Account"
+- name: create_desktop_token
+  description: "Create an access token for desktop app usage."
+  http: POST /v1/account/desktop/token
+  source_operation: openapi/kumospace-api-openapi.json#CreateDesktopToken
+  group: "Account"
+- name: create_integration_token
+  description: "Create a token to pass to oauth providers to identify the user after redirect"
+  http: POST /v1/account/integration/token/{type}
+  source_operation: openapi/kumospace-api-openapi.json#CreateIntegrationToken
+  group: "Account"
+- name: reset_password
+  description: "Send reset password email for account corresponding to given email"
+  http: POST /v1/account/resetPassword
+  source_operation: openapi/kumospace-api-openapi.json#ResetPassword
+  group: "Account"
+- name: on_create
+  description: "Accepts all invites for a given user."
+  http: POST /v1/account/onCreate
+  source_operation: openapi/kumospace-api-openapi.json#OnCreate
+  group: "Account"
+- name: get_analytics
+  description: "Attendance analytics for a given space"
+  http: GET /v1/analytics/attendance
+  source_operation: openapi/kumospace-api-openapi.json#GetAnalytics
+  group: "Analytics"
+- name: get_status_analytics
+  http: GET /v1/analytics/status
+  source_operation: openapi/kumospace-api-openapi.json#GetStatusAnalytics
+  group: "Analytics"
+- name: integrate_gcal
+  description: "Enables Google Calendar integration for the user."
+  http: POST /v1/calendar/integrate-gcal
+  source_operation: openapi/kumospace-api-openapi.json#IntegrateGcal
+  group: "Calendar"
+- name: get_events_for_date
+  description: "Fetches the user's GCal events."
+  http: GET /v1/calendar/events/{queryDateYYYYMMDD}
+  source_operation: openapi/kumospace-api-openapi.json#GetEventsForDate
+  group: "Calendar"
+- name: get_events_for_range
+  http: GET /v1/calendar/events
+  source_operation: openapi/kumospace-api-openapi.json#GetEventsForRange
+  group: "Calendar"
+- name: update_attendance
+  description: "Updates an event's reply status (accepted, declined, tentative)."
+  http: POST /v1/calendar/update-event-reply
+  source_operation: openapi/kumospace-api-openapi.json#UpdateAttendance
+  group: "Calendar"
+- name: update_connected_calendars
+  description: "Updates a user's connected calendar preferences."
+  http: POST /v1/calendar/update-connected-calendars
+  source_operation: openapi/kumospace-api-openapi.json#UpdateConnectedCalendars
+  group: "Calendar"
+- name: sync_calendars
+  description: "Syncs a user's subscribed calendars in [Gcal/Outlook], with our integration doc."
+  http: POST /v1/calendar/sync-calendars
+  source_operation: openapi/kumospace-api-openapi.json#SyncCalendars
+  group: "Calendar"
+- name: disconnect_calendar_integration1
+  description: "Disconnect Calendar integration for the user."
+  http: POST /v1/calendar/disconnect-calendar-integration
+  source_operation: openapi/kumospace-api-openapi.json#DisconnectCalendarIntegration1
+  group: "Calendar"
+- name: create_chat_channel
+  description: "Create a persistent chat channel."
+  http: POST /v1/chat/channel
+  source_operation: openapi/kumospace-api-openapi.json#CreateChatChannel
+  group: "Chat"
+- name: set_channel_preferences
+  http: POST /v1/chat/channel/{channelUrl}/preferences
+  source_operation: openapi/kumospace-api-openapi.json#SetChannelPreferences
+  group: "Chat"
+- name: update_custom_channel
+  http: PATCH /v1/chat/channel/{channelUrl}
+  source_operation: openapi/kumospace-api-openapi.json#UpdateCustomChannel
+  group: "Chat"
+- name: delete_custom_channel
+  http: DELETE /v1/chat/channel/{channelUrl}
+  source_operation: openapi/kumospace-api-openapi.json#DeleteCustomChannel
+  group: "Chat"
+- name: unarchive_channel
+  http: PUT /v1/chat/channel/{channelUrl}/unarchive
+  source_operation: openapi/kumospace-api-openapi.json#UnarchiveChannel
+  group: "Chat"
+- name: soft_delete_file_message
+  description: "Soft delete file messages."
+  http: DELETE /v1/chat/channel/{channelUrl}/file-messages/{messageId}
+  source_operation: openapi/kumospace-api-openapi.json#SoftDeleteFileMessage
+  group: "Chat"
+- name: get_chat_message
+  http: GET /v1/chat/channel/{channelUrl}/messages/{messageId}
+  source_operation: openapi/kumospace-api-openapi.json#GetChatMessage
+  group: "Chat"
+- name: delete_messages
+  description: "Hard deletes soft deleted messages."
+  http: DELETE /v1/chat/channel/{channelUrl}/messages/{messageId}
+  source_operation: openapi/kumospace-api-openapi.json#DeleteMessages
+  group: "Chat"
+- name: update_channel_members
+  description: "Adds users to a custom private channel"
+  http: PUT /v1/chat/channel/{channelUrl}/members
+  source_operation: openapi/kumospace-api-openapi.json#UpdateChannelMembers
+  group: "Chat"
+- name: search_chat_messages
+  http: GET /v1/chat/search
+  source_operation: openapi/kumospace-api-openapi.json#SearchChatMessages
+  group: "Chat"
+- name: handle_daily_webhook
+  http: POST /v1/integrations/daily/webhook
+  source_operation: openapi/kumospace-api-openapi.json#HandleDailyWebhook
+  group: "Daily (Webhook)"
+- name: create
+  http: POST /v1/demo
+  source_operation: openapi/kumospace-api-openapi.json#Create
+  group: "Demo"
+- name: claim_demo_space
+  description: "Claims a space."
+  http: POST /v1/demo/claim
+  source_operation: openapi/kumospace-api-openapi.json#ClaimDemoSpace
+  group: "Demo"
+- name: get_stock_room_backgrounds
+  description: "Get stock room backgrounds."
+  http: GET /v1/stockBackgrounds
+  source_operation: openapi/kumospace-api-openapi.json#GetStockRoomBackgrounds
+  group: "Flooring"
+- name: create_stock_background
+  description: "Create a stock room background."
+  http: POST /v1/stockBackgrounds
+  source_operation: openapi/kumospace-api-openapi.json#CreateStockBackground
+  group: "Flooring"
+- name: create_furniture
+  description: "Add furniture to a room."
+  http: POST /v1/spaces/{name}/rooms/{id}/furniture
+  source_operation: openapi/kumospace-api-openapi.json#CreateFurniture
+  group: "Furniture"
+- name: update_furniture
+  description: "Update furniture."
+  http: PUT /v1/spaces/{name}/rooms/{roomId}/furniture/{id}
+  source_operation: openapi/kumospace-api-openapi.json#UpdateFurniture
+  group: "Furniture"
+- name: delete_furniture
+  description: "Delete furniture."
+  http: DELETE /v1/spaces/{name}/rooms/{roomId}/furniture/{id}
+  source_operation: openapi/kumospace-api-openapi.json#DeleteFurniture
+  group: "Furniture"
+- name: get_self_integrations
+  description: "List connected integrations"
+  http: GET /v1/users/me/integrations
+  source_operation: openapi/kumospace-api-openapi.json#GetSelfIntegrations
+  group: "Integrations"
+- name: disconnect_own_integration
+  description: "Disconnect a user integration. This also deletes the integration doc."
+  http: DELETE /v1/integrations/{integrationId}
+  source_operation: openapi/kumospace-api-openapi.json#DisconnectOwnIntegration
+  group: "Integrations"
+- name: handle_connect_outlook_integration
+  description: "Handles the redirect from the microsoft graph authorize URL. This is a redirect endpoint, shouldn't be called by us"
+  http: POST /v1/integrations/microsoft-outlook/handle-redirect
+  source_operation: openapi/kumospace-api-openapi.json#HandleConnectOutlookIntegration
+  group: "Integrations"
+- name: handle_connect_teams_in_call_status
+  description: "Handles the redirect from the microsoft graph authorize URL. This is a redirect endpoint, shouldn't be called by us"
+  http: POST /v1/integrations/microsoft-teams-status/handle-redirect
+  source_operation: openapi/kumospace-api-openapi.json#HandleConnectTeamsInCallStatus
+  group: "Integrations"
+- name: handle
+  description: "Handles the subscription to the microsoft presence API. This is a webhook endpoint, shouldn't be called by us"
+  http: POST /v1/integrations/microsoft-teams-status/webhook/presence-subscription/{id}
+  source_operation: openapi/kumospace-api-openapi.json#Handle
+  group: "Integrations"
+- name: handle_connect_zoom_in_call_status
+  description: "Handles the redirect from the zoom oauth. This is a redirect endpoint, shouldn't be called by us"
+  http: GET /v1/integrations/zoom-status/handle-redirect
+  source_operation: openapi/kumospace-api-openapi.json#HandleConnectZoomInCallStatus
+  group: "Integrations"
+- name: handle_participant_update
+  description: "Handles the zoom participant updates. This is a webhook endpoint, shouldn't be called by us"
+  http: POST /v1/integrations/zoom-status/webhook/participant-update
+  source_operation: openapi/kumospace-api-openapi.json#HandleParticipantUpdate
+  group: "Integrations"
+- name: deauthorize_zoom_integration
+  http: POST /v1/integrations/zoom-status/deauthorize
+  source_operation: openapi/kumospace-api-openapi.json#DeauthorizeZoomIntegration
+  group: "Integrations"
+- name: create_music_track
+  description: "Adds a new music track to the available tracks collection."
+  http: POST /v1/musicTracks
+  source_operation: openapi/kumospace-api-openapi.json#CreateMusicTrack
+  group: "MusicTrack"
+- name: update_music_track
+  description: "Updates the provided fields on an existing music track. Fields omitted are untouched."
+  http: PUT /v1/musicTracks/{id}
+  source_operation: openapi/kumospace-api-openapi.json#UpdateMusicTrack
+  group: "MusicTrack"
+- name: create_recording
+  description: "Create a recording."
+  http: POST /v1/recordings
+  source_operation: openapi/kumospace-api-openapi.json#CreateRecording
+  group: "Recordings"
+- name: share_recording
+  description: "Share recording with a list of users"
+  http: PUT /v1/recordings/{recordingId}/share
+  source_operation: openapi/kumospace-api-openapi.json#ShareRecording
+  group: "Recordings"
+- name: handle_recording_stop
+  description: "Handle post-recording behavior"
+  http: POST /v1/recordings/{recordingId}/stop
+  source_operation: openapi/kumospace-api-openapi.json#HandleRecordingStop
+  group: "Recordings"
+- name: get_recordings_by_user
+  description: "Fetches recordings meta-data for the user for a given space"
+  http: GET /v1/recordings/spaces/{spaceName}
+  source_operation: openapi/kumospace-api-openapi.json#GetRecordingsByUser
+  group: "Recordings"
+- name: get_recording_by_id
+  description: "Fetches recording meta-data"
+  http: GET /v1/recordings/{recordingId}
+  source_operation: openapi/kumospace-api-openapi.json#GetRecordingById
+  group: "Recordings"
+- name: get_recording_access_link
+  description: "Fetches recording download access link"
+  http: GET /v1/recordings/{recordingId}/accessLink
+  source_operation: openapi/kumospace-api-openapi.json#GetRecordingAccessLink
+  group: "Recordings"
+- name: get_jstris_redirect
+  description: "Redirect to a puzzle game."
+  http: GET /v1/redirects/jstris/{furnitureId}
+  source_operation: openapi/kumospace-api-openapi.json#GetJstrisRedirect
+  group: "Redirects"
+- name: get_room_templates
+  description: "Get room templates."
+  http: GET /v1/roomTemplates
+  source_operation: openapi/kumospace-api-openapi.json#GetRoomTemplates
+  group: "Room Templates"
+- name: create_room_template
+  description: "Create a room template."
+  http: POST /v1/roomTemplates
+  source_operation: openapi/kumospace-api-openapi.json#CreateRoomTemplate
+  group: "Room Templates"
+- name: get_room_template
+  description: "Get room templates."
+  http: GET /v1/roomTemplates/{id}
+  source_operation: openapi/kumospace-api-openapi.json#GetRoomTemplate
+  group: "Room Templates"
+- name: update_room_template
+  description: "Update a room template."
+  http: PUT /v1/roomTemplates/{id}
+  source_operation: openapi/kumospace-api-openapi.json#UpdateRoomTemplate
+  group: "Room Templates"
+- name: create_room
+  description: "Create a room."
+  http: POST /v1/spaces/{name}/rooms
+  source_operation: openapi/kumospace-api-openapi.json#CreateRoom
+  group: "Rooms"
+- name: update_room
+  description: "Update a room."
+  http: PUT /v1/spaces/{name}/rooms/{id}
+  source_operation: openapi/kumospace-api-openapi.json#UpdateRoom
+  group: "Rooms"
+- name: delete_room
+  description: "Delete a room."
+  http: DELETE /v1/spaces/{name}/rooms/{id}
+  source_operation: openapi/kumospace-api-openapi.json#DeleteRoom
+  group: "Rooms"
+- name: get_spaces_by_owner
+  description: "Get the user's spaces."
+  http: GET /v1/spaces
+  source_operation: openapi/kumospace-api-openapi.json#GetSpacesByOwner
+  group: "Spaces"
+- name: create_space
+  description: "Create a space."
+  http: POST /v1/spaces
+  source_operation: openapi/kumospace-api-openapi.json#CreateSpace
+  group: "Spaces"
+- name: get_space_by_name
+  description: "Get a space by name."
+  http: GET /v1/spaces/{name}
+  source_operation: openapi/kumospace-api-openapi.json#GetSpaceByName
+  group: "Spaces"
+- name: update_space
+  description: "Update a space."
+  http: PUT /v1/spaces/{name}
+  source_operation: openapi/kumospace-api-openapi.json#UpdateSpace
+  group: "Spaces"
+- name: delete_space
+  description: "Delete a space."
+  http: DELETE /v1/spaces/{name}
+  source_operation: openapi/kumospace-api-openapi.json#DeleteSpace
+  group: "Spaces"
+- name: get_space_public_info_by_name
+  description: "Get public information about a space"
+  http: GET /v1/spaces/{name}/publicInfo
+  source_operation: openapi/kumospace-api-openapi.json#GetSpacePublicInfoByName
+  group: "Spaces"
+- name: get_space_chat_config_by_name
+  description: "Get a space's chat config"
+  http: GET /v1/spaces/{name}/chatConfig
+  source_operation: openapi/kumospace-api-openapi.json#GetSpaceChatConfigByName
+  group: "Spaces"
+- name: get_space_user_channels
+  description: "Get a space's chat channels"
+  http: GET /v1/spaces/{name}/channels
+  source_operation: openapi/kumospace-api-openapi.json#GetSpaceUserChannels
+  group: "Spaces"
+- name: get_space_custom_channels
+  description: "Get a space's custom channels"
+  http: GET /v1/spaces/{name}/customChannels
+  source_operation: openapi/kumospace-api-openapi.json#GetSpaceCustomChannels
+  group: "Spaces"
+- name: update_home
+  description: "Update a user's spawn home."
+  http: PUT /v1/spaces/{name}/home
+  source_operation: openapi/kumospace-api-openapi.json#UpdateHome
+  group: "Spaces"
+- name: delete_home
+  description: "Delete a user's spawn home."
+  http: DELETE /v1/spaces/{name}/home
+  source_operation: openapi/kumospace-api-openapi.json#DeleteHome
+  group: "Spaces"
+- name: start_internal_free_trial
+  description: "Start a free trial if space never got one"
+  http: PUT /v1/spaces/{name}/trial
+  source_operation: openapi/kumospace-api-openapi.json#StartInternalFreeTrial
+  group: "Spaces"
+- name: get_free_trial_info
+  description: "Retrieves free trial info"
+  http: GET /v1/spaces/{name}/trial
+  source_operation: openapi/kumospace-api-openapi.json#GetFreeTrialInfo
+  group: "Spaces"
+- name: get_add_member_link
+  description: "Start a free trial if space never got one"
+  http: GET /v1/spaces/{name}/addMemberLink/{addMemberLinkId}
+  source_operation: openapi/kumospace-api-openapi.json#GetAddMemberLink
+  group: "Spaces"
+- name: set_prospected
+  description: "Set a space as already prospected by Sales Team."
+  http: PUT /v1/spaces/{name}/prospected
+  source_operation: openapi/kumospace-api-openapi.json#SetProspected
+  group: "Spaces"
+- name: get_space_owner_email
+  description: "Get a space owner's email."
+  http: GET /v1/spaces/{name}/ownerEmail
+  source_operation: openapi/kumospace-api-openapi.json#GetSpaceOwnerEmail
+  group: "Spaces"
+- name: update_default_channels
+  description: "Updates a custom channel's settings"
+  http: PUT /v1/spaces/{name}/defaultChannels
+  source_operation: openapi/kumospace-api-openapi.json#UpdateDefaultChannels
+  group: "Spaces"
+- name: get_can_space_schedule_demo
+  description: "Uses onboarding intake forms to determine if the space"
+  http: GET /v1/spaces/{spaceName}/can-schedule-demo
+  source_operation: openapi/kumospace-api-openapi.json#GetCanSpaceScheduleDemo
+  group: "Spaces"
+- name: get_stock_furniture
+  description: "Get stock furniture."
+  http: GET /v1/stockFurniture
+  source_operation: openapi/kumospace-api-openapi.json#GetStockFurniture
+  group: "Stock Furniture"
+- name: create_stock_furniture
+  description: "Create stock furniture."
+  http: POST /v1/stockFurniture
+  source_operation: openapi/kumospace-api-openapi.json#CreateStockFurniture
+  group: "Stock Furniture"
+- name: get_stock_furniture_variant_groups
+  description: "Get furniture variations."
+  http: GET /v1/stockFurnitureVariantGroups
+  source_operation: openapi/kumospace-api-openapi.json#GetStockFurnitureVariantGroups
+  group: "Stock Furniture"
+- name: get_stock_walls
+  description: "Get stock walls."
+  http: GET /v1/stockWalls
+  source_operation: openapi/kumospace-api-openapi.json#GetStockWalls
+  group: "Stock Walls"
+- name: create_stock_wall
+  description: "Create stock wall."
+  http: POST /v1/stockWalls
+  source_operation: openapi/kumospace-api-openapi.json#CreateStockWall
+  group: "Stock Walls"
+- name: create_checkout_session
+  description: "Create a checkout session."
+  http: POST /v1/payments/checkout
+  source_operation: openapi/kumospace-api-openapi.json#CreateCheckoutSession
+  group: "Payments"
+- name: create_portal_session
+  description: "Create a customer billing portal session."
+  http: POST /v1/payments/billingPortal
+  source_operation: openapi/kumospace-api-openapi.json#CreatePortalSession
+  group: "Payments"
+- name: set_payment_setup_completed
+  description: "Sets reverse trial payment method as added."
+  http: PUT /v1/payments/setup
+  source_operation: openapi/kumospace-api-openapi.json#SetPaymentSetupCompleted
+  group: "Payments"
+- name: cancel_subscription
+  description: "Sets the space's subscription to cancel at the end of the billing period."
+  http: POST /v1/payments/subscription/cancel
+  source_operation: openapi/kumospace-api-openapi.json#CancelSubscription
+  group: "Payments"
+- name: renewl_subscription
+  description: "Sets the space's subscription to renew at the end of the billing period."
+  http: POST /v1/payments/subscription/renew
+  source_operation: openapi/kumospace-api-openapi.json#RenewlSubscription
+  group: "Payments"
+- name: setup_subscription
+  description: "Updates subscription info and return link to setup payment method."
+  http: PUT /v1/payments/reverse-trial/setup
+  source_operation: openapi/kumospace-api-openapi.json#SetupSubscription
+  group: "Payments"
+- name: get_subscription_config
+  description: "Gets stripe config values"
+  http: GET /v1/payments/config
+  source_operation: openapi/kumospace-api-openapi.json#GetSubscriptionConfig
+  group: "Payments"
+- name: handle_transcription_started
+  http: POST /v1/transcription/started
+  source_operation: openapi/kumospace-api-openapi.json#HandleTranscriptionStarted
+  group: "Transcription"
+- name: handle_transcription_stopped
+  http: POST /v1/transcription/stopped
+  source_operation: openapi/kumospace-api-openapi.json#HandleTranscriptionStopped
+  group: "Transcription"
+- name: get_transcription
+  http: GET /v1/transcription
+  source_operation: openapi/kumospace-api-openapi.json#GetTranscription
+  group: "Transcription"
+- name: get_summary
+  http: GET /v1/transcription/{id}/summary
+  source_operation: openapi/kumospace-api-openapi.json#GetSummary
+  group: "Transcription"
+- name: get_vtt
+  http: GET /v1/transcription/{id}/vtt
+  source_operation: openapi/kumospace-api-openapi.json#GetVtt
+  group: "Transcription"
+- name: set_user_role
+  description: "Update a user role."
+  http: PUT /v1/spaces/{name}/userRoles
+  source_operation: openapi/kumospace-api-openapi.json#SetUserRole
+  group: "Users"
+- name: get_user_roles
+  description: "Get user roles."
+  http: GET /v1/spaces/{name}/userRoles
+  source_operation: openapi/kumospace-api-openapi.json#GetUserRoles
+  group: "Users"
+- name: set_user_role_bulk
+  description: "Update users roles in bulk."
+  http: PUT /v1/spaces/{name}/userRoles/bulk
+  source_operation: openapi/kumospace-api-openapi.json#SetUserRoleBulk
+  group: "Users"
+- name: set_floor_roles
+  description: "Updates an existing space's floor roles."
+  http: PUT /v1/spaces/{name}/floorRoles
+  source_operation: openapi/kumospace-api-openapi.json#SetFloorRoles
+  group: "Users"
+- name: get_user_role_by_id
+  description: "Get a user role by firebaseID."
+  http: GET /v1/spaces/{name}/userRole
+  source_operation: openapi/kumospace-api-openapi.json#GetUserRoleById
+  group: "Users"
+- name: get_user_recent_spaces
+  description: "Get user recently visited spaces."
+  http: GET /v1/users/me/recentSpaces
+  source_operation: openapi/kumospace-api-openapi.json#GetUserRecentSpaces
+  group: "Users"
+- name: get_user_recent_space
+  description: "Get info about a user's recently visited space."
+  http: GET /v1/users/me/recentSpaces/{name}
+  source_operation: openapi/kumospace-api-openapi.json#GetUserRecentSpace
+  group: "Users"
+- name: get_user_default_space
+  description: "Get user default space."
+  http: GET /v1/users/me/defaultSpace
+  source_operation: openapi/kumospace-api-openapi.json#GetUserDefaultSpace
+  group: "Users"
+- name: add_fcm_token
+  description: "Mobile users will send their FCM token for us to send push notifs"
+  http: POST /v1/users/fcmToken
+  source_operation: openapi/kumospace-api-openapi.json#AddFcmToken
+  group: "Users"
+- name: remove_fcm_token
+  description: "De-associate FCM token from user when they logout of mobile"
+  http: DELETE /v1/users/fcmToken/{fcmToken}
+  source_operation: openapi/kumospace-api-openapi.json#RemoveFcmToken
+  group: "Users"
+- name: get_invitations_for_space
+  description: "Get all invitations sent for a certain space"
+  http: GET /v1/userInvitations/space/{spaceName}
+  source_operation: openapi/kumospace-api-openapi.json#GetInvitationsForSpace
+  group: "Users"
+- name: get_expiring_invite_info
+  description: "Get expiring invitation details for the given id"
+  http: GET /v1/invitations/{id}
+  source_operation: openapi/kumospace-api-openapi.json#GetExpiringInviteInfo
+  group: "Users"
+- name: create_expiring_invitation
+  description: "Create an expiring guest invitation"
+  http: POST /v1/invitations
+  source_operation: openapi/kumospace-api-openapi.json#CreateExpiringInvitation
+  group: "Users"
+- name: create_user_invitation
+  description: "Create and send a user invitation"
+  http: POST /v1/userInvitations
+  source_operation: openapi/kumospace-api-openapi.json#CreateUserInvitation
+  group: "Users"
+- name: update_user_invitation
+  description: "Create and send a user invitation"
+  http: PUT /v1/userInvitations/{invitationId}
+  source_operation: openapi/kumospace-api-openapi.json#UpdateUserInvitation
+  group: "Users"
+- name: delete_user_invitation
+  description: "Delete a user invitation"
+  http: DELETE /v1/userInvitations/{invitationId}
+  source_operation: openapi/kumospace-api-openapi.json#DeleteUserInvitation
+  group: "Users"
+- name: create_user_invitations_bulk
+  description: "Create and send bulk user invitations"
+  http: POST /v1/userInvitations/bulk
+  source_operation: openapi/kumospace-api-openapi.json#CreateUserInvitationsBulk
+  group: "Users"
+- name: resend_invite_email
+  description: "Resend"
+  http: POST /v1/userInvitations/{invitationId}/resend
+  source_operation: openapi/kumospace-api-openapi.json#ResendInviteEmail
+  group: "Users"
+- name: save_user_intake_profile_form
+  description: "Saves onboarding intake form for the user. This form will"
+  http: POST /v1/users/me/profile/form
+  source_operation: openapi/kumospace-api-openapi.json#SaveUserIntakeProfileForm
+  group: "Users"
+- name: get_user_intake_profile_form_status
+  description: "Gets onboarding intake form for the user."
+  http: GET /v1/users/me/profile/form/{spaceName}/response-required
+  source_operation: openapi/kumospace-api-openapi.json#GetUserIntakeProfileFormStatus
+  group: "Users"
+- name: update_user_profile
+  description: "Updates a user's space-specific profile information"
+  http: PUT /v1/users/me/profile/{spaceName}
+  source_operation: openapi/kumospace-api-openapi.json#UpdateUserProfile
+  group: "Users"
+- name: update_user
+  description: "Updates a user's information"
+  http: PUT /v1/users/me
+  source_operation: openapi/kumospace-api-openapi.json#UpdateUser
+  group: "Users"
+- name: get_user_public_info
+  description: "Gets a user's public information"
+  http: GET /v1/users/{userId}/publicInfo
+  source_operation: openapi/kumospace-api-openapi.json#GetUserPublicInfo
+  group: "Users"
+- name: is_user_hipaa_compliant
+  description: "Checks if a the user is a owner/member of a HIPAA space"
+  http: GET /v1/users/{userId}/hipaaCompliant
+  source_operation: openapi/kumospace-api-openapi.json#IsUserHipaaCompliant
+  group: "Users"
+- name: get_seen_kiosks
+  description: "Get which kiosks a user has seen in a given space"
+  http: GET /v1/users/me/spaces/{spaceName}/kiosks
+  source_operation: openapi/kumospace-api-openapi.json#GetSeenKiosks
+  group: "Users"
+- name: update_seen_kiosks
+  description: "Update which kiosks a user has seen in a given space"
+  http: PUT /v1/users/me/spaces/{spaceName}/kiosks
+  source_operation: openapi/kumospace-api-openapi.json#UpdateSeenKiosks
+  group: "Users"
+- name: send_verification_email
+  description: "Send verification email for user."
+  http: POST /v1/users/me/sendVerificationEmail
+  source_operation: openapi/kumospace-api-openapi.json#SendVerificationEmail
+  group: "Users"
+- name: handle_bug_report
+  http: POST /v1/users/me/bugReport
+  source_operation: openapi/kumospace-api-openapi.json#HandleBugReport
+  group: "Users"
+- name: handle_user_feedback
+  http: POST /v1/users/me/feedback
+  source_operation: openapi/kumospace-api-openapi.json#HandleUserFeedback
+  group: "Users"
+- name: update_zone
+  description: "Update a wall segment."
+  http: PUT /v1/spaces/{name}/rooms/{roomId}/zones/{zoneId}/walls/{wallId}
+  source_operation: openapi/kumospace-api-openapi.json#UpdateZone
+  group: "Walls"
+- name: get_zone_templates
+  description: "Get zone templates."
+  http: GET /v1/zoneTemplates
+  source_operation: openapi/kumospace-api-openapi.json#GetZoneTemplates
+  group: "Zone Templates"
+- name: create_template_from_zone
+  description: "Create a new zone template"
+  http: POST /v1/zoneTemplates
+  source_operation: openapi/kumospace-api-openapi.json#CreateTemplateFromZone
+  group: "Zone Templates"
+- name: update_template_from_zone
+  description: "Updates an existing zone template"
+  http: PUT /v1/zoneTemplates/{id}
+  source_operation: openapi/kumospace-api-openapi.json#UpdateTemplateFromZone
+  group: "Zone Templates"
+- name: create_room
+  description: "Create a zone."
+  http: POST /v1/spaces/{name}/rooms/{roomId}/zones
+  source_operation: openapi/kumospace-api-openapi.json#CreateRoom
+  group: "Zones"
+- name: update_zone
+  description: "Update a zone."
+  http: PUT /v1/spaces/{name}/rooms/{roomId}/zones/{id}
+  source_operation: openapi/kumospace-api-openapi.json#UpdateZone
+  group: "Zones"
+- name: delete_zone
+  description: "Delete a zone."
+  http: DELETE /v1/spaces/{name}/rooms/{roomId}/zones/{id}
+  source_operation: openapi/kumospace-api-openapi.json#DeleteZone
+  group: "Zones"
+- name: get_conference_rooms
+  http: GET /v1/space/{spaceName}/conferenceRooms
+  source_operation: openapi/kumospace-api-openapi.json#GetConferenceRooms
+  group: "Zones"
+- name: get_calendar_resource
+  http: GET /v1/calendarResource/{resourceId}
+  source_operation: openapi/kumospace-api-openapi.json#GetCalendarResource
+  group: "Zones"
+- name: delete_calendar_resource
+  http: DELETE /v1/calendarResource/{resourceId}
+  source_operation: openapi/kumospace-api-openapi.json#DeleteCalendarResource
+  group: "Zones"
+- name: create_calendar_resources
+  http: POST /v1/calendarResource/{spaceName}/bulk
+  source_operation: openapi/kumospace-api-openapi.json#CreateCalendarResources
+  group: "Zones"

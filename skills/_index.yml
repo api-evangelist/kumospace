@@ -1,0 +1,33 @@
+generated: '2026-07-19'
+method: generated
+source: openapi/kumospace-api-openapi.json
+notes: >-
+  Kumospace publishes no Agent Skills, AGENTS.md or agent-facing documentation. These skills were
+  generated from the public OpenAPI description served by the Swagger UI at api.kumospace.com. Every
+  operationId referenced was verified to exist in that spec; no operation, parameter or schema is invented.
+  Each skill also carries the cross-cutting rules that matter for safe automation against this API — a
+  Firebase bearer JWT, cursor pagination, no idempotency keys, and no declared error responses.
+api: kumospace:api
+base_url: https://api.kumospace.com
+skill_count: 5
+skills:
+- name: kumospace-provision-space
+  file: kumospace-provision-space.md
+  description: Create and lay out a Kumospace virtual office — space, rooms, furniture and the default landing spot.
+  operations: 6
+- name: kumospace-onboard-members
+  file: kumospace-onboard-members.md
+  description: Invite people into a space and assign per-space and per-floor roles, singly or in bulk.
+  operations: 12
+- name: kumospace-capture-meeting
+  file: kumospace-capture-meeting.md
+  description: Record a session and retrieve the access link, transcript, VTT captions and AI summary.
+  operations: 9
+- name: kumospace-workspace-analytics
+  file: kumospace-workspace-analytics.md
+  description: Pull attendance and presence-status analytics, paging through the cursor envelope.
+  operations: 2
+- name: kumospace-manage-subscription
+  file: kumospace-manage-subscription.md
+  description: Manage the Stripe-backed subscription — plan config, checkout, billing portal, cancel and renew.
+  operations: 8

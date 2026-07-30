@@ -1,0 +1,49 @@
+generated: '2026-07-19'
+method: probed
+source: live probes of the hosts in apis.yml
+notes: >-
+  IMPORTANT: www.kumospace.com is a single-page application that returns HTTP 200 with the app shell for
+  ANY unmatched path, including every /.well-known/ path probed. Those 200s are soft-404s, not documents.
+  Each was fetched and its body confirmed to be the Kumospace SPA HTML shell, so NO well-known document is
+  recorded as present. api.kumospace.com returns honest 404s.
+hosts:
+- host: https://api.kumospace.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://www.kumospace.com
+  soft_404: true
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    present: false
+    reason: SPA shell (soft-404) — body is the Kumospace app HTML, not RFC 9116 text
+  - path: /.well-known/openid-configuration
+    status: 200
+    present: false
+    reason: SPA shell (soft-404) — body is HTML, not JSON
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    present: false
+    reason: SPA shell (soft-404)
+  - path: /.well-known/api-catalog
+    status: 200
+    present: false
+    reason: SPA shell (soft-404)
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    present: false
+    reason: SPA shell (soft-404)
+  - path: /llms.txt
+    status: 200
+    present: false
+    reason: SPA shell (soft-404)
+documents_found: 0

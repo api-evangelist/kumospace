@@ -1,0 +1,66 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Kumospace API
+  version: 1.0.0
+x-generated: '2026-07-19'
+x-method: generated
+x-source: openapi/kumospace-api-openapi.json
+x-notes: >-
+  Applies to the OpenAPI 3.0.0 description harvested verbatim from the Swagger UI at
+  https://api.kumospace.com/. The original is never mutated. These actions add only what can be verified
+  from the provider's own public surface: the real server URL (the source spec declares a relative "/"),
+  descriptive info/contact metadata pointing at pages that exist, and human-readable descriptions for the
+  tag groups the spec already declares. No operations, schemas or responses are invented.
+actions:
+- target: $.info
+  description: Give the spec a real title, description and contact, replacing the bare package name.
+  update:
+    title: Kumospace API
+    version: '1.0.0'
+    description: >-
+      REST API for the Kumospace virtual office platform. Covers spaces, rooms, zones, walls, furniture
+      and flooring; room and zone templates; users, roles and invitations; chat channels and messages;
+      calendar events, resources and integrations; recordings, transcription and AI summaries; music
+      tracks; workspace analytics; and subscription billing. Requests are authenticated with a
+      Firebase-issued bearer JWT supplied in the Authorization header. List endpoints use cursor
+      pagination via `limit` and a `next` cursor returned in `metadata.next`.
+    contact:
+      name: Kumospace Support
+      url: https://www.kumospace.com/contact
+    x-help-center: https://www.kumospace.com/help
+    x-terms-of-service: https://www.kumospace.com/terms
+    x-privacy-policy: https://www.kumospace.com/privacy
+    x-status-page: https://status.kumospace.com/
+- target: $.servers
+  description: Replace the relative "/" server with the production host the Swagger UI is served from.
+  update:
+  - url: https://api.kumospace.com
+    description: Production
+- target: $
+  description: Add tag descriptions for the resource groups the spec already assigns to operations.
+  update:
+    tags:
+    - name: Account
+      description: Account creation, tokens for desktop and third-party integrations, password reset and account deletion.
+    - name: Analytics
+      description: Workspace attendance and presence-status analytics.
+    - name: Calendar
+      description: Google Calendar and Microsoft Outlook connection, event retrieval and attendance replies.
+    - name: Chat
+      description: Chat channels, membership, preferences, messages and message search.
+    - name: Integrations
+      description: Connect and disconnect Microsoft Teams status, Zoom status, Outlook and Google Calendar integrations.
+    - name: Payments
+      description: Stripe checkout and billing-portal sessions, subscription setup, cancellation and renewal.
+    - name: Recordings
+      description: Start, stop, retrieve and share session recordings.
+    - name: Rooms
+      description: Rooms within a space — the unit users navigate between.
+    - name: Spaces
+      description: The top-level workspace, addressed by its `name` slug.
+    - name: Transcription
+      description: Transcription lifecycle, transcripts, VTT captions and AI-generated summaries.
+    - name: Users
+      description: User profiles, roles, invitations, notification tokens and feedback.
+    - name: Zones
+      description: Zones within rooms, conference rooms and bookable calendar resources.

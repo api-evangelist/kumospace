@@ -1,0 +1,227 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/kumospace-api-openapi.json
+notes: >-
+  Entity graph derived from the $ref links, path hierarchy and id-reference fields in the public
+  Kumospace OpenAPI description. Kumospace publishes no separate object reference, so identifier
+  formats below are only those the spec itself declares.
+identifiers:
+  style: opaque strings
+  space_key: name  # spaces are addressed by their url-safe `name` slug, not a numeric id
+  user_key: userId  # Firebase uid; several schemas name it firebaseUid
+  channel_key: channelUrl
+  note: the spec declares no id prefixes or formats beyond type string
+entity_count: 15
+entities:
+- name: Space
+  description: "The top-level workspace, addressed by its unique `name` slug."
+  schema: ApiSpace
+  in_spec: true
+  key_fields:
+  - name
+  - displayName
+  - uid
+  - ownerId
+  - tier
+  - memberCount
+  - hipaaEnabled
+  - createdAt
+- name: Room
+  description: "A room inside a space; the unit users navigate between."
+  schema: ApiRoom
+  in_spec: true
+  key_fields:
+  - id
+  - displayName
+  - width
+  - height
+  - capacity
+  - roomTemplateId
+  - stockBackgroundId
+- name: Zone
+  description: "A subdivision of a room, used for conference areas and audio zones."
+  schemas: [ApiCreateZoneRequest, ApiUpdateZoneRequest, ZoneStatus, ZoneOrientation]
+  in_spec: partial
+  note: >-
+    The spec declares no canonical response schema for this entity — only request bodies. Its read
+    representation is embedded in its parent rather than described standalone.
+- name: Furniture
+  description: "A placed object inside a room, carrying an interactive behavior."
+  schemas: [ApiCreateFurnitureRequest, ApiUpdateFurnitureRequest, RotatedFurniture]
+  in_spec: partial
+  note: >-
+    The spec declares no canonical response schema for this entity — only request bodies. Its read
+    representation is embedded in its parent rather than described standalone.
+- name: Wall
+  description: "A wall segment bounding a zone within a room."
+  schemas: [ApiUpdateWallSegmentRequest, ApiWallBehavior]
+  in_spec: partial
+  note: >-
+    The spec declares no canonical response schema for this entity — only request bodies. Its read
+    representation is embedded in its parent rather than described standalone.
+- name: UserRole
+  description: "A user's membership and role within a space."
+  schema: ApiUserRole
+  in_spec: true
+  key_fields:
+  - userId
+  - email
+  - displayName
+  - role
+  - avatarUrl
+- name: UserInvitation
+  description: "A pending invitation for a user to join a space."
+  schemas: [UserInvitation]
+  in_spec: true
+- name: ChatChannel
+  description: "A chat channel, addressed by `channelUrl`."
+  schemas: [SendbirdChannel, ApiSearchChannel, ChannelMetadata, ApiChatConfigChannel]
+  in_spec: true
+- name: Recording
+  description: "A recorded session, grouped by `recordingGroupId`."
+  schema: ApiRecording
+  in_spec: true
+  key_fields:
+  - id
+  - firebaseUid
+  - status
+  - roomId
+  - spaceName
+  - visibility
+  - recordingGroupId
+- name: Transcription
+  description: "A transcript and optional AI summary for a recording group."
+  schema: ApiTranscription
+  in_spec: true
+  key_fields:
+  - id
+  - recordingGroupId
+  - roomId
+  - spaceUid
+  - ownerFirebaseUid
+- name: RoomTemplate
+  description: "A reusable room layout."
+  schema: ApiRoomTemplate
+  in_spec: true
+- name: ZoneTemplate
+  description: "A reusable zone layout."
+  schema: ApiZoneTemplate
+  in_spec: true
+  key_fields:
+  - id
+  - title
+  - description
+  - isDraft
+  - tags
+  - type
+- name: CalendarResource
+  description: "A bookable conference room mapped to a calendar resource."
+  schema: CalendarResource
+  in_spec: true
+  key_fields:
+  - resourceId
+  - floorId
+  - spaceName
+  - roomId
+- name: MusicTrack
+  description: "An audio track that can play inside a room."
+  schemas: [ApiCreateMusicTrackRequest, ApiUpdateMusicTrackRequest]
+  in_spec: partial
+  note: >-
+    The spec declares no canonical response schema for this entity — only request bodies. Its read
+    representation is embedded in its parent rather than described standalone.
+- name: Subscription
+  description: "The Stripe-backed subscription attached to a space."
+  schema: AutomaticStripeSubscription
+  in_spec: true
+relationships:
+- from: Space
+  type: has_many
+  to: Room
+  via: "ApiSpace.rooms"
+  evidence: "inline array of ApiRoom"
+- from: Space
+  type: has_many
+  to: UserRole
+  via: "ApiSpace.userRoles"
+  evidence: "map keyed by userId"
+- from: Space
+  type: has_one
+  to: Subscription
+  via: "ApiSpace.subscription"
+  evidence: "$ref AutomaticStripeSubscription"
+- from: Space
+  type: belongs_to
+  to: User
+  via: "ApiSpace.ownerId"
+  evidence: "id reference"
+- from: Room
+  type: belongs_to
+  to: Space
+  via: "path /v1/spaces/{name}/rooms/{id}"
+  evidence: "path hierarchy"
+- from: Room
+  type: belongs_to
+  to: RoomTemplate
+  via: "ApiRoom.roomTemplateId"
+  evidence: "id reference"
+- from: Zone
+  type: belongs_to
+  to: Room
+  via: "path /v1/spaces/{name}/rooms/{roomId}/zones/{id}"
+  evidence: "path hierarchy"
+- from: Wall
+  type: belongs_to
+  to: Zone
+  via: "path /v1/spaces/{name}/rooms/{roomId}/zones/{zoneId}/walls/{wallId}"
+  evidence: "path hierarchy"
+- from: Furniture
+  type: belongs_to
+  to: Room
+  via: "path /v1/spaces/{name}/rooms/{roomId}/furniture/{id}"
+  evidence: "path hierarchy"
+- from: Recording
+  type: belongs_to
+  to: Room
+  via: "ApiRecording.roomId"
+  evidence: "id reference"
+- from: Recording
+  type: belongs_to
+  to: Space
+  via: "ApiRecording.spaceName"
+  evidence: "name reference"
+- from: Transcription
+  type: belongs_to
+  to: Recording
+  via: "ApiTranscription.recordingGroupId"
+  evidence: "id reference"
+- from: Transcription
+  type: belongs_to
+  to: Space
+  via: "ApiTranscription.spaceUid"
+  evidence: "id reference"
+- from: CalendarResource
+  type: belongs_to
+  to: Room
+  via: "CalendarResource.roomId"
+  evidence: "id reference"
+- from: CalendarResource
+  type: belongs_to
+  to: Space
+  via: "CalendarResource.spaceName"
+  evidence: "name reference"
+- from: UserRole
+  type: belongs_to
+  to: Space
+  via: "ApiUserRole.spaceMetadata"
+  evidence: "$ref SpaceMetadata"
+- from: UserInvitation
+  type: belongs_to
+  to: Space
+  via: "path /v1/userInvitations/space/{spaceName}"
+  evidence: "path hierarchy"
+- from: ChatChannel
+  type: belongs_to
+  to: Space
+  via: "/v1/spaces/{name}/customChannels"
+  evidence: "path hierarchy"

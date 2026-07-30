@@ -1,0 +1,21 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/kumospace-api-openapi.json
+format: none
+problem_types: []
+summary: >-
+  The public Kumospace OpenAPI description declares NO error responses. Across all 132 operations
+  the only documented status codes are 200, 201, 204 and 302, and components.schemas contains no error,
+  problem or fault schema. Kumospace also publishes no error-code reference in its help centre. There is
+  therefore nothing to catalogue — this file records a verified absence, not an empty derivation.
+observed_status_codes:
+- '200'
+- '201'
+- '204'
+- '302'
+rfc9457: false
+error_reference_published: false
+gap: >-
+  Recommended follow-up with the provider: declare 400/401/403/404/409/429/500 responses with a shared
+  error schema, ideally application/problem+json per RFC 9457. Consumers currently cannot tell from the
+  contract what a failure looks like.

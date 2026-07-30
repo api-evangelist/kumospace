@@ -1,0 +1,78 @@
+# Kumospace
+
+> Kumospace is a virtual office platform for remote and distributed teams. Colleagues occupy a persistent
+> spatial workspace — moving between rooms and floors with proximity-based spatial audio and video — with
+> team chat, meetings, recordings, transcription and calendar integrations. Kumospace operates a public
+> REST API at api.kumospace.com covering spaces, rooms, users, chat, calendar, recordings, transcription,
+> analytics and billing.
+
+Generated: 2026-07-19
+Method: generated (Kumospace does not publish an llms.txt; https://www.kumospace.com/llms.txt returns the
+single-page-app shell, a soft-404, not a document)
+Source: openapi/kumospace-api-openapi.json and the public kumospace.com website
+
+## API
+
+The Kumospace API is an OpenAPI 3.0.0 REST API with 112 paths and 132 operations across 23 resource groups.
+There is no separate developer portal; the contract is served directly by a Swagger UI.
+
+- [Kumospace API reference (Swagger UI)](https://api.kumospace.com/): the interactive API reference and the
+  canonical source of the OpenAPI description.
+- Base URL: `https://api.kumospace.com` — all paths are prefixed `/v1/`.
+- Authentication: a Firebase-issued bearer JWT in `Authorization: Bearer <token>`. The spec declares one
+  security scheme, `firebase` (http/bearer, JWT). There is no OAuth server and no API-key scheme.
+- Pagination: cursor-based. Pass `limit`; read the next cursor from `metadata.next` in the
+  `PaginatedResponse_<T>_` envelope and pass it back as `next`.
+- Errors: the published spec declares no 4xx or 5xx responses and no error schema. Consumers cannot
+  determine failure shapes from the contract.
+- Idempotency: not supported; no idempotency key mechanism exists in the spec or documentation.
+- Rate limits: not documented.
+
+## Resource groups
+
+- Spaces (18 operations): create, read, update and delete workspaces addressed by a `name` slug; public
+  info, chat config, channels, default channels, home positions, trials and ownership.
+- Users (29 operations): profiles, per-space roles (individual and bulk), floor roles, invitations
+  (single, bulk, expiring, resend), recent and default spaces, notification tokens, feedback and bug reports.
+- Rooms, Zones, Walls, Furniture, Flooring: the spatial layout of a space, plus stock furniture, stock
+  walls and stock background catalogs (several of which are readable without authentication).
+- Room Templates and Zone Templates: reusable layouts.
+- Chat (10 operations): channels, member updates, preferences, message retrieval, deletion and search.
+- Calendar (7 operations): Google Calendar integration, event retrieval by date or range, attendance
+  replies, calendar sync and disconnection.
+- Recordings (6 operations) and Transcription (5 operations): recording lifecycle, sharing and access
+  links; transcripts, VTT captions and AI-generated summaries.
+- Integrations (8 operations): Microsoft Teams status, Zoom status, Microsoft Outlook and Google Calendar
+  connection and OAuth redirect handling.
+- Payments (7 operations): Stripe checkout and billing-portal sessions, subscription setup, cancellation
+  and renewal.
+- Analytics (2 operations): workspace attendance and presence-status reporting.
+
+## Product and company
+
+- [Kumospace](https://www.kumospace.com/): product homepage.
+- [Help centre](https://www.kumospace.com/help): end-user and admin documentation.
+- [Getting started guide](https://www.kumospace.com/virtual-office-guide/getting-started-guide)
+- [Pricing](https://www.kumospace.com/pricing)
+- [Downloads](https://www.kumospace.com/download): macOS, Windows, Linux, iOS and Android clients.
+- [Blog](https://www.kumospace.com/blog)
+- [Contact and support](https://www.kumospace.com/contact)
+- [GitHub organization](https://github.com/kumospace): two public repositories; no client SDKs are published.
+
+## Security, compliance and operations
+
+- [Security and compliance](https://www.kumospace.com/security): Kumospace states it has completed a SOC 2
+  examination and third-party penetration testing, is compliant with GDPR, and offers optional HIPAA
+  compliance on paid plans. Audio and video use WebRTC encryption; data is encrypted at rest and in transit.
+- [Status page](https://status.kumospace.com/): Better Stack uptime monitoring.
+- [Terms of service](https://www.kumospace.com/terms) · [Privacy policy](https://www.kumospace.com/privacy)
+- No security.txt (RFC 9116), vulnerability disclosure programme or bug bounty was found.
+
+## Optional
+
+- No official client SDKs exist on npm, PyPI or any other public registry.
+- No first-party CLI is published.
+- No official MCP server is published; a candidate tool surface derived from the OpenAPI description is in
+  `mcp/kumospace-mcp.yml`.
+- Kumospace exposes no outbound webhook subscriptions for API consumers. The webhook endpoints in the spec
+  are inbound receivers for Daily, Zoom and Microsoft Teams.

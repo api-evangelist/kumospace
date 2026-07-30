@@ -1,0 +1,147 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/kumospace-api-openapi.json
+notes: >-
+  Cross-cutting semantics derived from the public Kumospace OpenAPI description. Kumospace publishes no
+  narrative API guide, so every convention below is read off the spec itself; where the spec is silent the
+  field records that silence rather than guessing.
+authentication:
+  style: bearer
+  scheme_name: firebase
+  bearer_format: JWT
+  header: 'Authorization: Bearer <firebase-id-token>'
+  issued_by: Firebase Authentication
+  notes: >-
+    A single http/bearer scheme named `firebase` is declared. 116 of
+    132 operations apply it; the unsecured remainder are public catalog reads (stock furniture,
+    walls, backgrounds, room and zone templates), account creation and password reset, third-party
+    webhook receivers and OAuth redirect handlers.
+  see_also: authentication/kumospace-authentication.yml
+versioning:
+  style: path
+  current: v1
+  evidence: every path is prefixed /v1/
+  policy_published: false
+pagination:
+  style: cursor
+  request_params:
+  - limit
+  - next
+  response_envelope: PaginatedResponse_<T>_
+  response_fields:
+  - items      # the page of items
+  - metadata.count  # number of items sent
+  - metadata.next   # cursor for the next page; absent when exhausted
+  paginated_response_schemas: 12
+  evidence: components.schemas.PaginatedResponse_* generic wrapper
+idempotency:
+  supported: false
+  evidence: >-
+    No idempotency key header, parameter or schema field appears anywhere in the spec, and the docs
+    publish no retry-safety guidance. Recorded as absent rather than assumed.
+errors:
+  envelope_documented: false
+  problem_json: false
+  status_codes_declared:
+  - '200'
+  - '201'
+  - '204'
+  - '302'
+  evidence: >-
+    The spec declares only success responses; no 4xx or 5xx response is described for any of the
+    132 operations, and no error schema exists in components.schemas. This is the single largest
+    contract gap in the description.
+  see_also: errors/kumospace-problem-types.yml
+rate_limiting:
+  documented: false
+  headers_declared: none
+  evidence: no rate-limit header, schema or 429 response appears in the spec
+field_expansion:
+  supported: false
+  notes: >-
+    No `expand`/`fields` parameter. Some responses embed related objects unconditionally — ApiSpace
+    inlines its full rooms array.
+metadata:
+  user_defined_fields: false
+request_tracing:
+  request_id_header: none declared
+  notes: >-
+    Responses from api.kumospace.com carry an `x-cloud-trace-context` header (Google Cloud
+    Run/Frontend), observed live but not declared in the spec.
+transport:
+  tls: TLSv1.3
+  hsts: true
+  cors: 'access-control-allow-origin: *'
+  observed_headers:
+  - strict-transport-security
+  - content-security-policy
+  - x-content-type-options
+  - referrer-policy
+  - cross-origin-opener-policy
+events:
+  webhooks_for_consumers: false
+  asyncapi: false
+  evidence: >-
+    Kumospace offers no outbound webhook subscriptions and no event stream to API consumers. The webhook
+    paths in the spec (/v1/integrations/daily/webhook, /v1/integrations/zoom-status/webhook/participant-update,
+    /v1/integrations/microsoft-teams-status/webhook/presence-subscription/{id}) are INBOUND receivers that
+    Kumospace exposes to Daily, Zoom and Microsoft. Long-running work (recording processing, transcript
+    summarization) must therefore be polled.
+upstream_dependencies:
+  notes: >-
+    Third-party services visible in the public contract itself. Derived from schema names, path segments
+    and field names — not from any vendor disclosure page. Useful for consumers assessing the data path
+    and subprocessor surface.
+  services:
+  - vendor: Firebase Authentication (Google)
+    role: identity and bearer JWT issuance
+    evidence: securityScheme named `firebase`; `firebaseUid` / `ownerFirebaseUid` fields throughout
+  - vendor: Sendbird
+    role: chat backend
+    evidence: schema `SendbirdChannel`; chat channels addressed by `channelUrl`
+  - vendor: Daily
+    role: real-time video/audio infrastructure
+    evidence: tag "Daily (Webhook)"; POST /v1/integrations/daily/webhook receiver
+  - vendor: Stripe
+    role: subscription billing
+    evidence: schema `AutomaticStripeSubscription`; hosted checkout and billing-portal sessions
+  - vendor: Google Cloud
+    role: hosting
+    evidence: "live `x-cloud-trace-context` and `server: Google Frontend` response headers"
+  integration_clients:
+  - Google Calendar
+  - Microsoft Outlook
+  - Microsoft Teams (presence status)
+  - Zoom (presence status)
+contract_gaps:
+  notes: >-
+    Defects observed in the published OpenAPI description, recorded for follow-up with the provider. These
+    are findings about the contract, not about the running service.
+  duplicate_operation_ids:
+  - operationId: CreateRoom
+    paths:
+    - POST /v1/spaces/{name}/rooms
+    - POST /v1/spaces/{name}/rooms/{roomId}/zones
+    impact: generated clients collide; the zone-creating operation is misnamed
+  - operationId: UpdateZone
+    paths:
+    - PUT /v1/spaces/{name}/rooms/{roomId}/zones/{id}
+    - PUT /v1/spaces/{name}/rooms/{roomId}/zones/{zoneId}/walls/{wallId}
+    impact: generated clients collide; the wall-updating operation is misnamed
+  misspelled_operation_ids:
+  - operationId: RenewlSubscription
+    path: POST /v1/payments/subscription/renew
+    should_be: RenewSubscription
+  - operationId: DisconnectCalendarIntegration1
+    path: POST /v1/calendar/disconnect-calendar-integration
+    note: trailing "1" suggests an unresolved name collision at generation time
+  inconsistent_parameter_naming:
+  - the room path parameter is `id` on POST /v1/spaces/{name}/rooms/{id}/furniture but `roomId` on the
+    corresponding update and delete paths
+  other:
+  - info.title is the internal package name "@kumo/api" rather than a product title
+  - info has no version and no description
+  - servers declares a relative "/" rather than the production host
+  - no tags[] section, so the 23 tag groups assigned to operations carry no descriptions
+  - essentially no request or response examples (one occurrence across 263 schemas)
+  - no error responses declared on any of the 132 operations

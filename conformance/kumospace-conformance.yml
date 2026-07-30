@@ -1,0 +1,66 @@
+generated: '2026-07-19'
+method: searched
+source: https://www.kumospace.com/security
+notes: >-
+  Compliance claims harvested from the Kumospace security page; technical conformance derived from the
+  public OpenAPI description. Only standards Kumospace actually names are recorded as conforming.
+standards:
+- id: soc2
+  conforms: true
+  evidence: >-
+    "Kumospace has successfully undergone SOC 2 examination and audit that demonstrates we hold security
+    and data to the highest standards" — https://www.kumospace.com/security
+- id: gdpr
+  conforms: true
+  evidence: >-
+    "Kumospace is fully compliant with the General Data Protection Regulation" —
+    https://www.kumospace.com/security
+- id: hipaa
+  conforms: true
+  conditional: true
+  evidence: >-
+    Available as an opt-in on paid plans; the API exposes GET /v1/users/{userId}/hipaaCompliant and
+    ApiSpace carries a `hipaaEnabled` flag. https://www.kumospace.com/security
+- id: penetration-testing
+  conforms: true
+  evidence: >-
+    "Kumospace has successfully undergone third-party data penetration testing" —
+    https://www.kumospace.com/security
+- id: openapi
+  conforms: true
+  evidence: OpenAPI 3.0.0 description served by the Swagger UI at https://api.kumospace.com/
+- id: webrtc
+  conforms: true
+  evidence: >-
+    "Our video and audio rely on WebRTC using proven encryption technologies within your browser" —
+    https://www.kumospace.com/security
+- id: oauth2
+  conforms: false
+  evidence: >-
+    No oauth2 securityScheme. Authentication is a Firebase-issued bearer JWT. Kumospace acts as an OAuth
+    *client* against Google, Microsoft and Zoom for its integrations, but exposes no OAuth server.
+- id: oidc
+  conforms: false
+  evidence: no openIdConnect securityScheme and no /.well-known/openid-configuration on api.kumospace.com
+- id: rfc9457
+  conforms: false
+  evidence: no application/problem+json media type; no error responses declared at all
+- id: rfc9116
+  conforms: false
+  evidence: no security.txt served on kumospace.com or api.kumospace.com (see well-known/)
+- id: pagination
+  conforms: true
+  evidence: >-
+    Consistent cursor pagination via a PaginatedResponse_<T>_ generic wrapper with limit/next; see
+    conventions/kumospace-conventions.yml
+- id: idempotency
+  conforms: false
+  evidence: no idempotency key mechanism anywhere in the spec or docs
+- id: json:api
+  conforms: false
+  evidence: plain application/json resource representations, not the JSON:API media type
+certifications:
+- SOC 2
+- GDPR
+- HIPAA (opt-in, paid plans)
+see_also: security/kumospace-trust-center.yml
