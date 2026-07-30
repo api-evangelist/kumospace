@@ -1,23 +1,509 @@
 aid: kumospace
 name: Kumospace
-description: Kumospace is a company surfaced as a portfolio company of lightspeed-venture-partners and
-  added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment
-  pipeline.
+description: Kumospace is a virtual office platform for remote and distributed teams, providing a persistent
+  spatial workspace where colleagues move between rooms and floors, with proximity-based spatial audio and
+  video, team chat channels, scheduled and ad-hoc meetings, recordings, transcription and meeting summaries,
+  and calendar integrations with Google Calendar and Microsoft Outlook. Spaces are visually customizable
+  through rooms, zones, floors, walls, furniture and music tracks, and the platform integrates presence
+  status with Zoom and Microsoft Teams. Kumospace operates a publicly reachable REST API at
+  api.kumospace.com, documented with a Swagger UI and an OpenAPI 3.0 description covering spaces, rooms,
+  zones, users, invitations, chat, calendar, recordings, transcription, analytics and payments. The company
+  is headquartered in New York and is backed by Lightspeed Venture Partners.
 url: https://raw.githubusercontent.com/api-evangelist/kumospace/refs/heads/main/apis.yml
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://content.kumospace.com/hubfs/LinkPreviewImage@2x-1.png
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - lightspeed-venture-partners
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: enriched
+x-tier-reason: public-openapi-discovered
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-19'
 tags:
 - Company
-apis: []
+- Virtual Office
+- Remote Work
+- Collaboration
+- Video Conferencing
+- Communications
+- Real Time
+- Productivity
+- Meetings
+- Spatial Audio
+apis:
+- aid: kumospace:kumospace-account-api
+  name: Kumospace Account API
+  description: The Account API from Kumospace — 6 operation(s) for account.
+  humanURL: https://api.kumospace.com/
+  baseURL: https://api.kumospace.com
+  tags:
+  - Account
+  properties:
+  - type: OpenAPI
+    url: openapi/kumospace-account-api-openapi.yml
+  - type: Swagger
+    url: https://api.kumospace.com/
+  - type: Authentication
+    url: authentication/kumospace-authentication.yml
+  - type: Conventions
+    url: conventions/kumospace-conventions.yml
+  - type: DataModel
+    url: data-model/kumospace-data-model.yml
+- aid: kumospace:kumospace-analytics-api
+  name: Kumospace Analytics API
+  description: The Analytics API from Kumospace — 2 operation(s) for analytics.
+  humanURL: https://api.kumospace.com/
+  baseURL: https://api.kumospace.com
+  tags:
+  - Analytics
+  properties:
+  - type: OpenAPI
+    url: openapi/kumospace-analytics-api-openapi.yml
+  - type: Swagger
+    url: https://api.kumospace.com/
+  - type: Authentication
+    url: authentication/kumospace-authentication.yml
+  - type: Conventions
+    url: conventions/kumospace-conventions.yml
+  - type: DataModel
+    url: data-model/kumospace-data-model.yml
+- aid: kumospace:kumospace-calendar-api
+  name: Kumospace Calendar API
+  description: The Calendar API from Kumospace — 7 operation(s) for calendar.
+  humanURL: https://api.kumospace.com/
+  baseURL: https://api.kumospace.com
+  tags:
+  - Calendar
+  properties:
+  - type: OpenAPI
+    url: openapi/kumospace-calendar-api-openapi.yml
+  - type: Swagger
+    url: https://api.kumospace.com/
+  - type: Authentication
+    url: authentication/kumospace-authentication.yml
+  - type: Conventions
+    url: conventions/kumospace-conventions.yml
+  - type: DataModel
+    url: data-model/kumospace-data-model.yml
+- aid: kumospace:kumospace-chat-api
+  name: Kumospace Chat API
+  description: The Chat API from Kumospace — 8 operation(s) for chat.
+  humanURL: https://api.kumospace.com/
+  baseURL: https://api.kumospace.com
+  tags:
+  - Chat
+  properties:
+  - type: OpenAPI
+    url: openapi/kumospace-chat-api-openapi.yml
+  - type: Swagger
+    url: https://api.kumospace.com/
+  - type: Authentication
+    url: authentication/kumospace-authentication.yml
+  - type: Conventions
+    url: conventions/kumospace-conventions.yml
+  - type: DataModel
+    url: data-model/kumospace-data-model.yml
+- aid: kumospace:kumospace-daily-webhook-api
+  name: Kumospace Daily (Webhook) API
+  description: The Daily (Webhook) API from Kumospace — 1 operation(s) for daily (webhook).
+  humanURL: https://api.kumospace.com/
+  baseURL: https://api.kumospace.com
+  tags:
+  - Daily (Webhook)
+  properties:
+  - type: OpenAPI
+    url: openapi/kumospace-daily-webhook-api-openapi.yml
+  - type: Swagger
+    url: https://api.kumospace.com/
+  - type: Authentication
+    url: authentication/kumospace-authentication.yml
+  - type: Conventions
+    url: conventions/kumospace-conventions.yml
+  - type: DataModel
+    url: data-model/kumospace-data-model.yml
+- aid: kumospace:kumospace-demo-api
+  name: Kumospace Demo API
+  description: The Demo API from Kumospace — 2 operation(s) for demo.
+  humanURL: https://api.kumospace.com/
+  baseURL: https://api.kumospace.com
+  tags:
+  - Demo
+  properties:
+  - type: OpenAPI
+    url: openapi/kumospace-demo-api-openapi.yml
+  - type: Swagger
+    url: https://api.kumospace.com/
+  - type: Authentication
+    url: authentication/kumospace-authentication.yml
+  - type: Conventions
+    url: conventions/kumospace-conventions.yml
+  - type: DataModel
+    url: data-model/kumospace-data-model.yml
+- aid: kumospace:kumospace-flooring-api
+  name: Kumospace Flooring API
+  description: The Flooring API from Kumospace — 1 operation(s) for flooring.
+  humanURL: https://api.kumospace.com/
+  baseURL: https://api.kumospace.com
+  tags:
+  - Flooring
+  properties:
+  - type: OpenAPI
+    url: openapi/kumospace-flooring-api-openapi.yml
+  - type: Swagger
+    url: https://api.kumospace.com/
+  - type: Authentication
+    url: authentication/kumospace-authentication.yml
+  - type: Conventions
+    url: conventions/kumospace-conventions.yml
+  - type: DataModel
+    url: data-model/kumospace-data-model.yml
+- aid: kumospace:kumospace-furniture-api
+  name: Kumospace Furniture API
+  description: The Furniture API from Kumospace — 2 operation(s) for furniture.
+  humanURL: https://api.kumospace.com/
+  baseURL: https://api.kumospace.com
+  tags:
+  - Furniture
+  properties:
+  - type: OpenAPI
+    url: openapi/kumospace-furniture-api-openapi.yml
+  - type: Swagger
+    url: https://api.kumospace.com/
+  - type: Authentication
+    url: authentication/kumospace-authentication.yml
+  - type: Conventions
+    url: conventions/kumospace-conventions.yml
+  - type: DataModel
+    url: data-model/kumospace-data-model.yml
+- aid: kumospace:kumospace-integrations-api
+  name: Kumospace Integrations API
+  description: The Integrations API from Kumospace — 8 operation(s) for integrations.
+  humanURL: https://api.kumospace.com/
+  baseURL: https://api.kumospace.com
+  tags:
+  - Integrations
+  properties:
+  - type: OpenAPI
+    url: openapi/kumospace-integrations-api-openapi.yml
+  - type: Swagger
+    url: https://api.kumospace.com/
+  - type: Authentication
+    url: authentication/kumospace-authentication.yml
+  - type: Conventions
+    url: conventions/kumospace-conventions.yml
+  - type: DataModel
+    url: data-model/kumospace-data-model.yml
+- aid: kumospace:kumospace-musictrack-api
+  name: Kumospace MusicTrack API
+  description: The MusicTrack API from Kumospace — 2 operation(s) for musictrack.
+  humanURL: https://api.kumospace.com/
+  baseURL: https://api.kumospace.com
+  tags:
+  - MusicTrack
+  properties:
+  - type: OpenAPI
+    url: openapi/kumospace-musictrack-api-openapi.yml
+  - type: Swagger
+    url: https://api.kumospace.com/
+  - type: Authentication
+    url: authentication/kumospace-authentication.yml
+  - type: Conventions
+    url: conventions/kumospace-conventions.yml
+  - type: DataModel
+    url: data-model/kumospace-data-model.yml
+- aid: kumospace:kumospace-payments-api
+  name: Kumospace Payments API
+  description: The Payments API from Kumospace — 7 operation(s) for payments.
+  humanURL: https://api.kumospace.com/
+  baseURL: https://api.kumospace.com
+  tags:
+  - Payments
+  properties:
+  - type: OpenAPI
+    url: openapi/kumospace-payments-api-openapi.yml
+  - type: Swagger
+    url: https://api.kumospace.com/
+  - type: Authentication
+    url: authentication/kumospace-authentication.yml
+  - type: Conventions
+    url: conventions/kumospace-conventions.yml
+  - type: DataModel
+    url: data-model/kumospace-data-model.yml
+- aid: kumospace:kumospace-recordings-api
+  name: Kumospace Recordings API
+  description: The Recordings API from Kumospace — 6 operation(s) for recordings.
+  humanURL: https://api.kumospace.com/
+  baseURL: https://api.kumospace.com
+  tags:
+  - Recordings
+  properties:
+  - type: OpenAPI
+    url: openapi/kumospace-recordings-api-openapi.yml
+  - type: Swagger
+    url: https://api.kumospace.com/
+  - type: Authentication
+    url: authentication/kumospace-authentication.yml
+  - type: Conventions
+    url: conventions/kumospace-conventions.yml
+  - type: DataModel
+    url: data-model/kumospace-data-model.yml
+- aid: kumospace:kumospace-redirects-api
+  name: Kumospace Redirects API
+  description: The Redirects API from Kumospace — 1 operation(s) for redirects.
+  humanURL: https://api.kumospace.com/
+  baseURL: https://api.kumospace.com
+  tags:
+  - Redirects
+  properties:
+  - type: OpenAPI
+    url: openapi/kumospace-redirects-api-openapi.yml
+  - type: Swagger
+    url: https://api.kumospace.com/
+  - type: Authentication
+    url: authentication/kumospace-authentication.yml
+  - type: Conventions
+    url: conventions/kumospace-conventions.yml
+  - type: DataModel
+    url: data-model/kumospace-data-model.yml
+- aid: kumospace:kumospace-room-templates-api
+  name: Kumospace Room Templates API
+  description: The Room Templates API from Kumospace — 2 operation(s) for room templates.
+  humanURL: https://api.kumospace.com/
+  baseURL: https://api.kumospace.com
+  tags:
+  - Room Templates
+  properties:
+  - type: OpenAPI
+    url: openapi/kumospace-room-templates-api-openapi.yml
+  - type: Swagger
+    url: https://api.kumospace.com/
+  - type: Authentication
+    url: authentication/kumospace-authentication.yml
+  - type: Conventions
+    url: conventions/kumospace-conventions.yml
+  - type: DataModel
+    url: data-model/kumospace-data-model.yml
+- aid: kumospace:kumospace-rooms-api
+  name: Kumospace Rooms API
+  description: The Rooms API from Kumospace — 2 operation(s) for rooms.
+  humanURL: https://api.kumospace.com/
+  baseURL: https://api.kumospace.com
+  tags:
+  - Rooms
+  properties:
+  - type: OpenAPI
+    url: openapi/kumospace-rooms-api-openapi.yml
+  - type: Swagger
+    url: https://api.kumospace.com/
+  - type: Authentication
+    url: authentication/kumospace-authentication.yml
+  - type: Conventions
+    url: conventions/kumospace-conventions.yml
+  - type: DataModel
+    url: data-model/kumospace-data-model.yml
+- aid: kumospace:kumospace-spaces-api
+  name: Kumospace Spaces API
+  description: The Spaces API from Kumospace — 13 operation(s) for spaces.
+  humanURL: https://api.kumospace.com/
+  baseURL: https://api.kumospace.com
+  tags:
+  - Spaces
+  properties:
+  - type: OpenAPI
+    url: openapi/kumospace-spaces-api-openapi.yml
+  - type: Swagger
+    url: https://api.kumospace.com/
+  - type: Authentication
+    url: authentication/kumospace-authentication.yml
+  - type: Conventions
+    url: conventions/kumospace-conventions.yml
+  - type: DataModel
+    url: data-model/kumospace-data-model.yml
+- aid: kumospace:kumospace-stock-furniture-api
+  name: Kumospace Stock Furniture API
+  description: The Stock Furniture API from Kumospace — 2 operation(s) for stock furniture.
+  humanURL: https://api.kumospace.com/
+  baseURL: https://api.kumospace.com
+  tags:
+  - Stock Furniture
+  properties:
+  - type: OpenAPI
+    url: openapi/kumospace-stock-furniture-api-openapi.yml
+  - type: Swagger
+    url: https://api.kumospace.com/
+  - type: Authentication
+    url: authentication/kumospace-authentication.yml
+  - type: Conventions
+    url: conventions/kumospace-conventions.yml
+  - type: DataModel
+    url: data-model/kumospace-data-model.yml
+- aid: kumospace:kumospace-stock-walls-api
+  name: Kumospace Stock Walls API
+  description: The Stock Walls API from Kumospace — 1 operation(s) for stock walls.
+  humanURL: https://api.kumospace.com/
+  baseURL: https://api.kumospace.com
+  tags:
+  - Stock Walls
+  properties:
+  - type: OpenAPI
+    url: openapi/kumospace-stock-walls-api-openapi.yml
+  - type: Swagger
+    url: https://api.kumospace.com/
+  - type: Authentication
+    url: authentication/kumospace-authentication.yml
+  - type: Conventions
+    url: conventions/kumospace-conventions.yml
+  - type: DataModel
+    url: data-model/kumospace-data-model.yml
+- aid: kumospace:kumospace-transcription-api
+  name: Kumospace Transcription API
+  description: The Transcription API from Kumospace — 5 operation(s) for transcription.
+  humanURL: https://api.kumospace.com/
+  baseURL: https://api.kumospace.com
+  tags:
+  - Transcription
+  properties:
+  - type: OpenAPI
+    url: openapi/kumospace-transcription-api-openapi.yml
+  - type: Swagger
+    url: https://api.kumospace.com/
+  - type: Authentication
+    url: authentication/kumospace-authentication.yml
+  - type: Conventions
+    url: conventions/kumospace-conventions.yml
+  - type: DataModel
+    url: data-model/kumospace-data-model.yml
+- aid: kumospace:kumospace-users-api
+  name: Kumospace Users API
+  description: The Users API from Kumospace — 26 operation(s) for users.
+  humanURL: https://api.kumospace.com/
+  baseURL: https://api.kumospace.com
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/kumospace-users-api-openapi.yml
+  - type: Swagger
+    url: https://api.kumospace.com/
+  - type: Authentication
+    url: authentication/kumospace-authentication.yml
+  - type: Conventions
+    url: conventions/kumospace-conventions.yml
+  - type: DataModel
+    url: data-model/kumospace-data-model.yml
+- aid: kumospace:kumospace-walls-api
+  name: Kumospace Walls API
+  description: The Walls API from Kumospace — 1 operation(s) for walls.
+  humanURL: https://api.kumospace.com/
+  baseURL: https://api.kumospace.com
+  tags:
+  - Walls
+  properties:
+  - type: OpenAPI
+    url: openapi/kumospace-walls-api-openapi.yml
+  - type: Swagger
+    url: https://api.kumospace.com/
+  - type: Authentication
+    url: authentication/kumospace-authentication.yml
+  - type: Conventions
+    url: conventions/kumospace-conventions.yml
+  - type: DataModel
+    url: data-model/kumospace-data-model.yml
+- aid: kumospace:kumospace-zone-templates-api
+  name: Kumospace Zone Templates API
+  description: The Zone Templates API from Kumospace — 2 operation(s) for zone templates.
+  humanURL: https://api.kumospace.com/
+  baseURL: https://api.kumospace.com
+  tags:
+  - Zone Templates
+  properties:
+  - type: OpenAPI
+    url: openapi/kumospace-zone-templates-api-openapi.yml
+  - type: Swagger
+    url: https://api.kumospace.com/
+  - type: Authentication
+    url: authentication/kumospace-authentication.yml
+  - type: Conventions
+    url: conventions/kumospace-conventions.yml
+  - type: DataModel
+    url: data-model/kumospace-data-model.yml
+- aid: kumospace:kumospace-zones-api
+  name: Kumospace Zones API
+  description: The Zones API from Kumospace — 5 operation(s) for zones.
+  humanURL: https://api.kumospace.com/
+  baseURL: https://api.kumospace.com
+  tags:
+  - Zones
+  properties:
+  - type: OpenAPI
+    url: openapi/kumospace-zones-api-openapi.yml
+  - type: Swagger
+    url: https://api.kumospace.com/
+  - type: Authentication
+    url: authentication/kumospace-authentication.yml
+  - type: Conventions
+    url: conventions/kumospace-conventions.yml
+  - type: DataModel
+    url: data-model/kumospace-data-model.yml
+common:
+- type: TrustCenter
+  url: security/kumospace-trust-center.yml
+- type: Website
+  url: https://www.kumospace.com/
+- type: APIReference
+  url: https://api.kumospace.com/
+- type: Documentation
+  url: https://www.kumospace.com/help
+- type: GettingStarted
+  url: https://www.kumospace.com/virtual-office-guide/getting-started-guide
+- type: Support
+  url: https://www.kumospace.com/contact
+- type: HelpCenter
+  url: https://www.kumospace.com/help
+- type: Blog
+  url: https://www.kumospace.com/blog
+- type: GitHubOrganization
+  url: https://github.com/kumospace
+- type: Pricing
+  url: https://www.kumospace.com/pricing
+- type: SignUp
+  url: https://www.kumospace.com/pricing
+- type: TermsOfService
+  url: https://www.kumospace.com/terms
+- type: PrivacyPolicy
+  url: https://www.kumospace.com/privacy
+- type: StatusPage
+  url: https://status.kumospace.com/
+- type: Compliance
+  url: conformance/kumospace-conformance.yml
+- type: Conformance
+  url: conformance/kumospace-conformance.yml
+- type: Lifecycle
+  url: lifecycle/kumospace-lifecycle.yml
+- type: DomainSecurity
+  url: security/kumospace-domain-security.yml
+- type: LLMsTxt
+  url: llms/kumospace-llms.txt
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence
