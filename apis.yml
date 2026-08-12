@@ -459,6 +459,12 @@ apis:
   - type: DataModel
     url: data-model/kumospace-data-model.yml
 common:
+- type: AgentSkill
+  url: skills/kumospace-capture-meeting.md
+- type: MCPServer
+  url: mcp/kumospace-mcp.yml
+- type: Overlay
+  url: overlays/kumospace-api-overlay.yaml
 - type: TrustCenter
   url: security/kumospace-trust-center.yml
 - type: Website
