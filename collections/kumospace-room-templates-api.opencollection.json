@@ -1,0 +1,110 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "@kumo/api Account Room Templates API"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Room Templates",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get room templates.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/roomTemplates",
+            "params": [
+              {
+                "name": "includeDraft",
+                "value": "",
+                "type": "query",
+                "description": "Whether to include draft room templates in the results.  Defaults to false."
+              },
+              {
+                "name": "next",
+                "value": "",
+                "type": "query",
+                "description": "An opaque cursor used to request the next page of results.\nIt is provided in the previous response from the api."
+              }
+            ]
+          },
+          "docs": "Get a paginated list of room templates.\n\nSubsequent pages can be requested with the \"next\" parameter, which is\nreturned in the response metadata object if another page exists."
+        },
+        {
+          "info": {
+            "name": "Create a room template.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/roomTemplates",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a room template from an existing room.  Can only be called by\nkumospace admins."
+        },
+        {
+          "info": {
+            "name": "Get room templates.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/roomTemplates/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get information about a specific room template."
+        },
+        {
+          "info": {
+            "name": "Update a room template.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v1/roomTemplates/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The room template id"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Updates an existing room template.  Can only be called by kumospace admins."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

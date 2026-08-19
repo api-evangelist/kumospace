@@ -1,0 +1,146 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "@kumo/api Account Payments API"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Payments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a checkout session.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/payments/checkout",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a new checkout session (to upgrade a space by paying for the pro\nplan)"
+        },
+        {
+          "info": {
+            "name": "Create a customer billing portal session.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/payments/billingPortal",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a new billing portal session (to manage existing subscriptions)"
+        },
+        {
+          "info": {
+            "name": "Sets reverse trial payment method as added.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v1/payments/setup",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Sets reverse trial payment method as added."
+        },
+        {
+          "info": {
+            "name": "Sets the space's subscription to cancel at the end of the billing period.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/payments/subscription/cancel",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Sets the space's subscription to cancel at the end of the billing period."
+        },
+        {
+          "info": {
+            "name": "Sets the space's subscription to renew at the end of the billing period.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/payments/subscription/renew",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Sets the space's subscription to renew at the end of the billing period."
+        },
+        {
+          "info": {
+            "name": "Updates subscription info and return link to setup payment method.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v1/payments/reverse-trial/setup",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "This will update the subscription payment information (member seats and\nbilling period), and then will return a stripe link to setup the payment\nmethod and billing address for tax calculations"
+        },
+        {
+          "info": {
+            "name": "Gets stripe config values",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/payments/config",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get stripe config values for free member limits"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

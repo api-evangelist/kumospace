@@ -1,0 +1,31 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "@kumo/api Account Daily (Webhook) API"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Daily (Webhook)",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "HandleDailyWebhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/integrations/daily/webhook",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

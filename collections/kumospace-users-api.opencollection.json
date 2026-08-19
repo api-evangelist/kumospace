@@ -1,0 +1,677 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "@kumo/api Account Users API"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Users",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get user roles.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/spaces/:name/userRoles",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The space."
+              },
+              {
+                "name": "role",
+                "value": "",
+                "type": "query",
+                "description": "Return users having this role.  If unspecified, returns all users."
+              },
+              {
+                "name": "next",
+                "value": "",
+                "type": "query",
+                "description": "An opaque cursor used to request the next page of results.  It is provided in the previous response from the api."
+              },
+              {
+                "name": "includeSpaceMetadata",
+                "value": "",
+                "type": "query",
+                "description": "if specified, returns the spaceMetadata for each userRole"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of results to return.  max: 30"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get a paginated list of users by role."
+        },
+        {
+          "info": {
+            "name": "Update a user role.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v1/spaces/:name/userRoles",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Updates a user's role within the specified space."
+        },
+        {
+          "info": {
+            "name": "Update users roles in bulk.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v1/spaces/:name/userRoles/bulk",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Updates multuiple users' roles within the specified space."
+        },
+        {
+          "info": {
+            "name": "Updates an existing space's floor roles.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v1/spaces/:name/floorRoles",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the space."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Updates an existing space's floor roles. Can only be called by the owner of the space or admins."
+        },
+        {
+          "info": {
+            "name": "Get a user role by firebaseID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/spaces/:name/userRole",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The space."
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "The requested user's firebase UID."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get a role information for a single user from their firebase UID"
+        },
+        {
+          "info": {
+            "name": "Get user recently visited spaces.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/users/me/recentSpaces",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "excludeDemo",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get a paginated list of the users recently visited spaces"
+        },
+        {
+          "info": {
+            "name": "Get info about a user's recently visited space.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/users/me/recentSpaces/:name",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get info about a user's recently visted space"
+        },
+        {
+          "info": {
+            "name": "Get user default space.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/users/me/defaultSpace",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get the default space for the user that should be auto joined on desktop"
+        },
+        {
+          "info": {
+            "name": "Mobile users will send their FCM token for us to send push notifs",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/users/fcmToken",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Mobile users will send their FCM token for us to send push notifs"
+        },
+        {
+          "info": {
+            "name": "De-associate FCM token from user when they logout of mobile\nThis is to prevent users from sharing fcm tokens when logging in/out of one device",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/v1/users/fcmToken/:fcmToken",
+            "params": [
+              {
+                "name": "fcmToken",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "De-associate FCM token from user when they logout of mobile\nThis is to prevent users from sharing fcm tokens when logging in/out of one device"
+        },
+        {
+          "info": {
+            "name": "Get all invitations sent for a certain space",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/userInvitations/space/:spaceName",
+            "params": [
+              {
+                "name": "spaceName",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get a list of all invitations for a certain space"
+        },
+        {
+          "info": {
+            "name": "Get expiring invitation details for the given id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/invitations/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get expiring invitation details for the given id"
+        },
+        {
+          "info": {
+            "name": "Create an expiring guest invitation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/invitations",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create an expiring guest invitation"
+        },
+        {
+          "info": {
+            "name": "Create and send a user invitation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/userInvitations",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create and send a user invitation"
+        },
+        {
+          "info": {
+            "name": "Create and send a user invitation",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v1/userInvitations/:invitationId",
+            "params": [
+              {
+                "name": "invitationId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create and send a user invitation"
+        },
+        {
+          "info": {
+            "name": "Delete a user invitation",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/v1/userInvitations/:invitationId",
+            "params": [
+              {
+                "name": "invitationId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete a user invitation"
+        },
+        {
+          "info": {
+            "name": "Create and send bulk user invitations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/userInvitations/bulk",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create and send bulk user invitations"
+        },
+        {
+          "info": {
+            "name": "Resend",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/userInvitations/:invitationId/resend",
+            "params": [
+              {
+                "name": "invitationId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Resend"
+        },
+        {
+          "info": {
+            "name": "Saves onboarding intake form for the user. This form will\nanswer questions like who they are in their company and what they plan\nto do with Kumospace more deeply",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/users/me/profile/form",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Saves onboarding intake form for the user. This form will\nanswer questions like who they are in their company and what they plan\nto do with Kumospace more deeply"
+        },
+        {
+          "info": {
+            "name": "Gets onboarding intake form for the user.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/users/me/profile/form/:spaceName/response-required",
+            "params": [
+              {
+                "name": "spaceName",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Gets onboarding intake form for the user."
+        },
+        {
+          "info": {
+            "name": "Updates a user's space-specific profile information",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v1/users/me/profile/:spaceName",
+            "params": [
+              {
+                "name": "spaceName",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update a user's profile for a space"
+        },
+        {
+          "info": {
+            "name": "Updates a user's information",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v1/users/me",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update a user"
+        },
+        {
+          "info": {
+            "name": "Gets a user's public information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/users/:userId/publicInfo",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Gets a user's public information"
+        },
+        {
+          "info": {
+            "name": "Checks if a the user is a owner/member of a HIPAA space",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/users/:userId/hipaaCompliant",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Checks if a the user is a owner/member of a HIPAA space"
+        },
+        {
+          "info": {
+            "name": "Get which kiosks a user has seen in a given space",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/users/me/spaces/:spaceName/kiosks",
+            "params": [
+              {
+                "name": "spaceName",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get user seen kiosks"
+        },
+        {
+          "info": {
+            "name": "Update which kiosks a user has seen in a given space",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v1/users/me/spaces/:spaceName/kiosks",
+            "params": [
+              {
+                "name": "spaceName",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update user seen kiosks"
+        },
+        {
+          "info": {
+            "name": "Send verification email for user.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/users/me/sendVerificationEmail",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Send verification email for user."
+        },
+        {
+          "info": {
+            "name": "HandleBugReport",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/users/me/bugReport",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          }
+        },
+        {
+          "info": {
+            "name": "HandleUserFeedback",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/users/me/feedback",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

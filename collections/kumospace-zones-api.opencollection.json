@@ -1,0 +1,218 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "@kumo/api Account Zones API"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Zones",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a zone.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/spaces/:name/rooms/:roomId/zones",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the space."
+              },
+              {
+                "name": "roomId",
+                "value": "",
+                "type": "path",
+                "description": "The room id."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a zone inside a room (inside a space)."
+        },
+        {
+          "info": {
+            "name": "Update a zone.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v1/spaces/:name/rooms/:roomId/zones/:id",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the space."
+              },
+              {
+                "name": "roomId",
+                "value": "",
+                "type": "path",
+                "description": "The room id."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The zone id."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update an existing zone.  Any fields not sent will be preserved."
+        },
+        {
+          "info": {
+            "name": "Delete a zone.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/v1/spaces/:name/rooms/:roomId/zones/:id",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the space."
+              },
+              {
+                "name": "roomId",
+                "value": "",
+                "type": "path",
+                "description": "The room id containing the zone."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The zone id."
+              },
+              {
+                "name": "deleteFurniture",
+                "value": "",
+                "type": "query",
+                "description": "whether the zone's furniture should be deleted too"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete an existing zone by its id."
+        },
+        {
+          "info": {
+            "name": "GetConferenceRooms",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/space/:spaceName/conferenceRooms",
+            "params": [
+              {
+                "name": "spaceName",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          }
+        },
+        {
+          "info": {
+            "name": "GetCalendarResource",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/calendarResource/:resourceId",
+            "params": [
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          }
+        },
+        {
+          "info": {
+            "name": "DeleteCalendarResource",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/v1/calendarResource/:resourceId",
+            "params": [
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          }
+        },
+        {
+          "info": {
+            "name": "CreateCalendarResources",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/calendarResource/:spaceName/bulk",
+            "params": [
+              {
+                "name": "spaceName",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

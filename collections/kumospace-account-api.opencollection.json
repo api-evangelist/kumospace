@@ -1,0 +1,114 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "@kumo/api Account API"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Account",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Delete the user's account.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/v1/account",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete the user's account and all associated data.  This operation cannot\nbe undone."
+        },
+        {
+          "info": {
+            "name": "Create an access token for SSO.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/account/token",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a kumospace access token from a well-known identity provider."
+        },
+        {
+          "info": {
+            "name": "Create an access token for desktop app usage.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/account/desktop/token",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a kumospace access token for usage in the desktop app"
+        },
+        {
+          "info": {
+            "name": "Create a token to pass to oauth providers to identify the user after redirect",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/account/integration/token/:type",
+            "params": [
+              {
+                "name": "type",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a token to pass to oauth providers"
+        },
+        {
+          "info": {
+            "name": "Send reset password email for account corresponding to given email",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/account/resetPassword",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Send reset password email for account corresponding to given email"
+        },
+        {
+          "info": {
+            "name": "Accepts all invites for a given user.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/account/onCreate",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Accepts all invites for a given user. We can't simply listen to\nuser creation since anonymous users signing up doesn't create a new account."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

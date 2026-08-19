@@ -1,0 +1,55 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "@kumo/api Account Flooring API"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Flooring",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get stock room backgrounds.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/stockBackgrounds",
+            "params": [
+              {
+                "name": "next",
+                "value": "",
+                "type": "query",
+                "description": "An opaque cursor used to request the next page of results.\nIt is provided in the previous response from the api."
+              }
+            ]
+          },
+          "docs": "Get a paginated list of stock room backgrounds.\n\nSubsequent pages can be requested with the \"next\" parameter, which is\nreturned in the response metadata object if another page exists."
+        },
+        {
+          "info": {
+            "name": "Create a stock room background.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/stockBackgrounds",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a new stock background for a room.  (i.e., flooring).  Can only be\ncalled by kumospace admins."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

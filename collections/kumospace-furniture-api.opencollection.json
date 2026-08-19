@@ -1,0 +1,124 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "@kumo/api Account Furniture API"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Furniture",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Add furniture to a room.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/spaces/:name/rooms/:id/furniture",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the space."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The room id."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Add a new piece of furniture to a room."
+        },
+        {
+          "info": {
+            "name": "Update furniture.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v1/spaces/:name/rooms/:roomId/furniture/:id",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the space."
+              },
+              {
+                "name": "roomId",
+                "value": "",
+                "type": "path",
+                "description": "The room id containing the furniture."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The furniture id."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update an existing piece of furniture by its id.  Any fields that are not\nsent will be preserved."
+        },
+        {
+          "info": {
+            "name": "Delete furniture.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/v1/spaces/:name/rooms/:roomId/furniture/:id",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the space."
+              },
+              {
+                "name": "roomId",
+                "value": "",
+                "type": "path",
+                "description": "The room id containing the furniture."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The furniture id."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete an existing piece of furniture by its id."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,54 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "@kumo/api Account Demo API"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Demo",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/demo",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          }
+        },
+        {
+          "info": {
+            "name": "Claims a space.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/demo/claim",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Claims a space. Only users with no spaces can claim a space."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

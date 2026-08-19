@@ -1,0 +1,478 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "@kumo/api Account Spaces API"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Spaces",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get the user's spaces.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/spaces",
+            "params": [
+              {
+                "name": "members",
+                "value": "",
+                "type": "query",
+                "description": "If true, also returns spaces the user is a member of."
+              },
+              {
+                "name": "excludeDemo",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "emailDomain",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get spaces owned by the user.  For now, users can only have a single space."
+        },
+        {
+          "info": {
+            "name": "Create a space.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/spaces",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a new space.  Spaces must have a globally unique name, and each\nuser can only own one space."
+        },
+        {
+          "info": {
+            "name": "Get a space by name.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/spaces/:name",
+            "headers": [
+              {
+                "name": "Password",
+                "value": ""
+              },
+              {
+                "name": "InviteToken",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the space."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get a space by name.  Only returns a space if the user has permission to\njoin."
+        },
+        {
+          "info": {
+            "name": "Update a space.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v1/spaces/:name",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the space."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Updates an existing space.  Can only be called by the owner of the space.\nAny fields that are not sent will be preserved."
+        },
+        {
+          "info": {
+            "name": "Delete a space.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/v1/spaces/:name",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the space."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes a space.  Can only be called by the owner of the space.  This\nmethod will return success even if the space does not exist."
+        },
+        {
+          "info": {
+            "name": "Get public information about a space",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/spaces/:name/publicInfo",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the space."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get public information about a space."
+        },
+        {
+          "info": {
+            "name": "Get a space's chat config",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/spaces/:name/chatConfig",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the space."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get a space's chat config.  Only returns chat info if the user has permission\nto access the space."
+        },
+        {
+          "info": {
+            "name": "Get a space's chat channels",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/spaces/:name/channels",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the space."
+              },
+              {
+                "name": "withUnreadMessagesOnly",
+                "value": "",
+                "type": "query",
+                "description": "if true, only returns channels with unread messages"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get a space's chat channels"
+        },
+        {
+          "info": {
+            "name": "Get a space's custom channels",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/spaces/:name/customChannels",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the space."
+              },
+              {
+                "name": "includeArchived",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get a space's custom channels. Returns all space's public channels and only the\nspace's private channels a user belongs to."
+        },
+        {
+          "info": {
+            "name": "Update a user's spawn home.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v1/spaces/:name/home",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The space name."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates or updates a user's spawn home for a space"
+        },
+        {
+          "info": {
+            "name": "Delete a user's spawn home.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/v1/spaces/:name/home",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The space name."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes an existing user's spawn home for a space"
+        },
+        {
+          "info": {
+            "name": "Retrieves free trial info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/spaces/:name/trial",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The space name"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves free trial info"
+        },
+        {
+          "info": {
+            "name": "Start a free trial if space never got one",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v1/spaces/:name/trial",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The space name."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Starts an internal free trial if the space never got one or a stripe free trial"
+        },
+        {
+          "info": {
+            "name": "Start a free trial if space never got one",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/spaces/:name/addMemberLink/:addMemberLinkId",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The space name."
+              },
+              {
+                "name": "addMemberLinkId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the link to retrieve"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves an Add Member Link for a space"
+        },
+        {
+          "info": {
+            "name": "Set a space as already prospected by Sales Team.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v1/spaces/:name/prospected",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The space name."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Set a space as already prospected by Sales Team.\nCan only be called by verified Kumospace users."
+        },
+        {
+          "info": {
+            "name": "Get a space owner's email.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/spaces/:name/ownerEmail",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the space."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the space owner's email"
+        },
+        {
+          "info": {
+            "name": "Updates a custom channel's settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v1/spaces/:name/defaultChannels",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Updates a space's default channels. When a guest is promoted\nto member, they are added to all the space's default channels"
+        },
+        {
+          "info": {
+            "name": "Uses onboarding intake forms to determine if the space\nis a small company or not.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/spaces/:spaceName/can-schedule-demo",
+            "params": [
+              {
+                "name": "spaceName",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Uses onboarding intake forms to determine if the space\nis a small company or not."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

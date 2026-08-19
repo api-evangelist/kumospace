@@ -1,0 +1,67 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "@kumo/api Account Stock Walls API"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Stock Walls",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get stock walls.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/stockWalls",
+            "params": [
+              {
+                "name": "includeDraft",
+                "value": "",
+                "type": "query",
+                "description": "Whether to include draft walls in the results.  Defaults to false."
+              },
+              {
+                "name": "next",
+                "value": "",
+                "type": "query",
+                "description": "An opaque cursor used to request the next page of results.\nIt is provided in the previous response from the api."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of results to return.  max: 30"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of stock walls.  (i.e., well-known wall\ntypes).\n\nSubsequent pages can be requested with the \"next\" parameter, which is\nreturned in the response metadata object if another page exists."
+        },
+        {
+          "info": {
+            "name": "Create stock wall.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/stockWalls",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a new stock wall.  Can only be called by kumospace\nadmins."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

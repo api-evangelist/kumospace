@@ -1,0 +1,155 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "@kumo/api Account Recordings API"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Recordings",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a recording.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/recordings",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a recording meta-data record. This is used to tie recordings to\nan individual kumospace account."
+        },
+        {
+          "info": {
+            "name": "Share recording with a list of users",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v1/recordings/:recordingId/share",
+            "params": [
+              {
+                "name": "recordingId",
+                "value": "",
+                "type": "path",
+                "description": "The daily recording id to stop"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Share recording with a list of users"
+        },
+        {
+          "info": {
+            "name": "Handle post-recording behavior",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/recordings/:recordingId/stop",
+            "params": [
+              {
+                "name": "recordingId",
+                "value": "",
+                "type": "path",
+                "description": "The daily recording id to stop"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Handle recording once it's been stopped."
+        },
+        {
+          "info": {
+            "name": "Fetches recordings meta-data for the user for a given space",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/recordings/spaces/:spaceName",
+            "params": [
+              {
+                "name": "spaceName",
+                "value": "",
+                "type": "path",
+                "description": "The space name to fetch recordings for"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Gets a list of recordings from the user for a given space"
+        },
+        {
+          "info": {
+            "name": "Fetches recording meta-data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/recordings/:recordingId",
+            "params": [
+              {
+                "name": "recordingId",
+                "value": "",
+                "type": "path",
+                "description": "The daily recording id to fetch meta-data for"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Gets a recording meta-data record by id."
+        },
+        {
+          "info": {
+            "name": "Fetches recording download access link",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/recordings/:recordingId/accessLink",
+            "params": [
+              {
+                "name": "recordingId",
+                "value": "",
+                "type": "path",
+                "description": "The daily recording id to fetch the access link for"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Gets an access link to download a recording"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

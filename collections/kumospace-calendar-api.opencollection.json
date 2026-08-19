@@ -1,0 +1,157 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "@kumo/api Account Calendar API"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Calendar",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Enables Google Calendar integration for the user.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/calendar/integrate-gcal",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Enables Google Calendar integration for the user."
+        },
+        {
+          "info": {
+            "name": "Fetches the user's GCal events.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/calendar/events/:queryDateYYYYMMDD",
+            "params": [
+              {
+                "name": "queryDateYYYYMMDD",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "timeZone",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Fetches the user's GCal events."
+        },
+        {
+          "info": {
+            "name": "GetEventsForRange",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/calendar/events",
+            "params": [
+              {
+                "name": "startDateTime",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "endDateTime",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          }
+        },
+        {
+          "info": {
+            "name": "Updates an event's reply status (accepted, declined, tentative).",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/calendar/update-event-reply",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Updates an event's reply status (accepted, declined, tentative)."
+        },
+        {
+          "info": {
+            "name": "Updates a user's connected calendar preferences.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/calendar/update-connected-calendars",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Updates a user's connected calendar preferences."
+        },
+        {
+          "info": {
+            "name": "Syncs a user's subscribed calendars in [Gcal/Outlook], with our integration doc.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/calendar/sync-calendars",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Syncs a user's subscribed calendars in the external system (GCal or Outlook), with our integration doc.\nThis will always first check with [Gcal/Outlook] API to make sure we return the most up-to-date set\nof calendars. We sync with our internal integration doc so that we can store any user isConnected preferences."
+        },
+        {
+          "info": {
+            "name": "Disconnect Calendar integration for the user.\nThis will delete the corresponding integration doc in firestore.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/calendar/disconnect-calendar-integration",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Disconnect Calendar integration for the user.\nThis will delete the corresponding integration doc in firestore."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

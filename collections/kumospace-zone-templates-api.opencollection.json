@@ -1,0 +1,93 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "@kumo/api Account Zone Templates API"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Zone Templates",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get zone templates.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/zoneTemplates",
+            "params": [
+              {
+                "name": "includeDraft",
+                "value": "",
+                "type": "query",
+                "description": "Whether to include draft templates in the results.\nDefaults to false."
+              },
+              {
+                "name": "next",
+                "value": "",
+                "type": "query",
+                "description": "An opaque cursor used to request the next page of results.\nIt is provided in the previous response from the api."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of results to return.  max: 30"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of zone templates.\n\nSubsequent pages can be requested with the \"next\" parameter, which is\nreturned in the response metadata object if another page exists."
+        },
+        {
+          "info": {
+            "name": "Create a new zone template",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/zoneTemplates",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a new zone template from existing zones along with the furniture inside.\nAlso generates a thumbnail for the zone"
+        },
+        {
+          "info": {
+            "name": "Updates an existing zone template",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v1/zoneTemplates/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Updates an existing zone template using existing zones along with the furniture inside.\nCan also update title, description, and draft status."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

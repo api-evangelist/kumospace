@@ -1,0 +1,106 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "@kumo/api Account Rooms API"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Rooms",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a room.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/spaces/:name/rooms",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the space."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a room in a space.  Rooms can be created using a template (called a\nstock room) or manually by specifying the width, height, background, and\nthen adding furniture."
+        },
+        {
+          "info": {
+            "name": "Update a room.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v1/spaces/:name/rooms/:id",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The space name."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The room id."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Updates an existing room in a space.  Any fields that are not sent will\nbe preserved."
+        },
+        {
+          "info": {
+            "name": "Delete a room.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/v1/spaces/:name/rooms/:id",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The space name."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The room id."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes an existing room in a space."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,88 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "@kumo/api Account Analytics API"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Analytics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Attendance analytics for a given space",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/analytics/attendance",
+            "params": [
+              {
+                "name": "space",
+                "value": "",
+                "type": "query",
+                "description": "the name of the space"
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "an ISO8601 date-time.  (YYYY-MM-DDThh:mm:ssZ)"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "an ISO8601 date-time.  (YYYY-MM-DDThh:mm:ssZ)"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns room usage stats for a given space."
+        },
+        {
+          "info": {
+            "name": "GetStatusAnalytics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/analytics/status",
+            "params": [
+              {
+                "name": "space",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

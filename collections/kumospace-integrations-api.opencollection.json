@@ -1,0 +1,150 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "@kumo/api Account Integrations API"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Integrations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List connected integrations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/users/me/integrations",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Lists connected integrations for the current user which\ncan be disconnected with DELETE /integrations/{integrationId}"
+        },
+        {
+          "info": {
+            "name": "Disconnect a user integration. This also deletes the integration doc.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/v1/integrations/:integrationId",
+            "params": [
+              {
+                "name": "integrationId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Disconnect a user integration. This also deletes the integration doc."
+        },
+        {
+          "info": {
+            "name": "Handles the redirect from the microsoft graph authorize URL. This is a redirect endpoint, shouldn't be called by us",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/integrations/microsoft-outlook/handle-redirect"
+          },
+          "docs": "Handles the redirect from the microsoft graph authorize URL for connecting Microsoft Outlook integration."
+        },
+        {
+          "info": {
+            "name": "Handles the redirect from the microsoft graph authorize URL. This is a redirect endpoint, shouldn't be called by us",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/integrations/microsoft-teams-status/handle-redirect"
+          },
+          "docs": "Handles the redirect from the microsoft graph authorize URL"
+        },
+        {
+          "info": {
+            "name": "Handles the subscription to the microsoft presence API. This is a webhook endpoint, shouldn't be called by us",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/integrations/microsoft-teams-status/webhook/presence-subscription/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Handles the subscription to the microsoft presence API"
+        },
+        {
+          "info": {
+            "name": "Handles the redirect from the zoom oauth. This is a redirect endpoint, shouldn't be called by us",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/integrations/zoom-status/handle-redirect",
+            "params": [
+              {
+                "name": "code",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "state",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Handles the redirect from the zoom authorize URL"
+        },
+        {
+          "info": {
+            "name": "Handles the zoom participant updates. This is a webhook endpoint, shouldn't be called by us",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/integrations/zoom-status/webhook/participant-update",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Handles the zoom participant updates to determine if a user is in a call"
+        },
+        {
+          "info": {
+            "name": "DeauthorizeZoomIntegration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/integrations/zoom-status/deauthorize",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

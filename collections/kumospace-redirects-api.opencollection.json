@@ -1,0 +1,42 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "@kumo/api Account Redirects API"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Redirects",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Redirect to a puzzle game.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/redirects/jstris/:furnitureId",
+            "params": [
+              {
+                "name": "furnitureId",
+                "value": "",
+                "type": "path",
+                "description": "The furniture id that initiated this request."
+              },
+              {
+                "name": "idToken",
+                "value": "",
+                "type": "query",
+                "description": "The idToken of the user."
+              }
+            ]
+          },
+          "docs": "Redirects an authenticated user to the jstris integration."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

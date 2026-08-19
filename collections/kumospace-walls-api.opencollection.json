@@ -1,0 +1,62 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "@kumo/api Account Walls API"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Walls",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Update a wall segment.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v1/spaces/:name/rooms/:roomId/zones/:zoneId/walls/:wallId",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the space."
+              },
+              {
+                "name": "roomId",
+                "value": "",
+                "type": "path",
+                "description": "The room id."
+              },
+              {
+                "name": "zoneId",
+                "value": "",
+                "type": "path",
+                "description": "The zone id."
+              },
+              {
+                "name": "wallId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the wall segment to update"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update a wall segment."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

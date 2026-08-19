@@ -1,0 +1,122 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "@kumo/api Account Stock Furniture API"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Stock Furniture",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get stock furniture.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/stockFurniture",
+            "params": [
+              {
+                "name": "category",
+                "value": "",
+                "type": "query",
+                "description": "If specified, only returns furniture of this type."
+              },
+              {
+                "name": "includeDraft",
+                "value": "",
+                "type": "query",
+                "description": "Whether to include draft furniture in the results.  Defaults to false."
+              },
+              {
+                "name": "newerThan",
+                "value": "",
+                "type": "query",
+                "description": "If specified, only returns stock furniture created after this timestamp."
+              },
+              {
+                "name": "next",
+                "value": "",
+                "type": "query",
+                "description": "An opaque cursor used to request the next page of results.\nIt is provided in the previous response from the api."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of results to return. max: 200"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of stock furniture.  (i.e., well-known furniture\nassets that can be placed in a room).\n\nSubsequent pages can be requested with the \"next\" parameter, which is\nreturned in the response metadata object if another page exists."
+        },
+        {
+          "info": {
+            "name": "Create stock furniture.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/stockFurniture",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a new piece of stock furniture.  Can only be called by kumospace\nadmins."
+        },
+        {
+          "info": {
+            "name": "Get furniture variations.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/stockFurnitureVariantGroups",
+            "params": [
+              {
+                "name": "category",
+                "value": "",
+                "type": "query",
+                "description": "If specified, only returns furniture variations of this type."
+              },
+              {
+                "name": "includeDraft",
+                "value": "",
+                "type": "query",
+                "description": "Whether to include draft furniture variations in the results.  Defaults to false."
+              },
+              {
+                "name": "newerThan",
+                "value": "",
+                "type": "query",
+                "description": "If specified, only returns stock furniture variations created after this timestamp."
+              },
+              {
+                "name": "next",
+                "value": "",
+                "type": "query",
+                "description": "An opaque cursor used to request the next page of results.\nIt is provided in the previous response from the api."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of results to return. max: 200"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of furniture variations. (i.e., grouped well-known\nfurniture assets that can be placed in a room).\n\nSubsequent pages can be requested with the \"next\" parameter, which is\nreturned in the response metadata object if another page exists."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,62 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "@kumo/api Account MusicTrack API"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "MusicTrack",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Adds a new music track to the available tracks collection.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/musicTracks",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a new music track. Can only be called by kumospace admins."
+        },
+        {
+          "info": {
+            "name": "Updates the provided fields on an existing music track. Fields omitted are untouched.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v1/musicTracks/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Updates an existing music track. Can only be called by kumospace admins."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

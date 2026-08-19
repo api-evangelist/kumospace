@@ -1,0 +1,265 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "@kumo/api Account Chat API"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Chat",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a persistent chat channel.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/chat/channel",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a persistent chat channel. This can be used to create\nany type of persistent chat channel, space, floor, dm, etc."
+        },
+        {
+          "info": {
+            "name": "SetChannelPreferences",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/v1/chat/channel/:channelUrl/preferences",
+            "params": [
+              {
+                "name": "channelUrl",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          }
+        },
+        {
+          "info": {
+            "name": "UpdateCustomChannel",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/v1/chat/channel/:channelUrl",
+            "params": [
+              {
+                "name": "channelUrl",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          }
+        },
+        {
+          "info": {
+            "name": "DeleteCustomChannel",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/v1/chat/channel/:channelUrl",
+            "params": [
+              {
+                "name": "channelUrl",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          }
+        },
+        {
+          "info": {
+            "name": "UnarchiveChannel",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v1/chat/channel/:channelUrl/unarchive",
+            "params": [
+              {
+                "name": "channelUrl",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          }
+        },
+        {
+          "info": {
+            "name": "Soft delete file messages.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/v1/chat/channel/:channelUrl/file-messages/:messageId",
+            "params": [
+              {
+                "name": "channelUrl",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "messageId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Soft delete file messages. Sendbird UI Kit doesn't allow\ndeleting file messages, so we have to do it using their API."
+        },
+        {
+          "info": {
+            "name": "GetChatMessage",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/chat/channel/:channelUrl/messages/:messageId",
+            "params": [
+              {
+                "name": "channelUrl",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "messageId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          }
+        },
+        {
+          "info": {
+            "name": "Hard deletes soft deleted messages.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/v1/chat/channel/:channelUrl/messages/:messageId",
+            "params": [
+              {
+                "name": "channelUrl",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "messageId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "We delete previous soft deleted messages, in case\nall thread replies are also deleted."
+        },
+        {
+          "info": {
+            "name": "Adds users to a custom private channel",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/v1/chat/channel/:channelUrl/members",
+            "params": [
+              {
+                "name": "channelUrl",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Adds users to a custom private channe;"
+        },
+        {
+          "info": {
+            "name": "SearchChatMessages",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/v1/chat/search",
+            "params": [
+              {
+                "name": "query",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "spaceUid",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "next",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
