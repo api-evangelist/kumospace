@@ -39,6 +39,17 @@ tags:
 - Collaboration
 - Video Conferencing
 - Communications
+- Real-Time
+- Productivity
+- Meetings
+- Spatial Audio
+tags_raw:
+- Company
+- Virtual Office
+- Remote Work
+- Collaboration
+- Video Conferencing
+- Communications
 - Real Time
 - Productivity
 - Meetings
@@ -194,6 +205,8 @@ apis:
   humanURL: https://api.kumospace.com/
   baseURL: https://api.kumospace.com
   tags:
+  - Integration
+  tags_raw:
   - Integrations
   properties:
   - type: OpenAPI
@@ -392,6 +405,8 @@ apis:
   humanURL: https://api.kumospace.com/
   baseURL: https://api.kumospace.com
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
