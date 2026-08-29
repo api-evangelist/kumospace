@@ -10,6 +10,18 @@ description: Kumospace is a virtual office platform for remote and distributed t
   zones, users, invitations, chat, calendar, recordings, transcription, analytics and payments. The company
   is headquartered in New York and is backed by Lightspeed Venture Partners.
 url: https://raw.githubusercontent.com/api-evangelist/kumospace/refs/heads/main/apis.yml
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: unknown
   onboarding: self-serve
