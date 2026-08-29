@@ -486,6 +486,9 @@ apis:
   - type: DataModel
     url: data-model/kumospace-data-model.yml
 common:
+- type: CapabilityMap
+  url: capabilities/kumospace-capability-edges.yml
+  name: Kumospace Business Capability Map
 - type: AgentSkill
   url: skills/kumospace-capture-meeting.md
 - type: MCPServer

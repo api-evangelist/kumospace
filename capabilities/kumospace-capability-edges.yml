@@ -1,0 +1,26 @@
+slug: kumospace
+provider: Kumospace
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Telecommunications
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 1
+edges:
+- tag: Payments
+  spec_file: kumospace-payments-api-openapi.yml
+  capability_id: BC-4250.40
+  capability_id_l1: BC-4250
+  capability_name: Payment Collection & Dunning
+  confidence: 0.7
+  evidence: POST /v1/payments/billingPortal  CreatePortalSession  Create a customer billing portal session;
+    PUT /v1/payments/setup  SetPaymentSetupCompleted  Sets reverse trial payment method as added.
+  reason: Operations create Stripe checkout sessions, a customer billing portal, and record payment-method
+    setup, plus cancel/renew of the space subscription — subscription billing and payment collection for
+    a SaaS product. Some overlap with subscription lifecycle (cancel/renew) keeps confidence moderate.
