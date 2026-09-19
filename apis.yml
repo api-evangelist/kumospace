@@ -274,6 +274,8 @@ apis:
   humanURL: https://api.kumospace.com/
   baseURL: https://api.kumospace.com
   tags:
+  - Recording
+  tags_raw:
   - Recordings
   properties:
   - type: OpenAPI
@@ -346,6 +348,8 @@ apis:
   humanURL: https://api.kumospace.com/
   baseURL: https://api.kumospace.com
   tags:
+  - Space
+  tags_raw:
   - Spaces
   properties:
   - type: OpenAPI
