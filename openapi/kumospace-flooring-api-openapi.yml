@@ -1,6 +1,6 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: '@kumo/api Account Flooring API'
+  title: '@kumo/api Flooring API'
   contact: {}
 servers:
 - url: /
@@ -23,7 +23,7 @@ paths:
         Subsequent pages can be requested with the "next" parameter, which is
 
         returned in the response metadata object if another page exists.'
-      summary: Get stock room backgrounds.
+      summary: Get stock room backgrounds
       tags:
       - Flooring
       security: []
@@ -41,10 +41,10 @@ paths:
       responses:
         '201':
           description: Created
-      description: 'Creates a new stock background for a room.  (i.e., flooring).  Can only be
+      description: 'Creates a new stock background for a room. (i.e., flooring). Can only be
 
         called by kumospace admins.'
-      summary: Create a stock room background.
+      summary: Create a stock room background
       tags:
       - Flooring
       security:
@@ -62,38 +62,27 @@ components:
       enum:
       - singleTile
       type: string
-    ApiCreateStockBackgroundRequest:
-      allOf:
-      - properties:
-          thumbnailUrl:
-            type: string
-            description: A url with a 200x200 thumbnail of this background.
-            pattern: ^https://
-          description:
-            type: string
-            description: The description of this background.
-            minLength: 1
-          title:
-            type: string
-            description: A short title.
-            minLength: 1
-        required:
-        - thumbnailUrl
-        - description
-        - title
-        type: object
-      - properties:
-          data:
-            $ref: '#/components/schemas/SingleTileBackground'
-            description: Data associated with the background type.
-          type:
-            $ref: '#/components/schemas/BackgroundType.singleTile'
-            description: The background type.
-        required:
-        - data
-        - type
-        type: object
-      description: A request to create a new room background.
+    SingleTileBackground:
+      description: A background with a single tile repeated across the room.
+      properties:
+        tileUrl:
+          type: string
+          description: A url with the full-size image of the tile.
+          pattern: ^https://
+        width:
+          type: number
+          format: double
+          description: The width of the tile, in pixels.
+        height:
+          type: number
+          format: double
+          description: The height of the tile, in pixels.
+      required:
+      - tileUrl
+      - width
+      - height
+      type: object
+      additionalProperties: false
     ApiStockBackground:
       allOf:
       - properties:
@@ -127,27 +116,6 @@ components:
         - type
         type: object
       description: A stock background that can be used as a room background.
-    SingleTileBackground:
-      description: A background with a single tile repeated across the room.
-      properties:
-        tileUrl:
-          type: string
-          description: A url with the full-size image of the tile.
-          pattern: ^https://
-        width:
-          type: number
-          format: double
-          description: The width of the tile, in pixels.
-        height:
-          type: number
-          format: double
-          description: The height of the tile, in pixels.
-      required:
-      - tileUrl
-      - width
-      - height
-      type: object
-      additionalProperties: false
     PaginatedResponse_ApiStockBackground_:
       description: A page of items.  Useful for breaking up a large dataset into smaller chunks.
       properties:
@@ -180,6 +148,38 @@ components:
       - metadata
       type: object
       additionalProperties: false
+    ApiCreateStockBackgroundRequest:
+      allOf:
+      - properties:
+          thumbnailUrl:
+            type: string
+            description: A url with a 200x200 thumbnail of this background.
+            pattern: ^https://
+          description:
+            type: string
+            description: The description of this background.
+            minLength: 1
+          title:
+            type: string
+            description: A short title.
+            minLength: 1
+        required:
+        - thumbnailUrl
+        - description
+        - title
+        type: object
+      - properties:
+          data:
+            $ref: '#/components/schemas/SingleTileBackground'
+            description: Data associated with the background type.
+          type:
+            $ref: '#/components/schemas/BackgroundType.singleTile'
+            description: The background type.
+        required:
+        - data
+        - type
+        type: object
+      description: A request to create a new room background.
   securitySchemes:
     firebase:
       type: http

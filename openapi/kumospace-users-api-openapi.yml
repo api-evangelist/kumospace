@@ -1,6 +1,6 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: '@kumo/api Account Users API'
+  title: '@kumo/api Users API'
   contact: {}
 servers:
 - url: /
@@ -18,7 +18,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiUserRole'
       description: Updates a user's role within the specified space.
-      summary: Update a user role.
+      summary: Update a user role
       tags:
       - Users
       security:
@@ -45,7 +45,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedResponse_ApiUserRole_'
       description: Get a paginated list of users by role.
-      summary: Get user roles.
+      summary: Get user roles
       tags:
       - Users
       security:
@@ -97,7 +97,7 @@ paths:
                   $ref: '#/components/schemas/ApiUserRole'
                 type: array
       description: Updates multuiple users' roles within the specified space.
-      summary: Update users roles in bulk.
+      summary: Update users roles in bulk
       tags:
       - Users
       security:
@@ -123,7 +123,7 @@ paths:
         '204':
           description: No content
       description: Updates an existing space's floor roles. Can only be called by the owner of the space or admins.
-      summary: Updates an existing space's floor roles.
+      summary: Updates an existing space's floor roles
       tags:
       - Users
       security:
@@ -154,7 +154,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiUserRole'
       description: Get a role information for a single user from their firebase UID
-      summary: Get a user role by firebaseID.
+      summary: Get a user role by firebaseID
       tags:
       - Users
       security:
@@ -183,7 +183,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedResponse_ApiRecentlyVisitedSpace_'
       description: Get a paginated list of the users recently visited spaces
-      summary: Get user recently visited spaces.
+      summary: Get user recently visited spaces
       tags:
       - Users
       security:
@@ -212,7 +212,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiRecentlyVisitedSpace'
       description: Get info about a user's recently visted space
-      summary: Get info about a user's recently visited space.
+      summary: Get info about a user's recently visited space
       tags:
       - Users
       security:
@@ -234,7 +234,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiDefaultSpaceResponse'
       description: Get the default space for the user that should be auto joined on desktop
-      summary: Get user default space.
+      summary: Get user default space
       tags:
       - Users
       security:
@@ -264,9 +264,7 @@ paths:
       responses:
         '204':
           description: No content
-      summary: 'De-associate FCM token from user when they logout of mobile
-
-        This is to prevent users from sharing fcm tokens when logging in/out of one device'
+      summary: De-associate FCM token from user when they logout of mobile This is to prevent…
       tags:
       - Users
       security:
@@ -450,11 +448,7 @@ paths:
       responses:
         '204':
           description: No content
-      summary: 'Saves onboarding intake form for the user. This form will
-
-        answer questions like who they are in their company and what they plan
-
-        to do with Kumospace more deeply'
+      summary: Saves onboarding intake form for the user.
       tags:
       - Users
       security:
@@ -476,7 +470,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiIntakeFormStatusResponse'
-      summary: Gets onboarding intake form for the user.
+      summary: Gets onboarding intake form for the user
       tags:
       - Users
       security:
@@ -631,7 +625,7 @@ paths:
       responses:
         '204':
           description: No content
-      summary: Send verification email for user.
+      summary: Send verification email for user
       tags:
       - Users
       security:
@@ -655,6 +649,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/UserFeedbackEvent'
+      summary: Handle bug report
+      x-summary-source: derived
   /v1/users/me/feedback:
     post:
       operationId: HandleUserFeedback
@@ -672,12 +668,42 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/UserFeedbackEvent'
+      summary: Handle user feedback
+      x-summary-source: derived
 components:
   schemas:
-    Email:
-      type: string
-      description: Pattern for email
-      pattern: ^[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$
+    ApiUserIntakeProfileForm:
+      anyOf:
+      - $ref: '#/components/schemas/ApiUserIntakeProfileFormEducation'
+      - $ref: '#/components/schemas/ApiUserIntakeProfileFormFriendsAndFamily'
+      - $ref: '#/components/schemas/ApiUserIntakeProfileFormOthers'
+      - $ref: '#/components/schemas/ApiUserIntakeProfileFormEvents'
+    ApiUpdateUserRoleRequest:
+      allOf:
+      - properties:
+          role:
+            $ref: '#/components/schemas/UserRole'
+            description: The new role.
+        required:
+        - role
+        type: object
+      - anyOf:
+        - properties:
+            userId:
+              type: string
+              description: The user's firebase id.
+              minLength: 1
+          required:
+          - userId
+          type: object
+        - properties:
+            email:
+              $ref: '#/components/schemas/Email'
+              description: The user's email address.
+          required:
+          - email
+          type: object
+      description: A request to update a user's role within a space.
     UserFeedbackEvent:
       properties:
         type:
@@ -701,26 +727,22 @@ components:
       - comments
       type: object
       additionalProperties: false
-    DbInviteStatus:
-      enum:
-      - pending
-      - error
-      - completed
-      type: string
-    UserRole:
-      description: The user's role and permissions within a space.
-      enum:
-      - admin
-      - banned
-      - cohost
-      - guest
-      - member
-      - floorManager
-      type: string
-    ExpiryDuration.hour:
-      enum:
-      - hour
-      type: string
+    ApiCreateUserInvitationBulk:
+      properties:
+        invitations:
+          items:
+            $ref: '#/components/schemas/ApiCreateUserInvitationResponse'
+          type: array
+      required:
+      - invitations
+      type: object
+    ApiUpdateUserInvitation:
+      properties:
+        role:
+          $ref: '#/components/schemas/UserRole'
+      required:
+      - role
+      type: object
     PaginatedResponse_ApiUserRole_:
       description: A page of items.  Useful for breaking up a large dataset into smaller chunks.
       properties:
@@ -753,139 +775,24 @@ components:
       - metadata
       type: object
       additionalProperties: false
-    ApiUserIntakeProfileFormOthers:
+    DbUserSpaceProfile:
       properties:
-        companyName:
+        description:
           type: string
-        marketingSource:
+        jobTitle:
           type: string
-        useGoal:
+        phoneNumber:
           type: string
-        currentRole:
+        name:
           type: string
-        workKind:
-          type: string
-        companySize:
-          type: string
-        relatedSpaceName:
-          type: string
-      required:
-      - marketingSource
-      - currentRole
-      - workKind
-      - companySize
       type: object
-    ApiCreateUserInvitationResponse:
+    ApiIntakeFormStatusResponse:
       properties:
-        isAccepted:
+        needsToAnswer:
           type: boolean
-          description: Whether the invite has already been accepted
-        displayName:
-          type: string
-        email:
-          type: string
-        userId:
-          type: string
-        role:
-          $ref: '#/components/schemas/UserRole'
-        inviteId:
-          type: string
       required:
-      - isAccepted
-      - email
-      - userId
-      - role
-      - inviteId
+      - needsToAnswer
       type: object
-    DbRecentlyVisitedSpace:
-      properties:
-        kiosks:
-          items:
-            type: string
-          type: array
-        profile:
-          $ref: '#/components/schemas/DbUserSpaceProfile'
-        lastRoomId:
-          type: string
-        cachedSpaceName:
-          type: string
-        timeZone:
-          type: string
-        lastSeenAt:
-          type: number
-          format: double
-        visitedAt:
-          type: number
-          format: double
-      type: object
-    PaginatedResponse_ApiRecentlyVisitedSpace_:
-      description: A page of items.  Useful for breaking up a large dataset into smaller chunks.
-      properties:
-        items:
-          items:
-            $ref: '#/components/schemas/ApiRecentlyVisitedSpace'
-          type: array
-          description: The page of items.
-        metadata:
-          properties:
-            count:
-              type: number
-              format: double
-              description: The number of items sent.
-            next:
-              type: string
-              description: 'A pagination cursor.  If specified, there is another page of results that
-
-                can be requested by appending this value as a query parameter called
-
-                "next".'
-          required:
-          - count
-          type: object
-          description: 'Metadata about the page of items.  Contains a pagination cursor called
-
-            "next" if there is another page of items.'
-      required:
-      - items
-      - metadata
-      type: object
-      additionalProperties: false
-    ApiUserPublicInfo:
-      properties:
-        displayName:
-          type: string
-        avatarUrl:
-          type: string
-      required:
-      - displayName
-      type: object
-      additionalProperties: false
-    ClientUserRole:
-      anyOf:
-      - $ref: '#/components/schemas/UserRole'
-      - type: string
-        enum:
-        - owner
-    ApiDefaultSpaceResponse:
-      properties:
-        defaultSpace:
-          type: string
-      type: object
-    ApiUpdateSpaceFloorRolesRequest:
-      description: A request to update an existing space's floor roles for a user.
-      properties:
-        userId:
-          type: string
-        roles:
-          properties: {}
-          additionalProperties:
-            $ref: '#/components/schemas/FloorRole'
-          type: object
-      required:
-      - userId
-      - roles
-      type: object
-      additionalProperties: false
     ApiUserIntakeProfileFormFriendsAndFamily:
       properties:
         marketingSource:
@@ -904,100 +811,24 @@ components:
       - expectedGuests
       - intendedUse
       type: object
-    firestore.Timestamp:
-      description: 'A Timestamp represents a point in time independent of any time zone or
-
-        calendar, represented as seconds and fractions of seconds at nanosecond
-
-        resolution in UTC Epoch time. It is encoded using the Proleptic Gregorian
-
-        Calendar which extends the Gregorian calendar backwards to year one. It is
-
-        encoded assuming all minutes are 60 seconds long, i.e. leap seconds are
-
-        "smeared" so that no leap second table is needed for interpretation. Range
-
-        is from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59.999999999Z.'
+    ApiFcmTokenRequest:
       properties:
-        seconds:
-          type: number
-          format: double
-          description: The number of seconds of UTC time since Unix epoch 1970-01-01T00:00:00Z.
-        nanoseconds:
-          type: number
-          format: double
-          description: The non-negative fractions of a second at nanosecond resolution.
+        fcmToken:
+          type: string
+          description: The fcm token for one of the user's mobile devices
       required:
-      - seconds
-      - nanoseconds
+      - fcmToken
       type: object
-      additionalProperties: false
-    ApiUserIntakeProfileForm:
+    ClientUserRole:
       anyOf:
-      - $ref: '#/components/schemas/ApiUserIntakeProfileFormEducation'
-      - $ref: '#/components/schemas/ApiUserIntakeProfileFormFriendsAndFamily'
-      - $ref: '#/components/schemas/ApiUserIntakeProfileFormOthers'
-      - $ref: '#/components/schemas/ApiUserIntakeProfileFormEvents'
-    UserInvitationEmailSend:
-      properties:
-        senderUid:
-          type: string
-        sentAt:
-          allOf:
-          - $ref: '#/components/schemas/firestore.Timestamp'
-          nullable: true
-        id:
-          type: string
-      required:
-      - senderUid
-      - sentAt
-      - id
-      type: object
-    ApiUpdateUserRequest:
-      properties:
-        defaultSpace:
-          type: string
-          description: The space the user wants to automatically join in the desktop app.
-        displayName:
-          type: string
-          description: The user's display name.
-          minLength: 1
-      type: object
-    ExpiryDuration.week:
+      - $ref: '#/components/schemas/UserRole'
+      - type: string
+        enum:
+        - owner
+    ExpiryDuration.twoWeeks:
       enum:
-      - week
+      - twoWeeks
       type: string
-    ApiIntakeFormStatusResponse:
-      properties:
-        needsToAnswer:
-          type: boolean
-      required:
-      - needsToAnswer
-      type: object
-    DbUserSpaceProfile:
-      properties:
-        description:
-          type: string
-        jobTitle:
-          type: string
-        phoneNumber:
-          type: string
-        name:
-          type: string
-      type: object
-    ExpiryDuration.oneMonth:
-      enum:
-      - oneMonth
-      type: string
-    ApiRecentlyVisitedSpace:
-      allOf:
-      - $ref: '#/components/schemas/DbRecentlyVisitedSpace'
-      - properties:
-          spaceId:
-            type: string
-        required:
-        - spaceId
-        type: object
     ApiCreateExpiringInvitationRequest:
       properties:
         expiringTimeSelected:
@@ -1016,72 +847,54 @@ components:
       - expiringTimeSelected
       - spaceName
       type: object
-    ApiUserIntakeProfileFormEvents:
+    ApiUserIntakeProfileFormEducation:
       properties:
         marketingSource:
           type: string
-        workKind:
+        useGoal:
           type: string
-        eventType:
-          type: string
-        expectedGuests:
+        currentRole:
           type: string
         relatedSpaceName:
           type: string
       required:
       - marketingSource
-      - workKind
-      - eventType
-      - expectedGuests
+      - useGoal
+      - currentRole
       type: object
-    ExpiryDuration.day:
+    ApiCreateUserInvitationBulkRequest:
+      properties:
+        usedCsv:
+          type: boolean
+          description: Whether the source of the emails was a CSV or not
+        spaceName:
+          type: string
+          description: The space name
+          minLength: 6
+          maxLength: 20
+          pattern: ^[0-9a-z\-_]{6,20}$
+        emails:
+          items:
+            $ref: '#/components/schemas/Email'
+          type: array
+          description: List of email(s)
+          minLength: 1
+          maxLength: 2000
+      required:
+      - usedCsv
+      - spaceName
+      - emails
+      type: object
+    ValidExpiryDuration:
+      anyOf:
+      - $ref: '#/components/schemas/ExpiryDuration.hour'
+      - $ref: '#/components/schemas/ExpiryDuration.day'
+      - $ref: '#/components/schemas/ExpiryDuration.week'
+      - $ref: '#/components/schemas/ExpiryDuration.twoWeeks'
+      - $ref: '#/components/schemas/ExpiryDuration.oneMonth'
+    ExpiryDuration.week:
       enum:
-      - day
-      type: string
-    FloorRole:
-      enum:
-      - floorManager
-      type: string
-    ApiUpdateUserRoleRequest:
-      allOf:
-      - properties:
-          role:
-            $ref: '#/components/schemas/UserRole'
-            description: The new role.
-        required:
-        - role
-        type: object
-      - anyOf:
-        - properties:
-            userId:
-              type: string
-              description: The user's firebase id.
-              minLength: 1
-          required:
-          - userId
-          type: object
-        - properties:
-            email:
-              $ref: '#/components/schemas/Email'
-              description: The user's email address.
-          required:
-          - email
-          type: object
-      description: A request to update a user's role within a space.
-    CustomerIoMessageStatus:
-      enum:
-      - drafted
-      - queued
-      - attempted
-      - failed
-      - sent
-      - opened
-      - clicked
-      - converted
-      - bounced
-      - suppressed
-      - spammed
-      - unsubscribed
+      - week
       type: string
     ApiCreateUserInvitationRequest:
       properties:
@@ -1107,21 +920,6 @@ components:
       - role
       - spaceName
       - email
-      type: object
-    ApiUpdateUserInvitation:
-      properties:
-        role:
-          $ref: '#/components/schemas/UserRole'
-      required:
-      - role
-      type: object
-    ApiFcmTokenRequest:
-      properties:
-        fcmToken:
-          type: string
-          description: The fcm token for one of the user's mobile devices
-      required:
-      - fcmToken
       type: object
     DbExpiringInvitation:
       properties:
@@ -1151,82 +949,6 @@ components:
       - spaceName
       - id
       type: object
-    ExpiryDuration.twoWeeks:
-      enum:
-      - twoWeeks
-      type: string
-    ApiUserRole:
-      properties:
-        spaceMetadata:
-          $ref: '#/components/schemas/SpaceMetadata'
-        role:
-          $ref: '#/components/schemas/ClientUserRole'
-        avatarUrl:
-          type: string
-        displayName:
-          type: string
-        email:
-          type: string
-        userId:
-          type: string
-      required:
-      - role
-      - userId
-      type: object
-    ApiUserIntakeProfileFormEducation:
-      properties:
-        marketingSource:
-          type: string
-        useGoal:
-          type: string
-        currentRole:
-          type: string
-        relatedSpaceName:
-          type: string
-      required:
-      - marketingSource
-      - useGoal
-      - currentRole
-      type: object
-    ApiCreateUserInvitationBulk:
-      properties:
-        invitations:
-          items:
-            $ref: '#/components/schemas/ApiCreateUserInvitationResponse'
-          type: array
-      required:
-      - invitations
-      type: object
-    ValidExpiryDuration:
-      anyOf:
-      - $ref: '#/components/schemas/ExpiryDuration.hour'
-      - $ref: '#/components/schemas/ExpiryDuration.day'
-      - $ref: '#/components/schemas/ExpiryDuration.week'
-      - $ref: '#/components/schemas/ExpiryDuration.twoWeeks'
-      - $ref: '#/components/schemas/ExpiryDuration.oneMonth'
-    ApiCreateUserInvitationBulkRequest:
-      properties:
-        usedCsv:
-          type: boolean
-          description: Whether the source of the emails was a CSV or not
-        spaceName:
-          type: string
-          description: The space name
-          minLength: 6
-          maxLength: 20
-          pattern: ^[0-9a-z\-_]{6,20}$
-        emails:
-          items:
-            $ref: '#/components/schemas/Email'
-          type: array
-          description: List of email(s)
-          minLength: 1
-          maxLength: 2000
-      required:
-      - usedCsv
-      - spaceName
-      - emails
-      type: object
     ApiUpdateSeenKiosksRequest:
       properties:
         seenKiosks:
@@ -1237,8 +959,133 @@ components:
       required:
       - seenKiosks
       type: object
-    SpaceMetadata:
-      $ref: '#/components/schemas/DbRecentlyVisitedSpace'
+    ApiRecentlyVisitedSpace:
+      allOf:
+      - $ref: '#/components/schemas/DbRecentlyVisitedSpace'
+      - properties:
+          spaceId:
+            type: string
+        required:
+        - spaceId
+        type: object
+    ExpiryDuration.oneMonth:
+      enum:
+      - oneMonth
+      type: string
+    DbRecentlyVisitedSpace:
+      properties:
+        kiosks:
+          items:
+            type: string
+          type: array
+        profile:
+          $ref: '#/components/schemas/DbUserSpaceProfile'
+        lastRoomId:
+          type: string
+        cachedSpaceName:
+          type: string
+        timeZone:
+          type: string
+        lastSeenAt:
+          type: number
+          format: double
+        visitedAt:
+          type: number
+          format: double
+      type: object
+    CustomerIoMessageStatus:
+      enum:
+      - drafted
+      - queued
+      - attempted
+      - failed
+      - sent
+      - opened
+      - clicked
+      - converted
+      - bounced
+      - suppressed
+      - spammed
+      - unsubscribed
+      type: string
+    ExpiryDuration.day:
+      enum:
+      - day
+      type: string
+    UserInvitationEmailSend:
+      properties:
+        senderUid:
+          type: string
+        sentAt:
+          allOf:
+          - $ref: '#/components/schemas/firestore.Timestamp'
+        id:
+          type: string
+      required:
+      - senderUid
+      - sentAt
+      - id
+      type: object
+    ApiUserIntakeProfileFormEvents:
+      properties:
+        marketingSource:
+          type: string
+        workKind:
+          type: string
+        eventType:
+          type: string
+        expectedGuests:
+          type: string
+        relatedSpaceName:
+          type: string
+      required:
+      - marketingSource
+      - workKind
+      - eventType
+      - expectedGuests
+      type: object
+    ApiUpdateUserRequest:
+      properties:
+        defaultSpace:
+          type: string
+          description: The space the user wants to automatically join in the desktop app.
+        displayName:
+          type: string
+          description: The user's display name.
+          minLength: 1
+      type: object
+    ApiCreateUserInvitationResponse:
+      properties:
+        isAccepted:
+          type: boolean
+          description: Whether the invite has already been accepted
+        displayName:
+          type: string
+        email:
+          type: string
+        userId:
+          type: string
+        role:
+          $ref: '#/components/schemas/UserRole'
+        inviteId:
+          type: string
+      required:
+      - isAccepted
+      - email
+      - userId
+      - role
+      - inviteId
+      type: object
+    ApiUserPublicInfo:
+      properties:
+        displayName:
+          type: string
+        avatarUrl:
+          type: string
+      required:
+      - displayName
+      type: object
+      additionalProperties: false
     UserInvitation:
       properties:
         usedCsv:
@@ -1299,6 +1146,156 @@ components:
       - email
       - id
       type: object
+    ApiDefaultSpaceResponse:
+      properties:
+        defaultSpace:
+          type: string
+      type: object
+    ApiUserIntakeProfileFormOthers:
+      properties:
+        companyName:
+          type: string
+        marketingSource:
+          type: string
+        useGoal:
+          type: string
+        currentRole:
+          type: string
+        workKind:
+          type: string
+        companySize:
+          type: string
+        relatedSpaceName:
+          type: string
+      required:
+      - marketingSource
+      - currentRole
+      - workKind
+      - companySize
+      type: object
+    FloorRole:
+      enum:
+      - floorManager
+      type: string
+    PaginatedResponse_ApiRecentlyVisitedSpace_:
+      description: A page of items.  Useful for breaking up a large dataset into smaller chunks.
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/ApiRecentlyVisitedSpace'
+          type: array
+          description: The page of items.
+        metadata:
+          properties:
+            count:
+              type: number
+              format: double
+              description: The number of items sent.
+            next:
+              type: string
+              description: 'A pagination cursor.  If specified, there is another page of results that
+
+                can be requested by appending this value as a query parameter called
+
+                "next".'
+          required:
+          - count
+          type: object
+          description: 'Metadata about the page of items.  Contains a pagination cursor called
+
+            "next" if there is another page of items.'
+      required:
+      - items
+      - metadata
+      type: object
+      additionalProperties: false
+    firestore.Timestamp:
+      description: 'A Timestamp represents a point in time independent of any time zone or
+
+        calendar, represented as seconds and fractions of seconds at nanosecond
+
+        resolution in UTC Epoch time. It is encoded using the Proleptic Gregorian
+
+        Calendar which extends the Gregorian calendar backwards to year one. It is
+
+        encoded assuming all minutes are 60 seconds long, i.e. leap seconds are
+
+        "smeared" so that no leap second table is needed for interpretation. Range
+
+        is from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59.999999999Z.'
+      properties:
+        seconds:
+          type: number
+          format: double
+          description: The number of seconds of UTC time since Unix epoch 1970-01-01T00:00:00Z.
+        nanoseconds:
+          type: number
+          format: double
+          description: The non-negative fractions of a second at nanosecond resolution.
+      required:
+      - seconds
+      - nanoseconds
+      type: object
+      additionalProperties: false
+    Email:
+      type: string
+      description: Pattern for email
+      pattern: ^[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$
+    ApiUserRole:
+      properties:
+        spaceMetadata:
+          $ref: '#/components/schemas/SpaceMetadata'
+        role:
+          $ref: '#/components/schemas/ClientUserRole'
+        avatarUrl:
+          type: string
+        displayName:
+          type: string
+        email:
+          type: string
+        userId:
+          type: string
+      required:
+      - role
+      - userId
+      type: object
+    DbInviteStatus:
+      enum:
+      - pending
+      - error
+      - completed
+      type: string
+    SpaceMetadata:
+      $ref: '#/components/schemas/DbRecentlyVisitedSpace'
+    ApiUpdateSpaceFloorRolesRequest:
+      description: A request to update an existing space's floor roles for a user.
+      properties:
+        userId:
+          type: string
+        roles:
+          properties: {}
+          additionalProperties:
+            $ref: '#/components/schemas/FloorRole'
+          type: object
+      required:
+      - userId
+      - roles
+      type: object
+      additionalProperties: false
+    UserRole:
+      description: The user's role and permissions within a space.
+      enum:
+      - admin
+      - banned
+      - cohost
+      - guest
+      - member
+      - floorManager
+      type: string
+    ExpiryDuration.hour:
+      enum:
+      - hour
+      type: string
   securitySchemes:
     firebase:
       type: http

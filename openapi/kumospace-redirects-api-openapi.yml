@@ -1,6 +1,6 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: '@kumo/api Account Redirects API'
+  title: '@kumo/api Redirects API'
   contact: {}
 servers:
 - url: /
@@ -14,7 +14,7 @@ paths:
         '302':
           description: Found
       description: Redirects an authenticated user to the jstris integration.
-      summary: Redirect to a puzzle game.
+      summary: Redirect to a puzzle game
       tags:
       - Redirects
       security: []

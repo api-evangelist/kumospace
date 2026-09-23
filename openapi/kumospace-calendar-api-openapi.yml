@@ -1,6 +1,6 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: '@kumo/api Account Calendar API'
+  title: '@kumo/api Calendar API'
   contact: {}
 servers:
 - url: /
@@ -13,7 +13,7 @@ paths:
       responses:
         '200':
           description: ''
-      summary: Enables Google Calendar integration for the user.
+      summary: Enables Google Calendar integration for the user
       tags:
       - Calendar
       security:
@@ -37,7 +37,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/ApiCalendarEvent'
                 type: array
-      summary: Fetches the user's GCal events.
+      summary: Fetches the user's GCal events
       tags:
       - Calendar
       security:
@@ -80,13 +80,15 @@ paths:
         required: true
         schema:
           type: string
+      summary: Get events for range
+      x-summary-source: derived
   /v1/calendar/update-event-reply:
     post:
       operationId: UpdateAttendance
       responses:
         '200':
           description: ''
-      summary: Updates an event's reply status (accepted, declined, tentative).
+      summary: Updates an event's reply status (accepted, declined, tentative)
       tags:
       - Calendar
       security:
@@ -104,7 +106,7 @@ paths:
       responses:
         '200':
           description: ''
-      summary: Updates a user's connected calendar preferences.
+      summary: Updates a user's connected calendar preferences
       tags:
       - Calendar
       security:
@@ -133,7 +135,7 @@ paths:
         This will always first check with [Gcal/Outlook] API to make sure we return the most up-to-date set
 
         of calendars. We sync with our internal integration doc so that we can store any user isConnected preferences.'
-      summary: Syncs a user's subscribed calendars in [Gcal/Outlook], with our integration doc.
+      summary: Syncs a user's subscribed calendars in [Gcal/Outlook], with our integration doc
       tags:
       - Calendar
       security:
@@ -145,9 +147,7 @@ paths:
       responses:
         '200':
           description: ''
-      summary: 'Disconnect Calendar integration for the user.
-
-        This will delete the corresponding integration doc in firestore.'
+      summary: Disconnect Calendar integration for the user.
       tags:
       - Calendar
       security:
@@ -155,6 +155,44 @@ paths:
       parameters: []
 components:
   schemas:
+    ApiCalendarEventAttendee:
+      description: An object for attendee related information for the client.
+      properties:
+        email:
+          type: string
+        firebaseUid:
+          type: string
+        avatarUrl:
+          type: string
+        displayName:
+          type: string
+        replyStatus:
+          $ref: '#/components/schemas/CalendarEventReplyStatus'
+      required:
+      - email
+      - displayName
+      - replyStatus
+      type: object
+      additionalProperties: false
+    ApiEnableGcalIntegrationRequest:
+      description: A request to enable Google Calendar integration.
+      properties:
+        authCode:
+          type: string
+      type: object
+      additionalProperties: false
+    ApiUpdateCalendarEventReplyRequest:
+      description: A request to update event reply status
+      properties:
+        eventId:
+          type: string
+        replyStatus:
+          $ref: '#/components/schemas/CalendarEventReplyStatus'
+      required:
+      - eventId
+      - replyStatus
+      type: object
+      additionalProperties: false
     ApiCalendarEvent:
       description: A Calendar Event.
       properties:
@@ -217,18 +255,6 @@ components:
       - shouldShowAsBusy
       type: object
       additionalProperties: false
-    ApiUpdateCalendarEventReplyRequest:
-      description: A request to update event reply status
-      properties:
-        eventId:
-          type: string
-        replyStatus:
-          $ref: '#/components/schemas/CalendarEventReplyStatus'
-      required:
-      - eventId
-      - replyStatus
-      type: object
-      additionalProperties: false
     CalendarEventReplyStatus:
       description: These calendar response statuses match the Google Calendar API.
       enum:
@@ -237,32 +263,38 @@ components:
       - tentative
       - needsAction
       type: string
-    ApiCalendarEventAttendee:
-      description: An object for attendee related information for the client.
+    CalendarEventStatus:
+      type: string
+      enum:
+      - confirmed
+      - tentative
+      - cancelled
+      description: These calendar statuses match the Google Calendar API.
+    ApiUpdateConnectedCalendarsRequest:
+      description: A request to update the user's connected calendars preferences.
       properties:
-        email:
-          type: string
-        firebaseUid:
-          type: string
-        avatarUrl:
-          type: string
-        displayName:
-          type: string
-        replyStatus:
-          $ref: '#/components/schemas/CalendarEventReplyStatus'
+        calendarIsConnectedUpdates:
+          items:
+            properties:
+              isConnected:
+                type: boolean
+              calendarId:
+                type: string
+            required:
+            - isConnected
+            - calendarId
+            type: object
+          type: array
       required:
-      - email
-      - displayName
-      - replyStatus
+      - calendarIsConnectedUpdates
       type: object
       additionalProperties: false
-    ApiEnableGcalIntegrationRequest:
-      description: A request to enable Google Calendar integration.
-      properties:
-        authCode:
-          type: string
-      type: object
-      additionalProperties: false
+    ApiCalendarSource:
+      description: Identifies the external source where this calendar was fetched from.
+      enum:
+      - google-calendar
+      - microsoft-outlook
+      type: string
     ApiCalendar:
       description: 'ApiCalendar is a Calendar resource identifier, along with any state
 
@@ -283,38 +315,6 @@ components:
       - summary
       - isConnected
       - source
-      type: object
-      additionalProperties: false
-    CalendarEventStatus:
-      type: string
-      enum:
-      - confirmed
-      - tentative
-      - cancelled
-      description: These calendar statuses match the Google Calendar API.
-    ApiCalendarSource:
-      description: Identifies the external source where this calendar was fetched from.
-      enum:
-      - google-calendar
-      - microsoft-outlook
-      type: string
-    ApiUpdateConnectedCalendarsRequest:
-      description: A request to update the user's connected calendars preferences.
-      properties:
-        calendarIsConnectedUpdates:
-          items:
-            properties:
-              isConnected:
-                type: boolean
-              calendarId:
-                type: string
-            required:
-            - isConnected
-            - calendarId
-            type: object
-          type: array
-      required:
-      - calendarIsConnectedUpdates
       type: object
       additionalProperties: false
   securitySchemes:

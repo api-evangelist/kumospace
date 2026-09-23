@@ -1,6 +1,6 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: '@kumo/api Account Recordings API'
+  title: '@kumo/api Recordings API'
   contact: {}
 servers:
 - url: /
@@ -16,7 +16,7 @@ paths:
       description: 'Create a recording meta-data record. This is used to tie recordings to
 
         an individual kumospace account.'
-      summary: Create a recording.
+      summary: Create a recording
       tags:
       - Recordings
       security:
@@ -149,42 +149,6 @@ paths:
           type: string
 components:
   schemas:
-    ApiCreateRecordingRequest:
-      properties:
-        recordingGroupId:
-          type: string
-          description: ID to group recordings and transcriptions together
-          minLength: 1
-        roomId:
-          type: string
-          description: The name of the room that is recorded
-          minLength: 1
-        spaceName:
-          type: string
-          description: The name of the space the recording belongs to
-          minLength: 1
-        id:
-          type: string
-          description: The id of the daily recording, provided by the daily start-recording event.
-          format: uuid
-          minLength: 1
-      required:
-      - roomId
-      - spaceName
-      - id
-      type: object
-      description: A request to create a new recording meta-data record.
-    ApiShareRecordingRequest:
-      properties:
-        sharedWithFirebaseUids:
-          items:
-            type: string
-          type: array
-        visibility:
-          $ref: '#/components/schemas/RecordingVisibility'
-      required:
-      - sharedWithFirebaseUids
-      type: object
     ApiRecording:
       description: A recording as returned by the API
       properties:
@@ -225,11 +189,47 @@ components:
       - sharedWithFirebaseUids
       type: object
       additionalProperties: false
+    ApiShareRecordingRequest:
+      properties:
+        sharedWithFirebaseUids:
+          items:
+            type: string
+          type: array
+        visibility:
+          $ref: '#/components/schemas/RecordingVisibility'
+      required:
+      - sharedWithFirebaseUids
+      type: object
     RecordingVisibility:
       type: string
       enum:
       - public
       - private
+    ApiCreateRecordingRequest:
+      properties:
+        recordingGroupId:
+          type: string
+          description: ID to group recordings and transcriptions together
+          minLength: 1
+        roomId:
+          type: string
+          description: The name of the room that is recorded
+          minLength: 1
+        spaceName:
+          type: string
+          description: The name of the space the recording belongs to
+          minLength: 1
+        id:
+          type: string
+          description: The id of the daily recording, provided by the daily start-recording event.
+          format: uuid
+          minLength: 1
+      required:
+      - roomId
+      - spaceName
+      - id
+      type: object
+      description: A request to create a new recording meta-data record.
   securitySchemes:
     firebase:
       type: http

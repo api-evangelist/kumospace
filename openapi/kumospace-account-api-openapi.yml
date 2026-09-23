@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   title: '@kumo/api Account API'
   contact: {}
@@ -13,10 +13,10 @@ paths:
       responses:
         '204':
           description: No content
-      description: 'Delete the user''s account and all associated data.  This operation cannot
+      description: 'Delete the user''s account and all associated data. This operation cannot
 
         be undone.'
-      summary: Delete the user's account.
+      summary: Delete the user's account
       tags:
       - Account
       security:
@@ -33,7 +33,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiCustomKumoToken'
       description: Create a kumospace access token from a well-known identity provider.
-      summary: Create an access token for SSO.
+      summary: Create an access token for SSO
       tags:
       - Account
       security: []
@@ -55,7 +55,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiCustomKumoToken'
       description: Create a kumospace access token for usage in the desktop app
-      summary: Create an access token for desktop app usage.
+      summary: Create an access token for desktop app usage
       tags:
       - Account
       security:
@@ -89,7 +89,6 @@ paths:
       responses:
         '204':
           description: No content
-      description: Send reset password email for account corresponding to given email
       summary: Send reset password email for account corresponding to given email
       tags:
       - Account
@@ -110,7 +109,7 @@ paths:
       description: 'Accepts all invites for a given user. We can''t simply listen to
 
         user creation since anonymous users signing up doesn''t create a new account.'
-      summary: Accepts all invites for a given user.
+      summary: Accepts all invites for a given user
       tags:
       - Account
       security:
@@ -118,20 +117,23 @@ paths:
       parameters: []
 components:
   schemas:
+    ApiCreateCustomTokenRequest:
+      properties:
+        idToken:
+          type: string
+          description: 'Third-party id token.  It must contain an "iss" field and we must have an
+
+            associated public key in our firestore issuers table.'
+      required:
+      - idToken
+      type: object
+      additionalProperties: false
     ApiCustomKumoToken:
       properties:
         idToken:
           type: string
       required:
       - idToken
-      type: object
-      additionalProperties: false
-    ApiResetPasswordRequest:
-      properties:
-        email:
-          type: string
-      required:
-      - email
       type: object
       additionalProperties: false
     ApiIntegrationToken:
@@ -149,15 +151,12 @@ components:
       - google-calendar
       - microsoft-outlook
       type: string
-    ApiCreateCustomTokenRequest:
+    ApiResetPasswordRequest:
       properties:
-        idToken:
+        email:
           type: string
-          description: 'Third-party id token.  It must contain an "iss" field and we must have an
-
-            associated public key in our firestore issuers table.'
       required:
-      - idToken
+      - email
       type: object
       additionalProperties: false
   securitySchemes:

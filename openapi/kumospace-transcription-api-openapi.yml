@@ -1,6 +1,6 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: '@kumo/api Account Transcription API'
+  title: '@kumo/api Transcription API'
   contact: {}
 servers:
 - url: /
@@ -24,6 +24,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ApiHandleTranscriptionStartedRequest'
+      summary: Handle transcription started
+      x-summary-source: derived
   /v1/transcription/stopped:
     post:
       operationId: HandleTranscriptionStopped
@@ -41,6 +43,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ApiHandleTranscriptionStoppedRequest'
+      summary: Handle transcription stopped
+      x-summary-source: derived
   /v1/transcription:
     get:
       operationId: GetTranscription
@@ -61,6 +65,8 @@ paths:
         required: true
         schema:
           type: string
+      summary: Get transcription
+      x-summary-source: derived
   /v1/transcription/{id}/summary:
     get:
       operationId: GetSummary
@@ -86,6 +92,8 @@ paths:
         required: true
         schema:
           type: string
+      summary: Get summary
+      x-summary-source: derived
   /v1/transcription/{id}/vtt:
     get:
       operationId: GetVtt
@@ -102,8 +110,21 @@ paths:
         required: true
         schema:
           type: string
+      summary: Get vtt
+      x-summary-source: derived
 components:
   schemas:
+    ApiHandleTranscriptionStoppedRequest:
+      properties:
+        endTimestamp:
+          type: number
+          format: double
+        id:
+          type: string
+      required:
+      - endTimestamp
+      - id
+      type: object
     ApiTranscription:
       properties:
         recordingGroupId:
@@ -141,17 +162,6 @@ components:
       - ownerFirebaseUid
       - roomId
       - spaceUid
-      - id
-      type: object
-    ApiHandleTranscriptionStoppedRequest:
-      properties:
-        endTimestamp:
-          type: number
-          format: double
-        id:
-          type: string
-      required:
-      - endTimestamp
       - id
       type: object
     ApiHandleTranscriptionStartedRequest:

@@ -1,6 +1,6 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: '@kumo/api Account Payments API'
+  title: '@kumo/api Payments API'
   contact: {}
 servers:
 - url: /
@@ -20,7 +20,7 @@ paths:
       description: 'Creates a new checkout session (to upgrade a space by paying for the pro
 
         plan)'
-      summary: Create a checkout session.
+      summary: Create a checkout session
       tags:
       - Payments
       security:
@@ -45,7 +45,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiPortalSession'
       description: Creates a new billing portal session (to manage existing subscriptions)
-      summary: Create a customer billing portal session.
+      summary: Create a customer billing portal session
       tags:
       - Payments
       security:
@@ -66,7 +66,7 @@ paths:
         '204':
           description: No Content
       description: Sets reverse trial payment method as added.
-      summary: Sets reverse trial payment method as added.
+      summary: Sets reverse trial payment method as added
       tags:
       - Payments
       security:
@@ -90,7 +90,7 @@ paths:
         '201':
           description: Created
       description: Sets the space's subscription to cancel at the end of the billing period.
-      summary: Sets the space's subscription to cancel at the end of the billing period.
+      summary: Sets the space's subscription to cancel at the end of the billing period
       tags:
       - Payments
       security:
@@ -109,7 +109,7 @@ paths:
         '201':
           description: Created
       description: Sets the space's subscription to renew at the end of the billing period.
-      summary: Sets the space's subscription to renew at the end of the billing period.
+      summary: Sets the space's subscription to renew at the end of the billing period
       tags:
       - Payments
       security:
@@ -136,7 +136,7 @@ paths:
         billing period), and then will return a stripe link to setup the payment
 
         method and billing address for tax calculations'
-      summary: Updates subscription info and return link to setup payment method.
+      summary: Updates subscription info and return link to setup payment method
       tags:
       - Payments
       security:
@@ -167,53 +167,55 @@ paths:
       parameters: []
 components:
   schemas:
-    ExitSurvey:
-      properties:
-        answeredQuestions:
-          properties: {}
-          additionalProperties:
-            $ref: '#/components/schemas/ExitSurveyAnsweredQuestion'
-          type: object
-      required:
-      - answeredQuestions
-      type: object
-      additionalProperties: false
-    BillingPeriod:
-      enum:
-      - monthly
-      - annually
-      type: string
-    SubscriptionTier.professional:
-      enum:
-      - professional
-      type: string
     ExitSurveyAnswer:
       properties:
         selected:
           type: boolean
           enum:
           - true
-          nullable: false
         additionalText:
           type: string
       required:
       - selected
       type: object
       additionalProperties: false
-    SubscriptionConfig:
+    ApiUpdateReverseTrialSubscriptionRequest:
       properties:
-        defaultMinimumBillingMembers:
-          type: number
-          format: double
-        freeTierMemberSeats:
+        billingPeriod:
+          $ref: '#/components/schemas/BillingPeriod'
+        spaceName:
+          type: string
+        memberCount:
           type: number
           format: double
       required:
-      - defaultMinimumBillingMembers
-      - freeTierMemberSeats
+      - billingPeriod
+      - spaceName
+      - memberCount
       type: object
       additionalProperties: false
-    ApiCreatePortalSessionRequest:
+    AutoManagedSubscriptionTier:
+      anyOf:
+      - $ref: '#/components/schemas/SubscriptionTier.professional'
+      - $ref: '#/components/schemas/SubscriptionTier.business'
+      - $ref: '#/components/schemas/SubscriptionTier.enterprise'
+    ApiPortalSession:
+      properties:
+        portalUrl:
+          type: string
+      required:
+      - portalUrl
+      type: object
+      additionalProperties: false
+    SubscriptionTier.professional:
+      enum:
+      - professional
+      type: string
+    SubscriptionTier.enterprise:
+      enum:
+      - enterprise
+      type: string
+    ApiRenewSubscriptionRequest:
       properties:
         space:
           type: string
@@ -221,6 +223,21 @@ components:
       - space
       type: object
       additionalProperties: false
+    ApiCancelSubscriptionRequest:
+      properties:
+        space:
+          type: string
+        exitSurvey:
+          $ref: '#/components/schemas/ExitSurvey'
+      required:
+      - space
+      type: object
+      additionalProperties: false
+    ExitSurveyAnsweredQuestion:
+      properties: {}
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/ExitSurveyAnswer'
     ApiCreateCheckoutSessionRequest:
       description: A request to create a checkout session
       properties:
@@ -243,71 +260,53 @@ components:
       - billingPeriod
       type: object
       additionalProperties: false
-    AutoManagedSubscriptionTier:
-      anyOf:
-      - $ref: '#/components/schemas/SubscriptionTier.professional'
-      - $ref: '#/components/schemas/SubscriptionTier.business'
-      - $ref: '#/components/schemas/SubscriptionTier.enterprise'
-    ApiRenewSubscriptionRequest:
-      properties:
-        space:
-          type: string
-      required:
-      - space
-      type: object
-      additionalProperties: false
-    SubscriptionTier.enterprise:
+    BillingPeriod:
       enum:
-      - enterprise
+      - monthly
+      - annually
       type: string
-    ExitSurveyAnsweredQuestion:
-      properties: {}
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/ExitSurveyAnswer'
-    ApiCheckoutSession:
+    SubscriptionConfig:
       properties:
-        checkoutUrl:
-          type: string
-      required:
-      - checkoutUrl
-      type: object
-      additionalProperties: false
-    ApiUpdateReverseTrialSubscriptionRequest:
-      properties:
-        billingPeriod:
-          $ref: '#/components/schemas/BillingPeriod'
-        spaceName:
-          type: string
-        memberCount:
+        defaultMinimumBillingMembers:
+          type: number
+          format: double
+        freeTierMemberSeats:
           type: number
           format: double
       required:
-      - billingPeriod
-      - spaceName
-      - memberCount
+      - defaultMinimumBillingMembers
+      - freeTierMemberSeats
       type: object
       additionalProperties: false
     SubscriptionTier.business:
       enum:
       - business
       type: string
-    ApiPortalSession:
+    ExitSurvey:
       properties:
-        portalUrl:
-          type: string
+        answeredQuestions:
+          properties: {}
+          additionalProperties:
+            $ref: '#/components/schemas/ExitSurveyAnsweredQuestion'
+          type: object
       required:
-      - portalUrl
+      - answeredQuestions
       type: object
       additionalProperties: false
-    ApiCancelSubscriptionRequest:
+    ApiCreatePortalSessionRequest:
       properties:
         space:
           type: string
-        exitSurvey:
-          $ref: '#/components/schemas/ExitSurvey'
       required:
       - space
+      type: object
+      additionalProperties: false
+    ApiCheckoutSession:
+      properties:
+        checkoutUrl:
+          type: string
+      required:
+      - checkoutUrl
       type: object
       additionalProperties: false
   securitySchemes:

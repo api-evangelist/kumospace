@@ -1,6 +1,6 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: '@kumo/api Account Rooms API'
+  title: '@kumo/api Rooms API'
   contact: {}
 servers:
 - url: /
@@ -13,12 +13,12 @@ paths:
       responses:
         '201':
           description: Created
-      description: 'Create a room in a space.  Rooms can be created using a template (called a
+      description: 'Create a room in a space. Rooms can be created using a template (called a
 
         stock room) or manually by specifying the width, height, background, and
 
         then adding furniture.'
-      summary: Create a room.
+      summary: Create a room
       tags:
       - Rooms
       security:
@@ -42,10 +42,10 @@ paths:
       responses:
         '204':
           description: No content
-      description: 'Updates an existing room in a space.  Any fields that are not sent will
+      description: 'Updates an existing room in a space. Any fields that are not sent will
 
         be preserved.'
-      summary: Update a room.
+      summary: Update a room
       tags:
       - Rooms
       security:
@@ -75,7 +75,7 @@ paths:
         '204':
           description: No content
       description: Deletes an existing room in a space.
-      summary: Delete a room.
+      summary: Delete a room
       tags:
       - Rooms
       security:
@@ -95,14 +95,6 @@ paths:
           type: string
 components:
   schemas:
-    RoomPrivacySettingType.closed:
-      enum:
-      - closed
-      type: string
-    RoomPrivacySettingType.password:
-      enum:
-      - password
-      type: string
     RoomSpawn:
       properties:
         main:
@@ -127,6 +119,98 @@ components:
       required:
       - main
       type: object
+    RoomPrivacySettingType.open:
+      enum:
+      - open
+      type: string
+    ApiUpdateRoomRequest:
+      properties:
+        spawn:
+          $ref: '#/components/schemas/RoomSpawn'
+          description: Spawn point for users who enter the room.
+        accessAllowList:
+          items:
+            type: string
+          type: array
+        isAccessRestricted:
+          type: boolean
+        disableMemberEditing:
+          type: boolean
+          description: The room's editing restrictions. If true, only floor managers can edit (can be overridden by explicit per-zone permissions)
+        height:
+          type: integer
+          format: int32
+          description: The width of the floor in pixels
+          minimum: 800
+          maximum: 6400
+        width:
+          type: integer
+          format: int32
+          description: The width of the floor in pixels
+          minimum: 800
+          maximum: 6400
+        roomTemplateId:
+          type: string
+          description: 'The room template whose attributes to copy.  If ''stockBackgroundId'' is
+
+            also specified, it is applied after the template.'
+          minLength: 1
+        stockBackgroundId:
+          type: string
+          description: The stock background to apply to the room.
+          minLength: 1
+        privacySettings:
+          $ref: '#/components/schemas/ApiRoomPrivacySettings'
+          description: The privacy settings for the room.
+        audioRange:
+          anyOf:
+          - type: number
+            format: double
+          - type: string
+            enum:
+            - room
+          description: The radius, in pixels, for which a user's voice can be heard.
+        capacity:
+          type: number
+          format: double
+          description: The maximum capacity of the room.
+          maximum: 200
+          minimum: 1
+        displayName:
+          type: string
+          description: The name of the room.
+          minLength: 1
+      type: object
+      description: 'A request to update an existing room.  Any fields not specified are left
+
+        unchanged.'
+    RoomPrivacySettingType.closed:
+      enum:
+      - closed
+      type: string
+    RoomPrivacySettingType.password:
+      enum:
+      - password
+      type: string
+    ApiRoomPrivacySettings:
+      anyOf:
+      - $ref: '#/components/schemas/RoomPrivacySettings'
+      - properties:
+          data:
+            properties:
+              password:
+                type: string
+                description: The password for this room. Attendees will be prompted before joining
+                minLength: 4
+            required:
+            - password
+            type: object
+          type:
+            $ref: '#/components/schemas/RoomPrivacySettingType.password'
+        required:
+        - data
+        - type
+        type: object
     ApiCreateRoomRequest:
       allOf:
       - properties:
@@ -205,90 +289,6 @@ components:
           type:
             $ref: '#/components/schemas/RoomPrivacySettingType.closed'
         required:
-        - type
-        type: object
-    ApiUpdateRoomRequest:
-      properties:
-        spawn:
-          $ref: '#/components/schemas/RoomSpawn'
-          description: Spawn point for users who enter the room.
-        accessAllowList:
-          items:
-            type: string
-          type: array
-        isAccessRestricted:
-          type: boolean
-        disableMemberEditing:
-          type: boolean
-          description: The room's editing restrictions. If true, only floor managers can edit (can be overridden by explicit per-zone permissions)
-        height:
-          type: integer
-          format: int32
-          description: The width of the floor in pixels
-          minimum: 800
-          maximum: 6400
-        width:
-          type: integer
-          format: int32
-          description: The width of the floor in pixels
-          minimum: 800
-          maximum: 6400
-        roomTemplateId:
-          type: string
-          description: 'The room template whose attributes to copy.  If ''stockBackgroundId'' is
-
-            also specified, it is applied after the template.'
-          minLength: 1
-        stockBackgroundId:
-          type: string
-          description: The stock background to apply to the room.
-          minLength: 1
-        privacySettings:
-          $ref: '#/components/schemas/ApiRoomPrivacySettings'
-          description: The privacy settings for the room.
-        audioRange:
-          anyOf:
-          - type: number
-            format: double
-          - type: string
-            enum:
-            - room
-          description: The radius, in pixels, for which a user's voice can be heard.
-        capacity:
-          type: number
-          format: double
-          description: The maximum capacity of the room.
-          maximum: 200
-          minimum: 1
-        displayName:
-          type: string
-          description: The name of the room.
-          minLength: 1
-      type: object
-      description: 'A request to update an existing room.  Any fields not specified are left
-
-        unchanged.'
-    RoomPrivacySettingType.open:
-      enum:
-      - open
-      type: string
-    ApiRoomPrivacySettings:
-      anyOf:
-      - $ref: '#/components/schemas/RoomPrivacySettings'
-      - properties:
-          data:
-            properties:
-              password:
-                type: string
-                description: The password for this room. Attendees will be prompted before joining
-                minLength: 4
-            required:
-            - password
-            type: object
-          type:
-            $ref: '#/components/schemas/RoomPrivacySettingType.password'
-        required:
-        - data
         - type
         type: object
   securitySchemes:

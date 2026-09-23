@@ -1,6 +1,6 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: '@kumo/api Account Stock Walls API'
+  title: '@kumo/api Stock Walls API'
   contact: {}
 servers:
 - url: /
@@ -17,7 +17,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedResponse_ApiStockWall_'
-      description: 'Get a paginated list of stock walls.  (i.e., well-known wall
+      description: 'Get a paginated list of stock walls. (i.e., well-known wall
 
         types).
 
@@ -25,7 +25,7 @@ paths:
         Subsequent pages can be requested with the "next" parameter, which is
 
         returned in the response metadata object if another page exists.'
-      summary: Get stock walls.
+      summary: Get stock walls
       tags:
       - Stock Walls
       security: []
@@ -60,10 +60,10 @@ paths:
       responses:
         '201':
           description: Created
-      description: 'Creates a new stock wall.  Can only be called by kumospace
+      description: 'Creates a new stock wall. Can only be called by kumospace
 
         admins.'
-      summary: Create stock wall.
+      summary: Create stock wall
       tags:
       - Stock Walls
       security:
@@ -77,127 +77,6 @@ paths:
               $ref: '#/components/schemas/ApiCreateStockWallRequest'
 components:
   schemas:
-    DbWallBehavior:
-      allOf:
-      - properties:
-          disableCollision:
-            type: boolean
-        type: object
-      - anyOf:
-        - properties:
-            type:
-              $ref: '#/components/schemas/WallBehaviorType.none'
-          required:
-          - type
-          type: object
-        - properties:
-            data:
-              properties:
-                hinge:
-                  type: string
-                  enum:
-                  - left
-                  - right
-              required:
-              - hinge
-              type: object
-            type:
-              $ref: '#/components/schemas/WallBehaviorType.door'
-          required:
-          - data
-          - type
-          type: object
-    WallBehaviorType.none:
-      enum:
-      - none
-      type: string
-    DbStockWall:
-      properties:
-        title:
-          type: string
-        description:
-          type: string
-        thumbnailUrl:
-          type: string
-        behavior:
-          $ref: '#/components/schemas/DbWallBehavior'
-        textures:
-          properties:
-            '0':
-              $ref: '#/components/schemas/DbStockWallTexture'
-            '90':
-              $ref: '#/components/schemas/DbStockWallTexture'
-            '180':
-              $ref: '#/components/schemas/DbStockWallTexture'
-            '270':
-              $ref: '#/components/schemas/DbStockWallTexture'
-            corner:
-              $ref: '#/components/schemas/DbStockWallTexture'
-          required:
-          - '90'
-          - '0'
-          type: object
-        isDraft:
-          type: boolean
-        isDeleted:
-          type: boolean
-      required:
-      - title
-      - description
-      - thumbnailUrl
-      - behavior
-      - textures
-      - isDraft
-      type: object
-      additionalProperties: false
-    WallBehaviorType.door:
-      enum:
-      - door
-      type: string
-    ApiWallBehavior:
-      $ref: '#/components/schemas/DbWallBehavior'
-    PaginatedResponse_ApiStockWall_:
-      description: A page of items.  Useful for breaking up a large dataset into smaller chunks.
-      properties:
-        items:
-          items:
-            $ref: '#/components/schemas/ApiStockWall'
-          type: array
-          description: The page of items.
-        metadata:
-          properties:
-            count:
-              type: number
-              format: double
-              description: The number of items sent.
-            next:
-              type: string
-              description: 'A pagination cursor.  If specified, there is another page of results that
-
-                can be requested by appending this value as a query parameter called
-
-                "next".'
-          required:
-          - count
-          type: object
-          description: 'Metadata about the page of items.  Contains a pagination cursor called
-
-            "next" if there is another page of items.'
-      required:
-      - items
-      - metadata
-      type: object
-      additionalProperties: false
-    ApiStockWall:
-      allOf:
-      - $ref: '#/components/schemas/DbStockWall'
-      - properties:
-          id:
-            type: string
-        required:
-        - id
-        type: object
-      description: A wall style that can be applied to a room.
     ApiCreateStockWallRequest:
       properties:
         isDraft:
@@ -247,6 +126,8 @@ components:
       - title
       type: object
       description: A request to add a new stock wall to the wall gallery.
+    ApiWallBehavior:
+      $ref: '#/components/schemas/DbWallBehavior'
     DbStockWallTexture:
       properties:
         url:
@@ -269,6 +150,125 @@ components:
       - height
       type: object
       additionalProperties: false
+    WallBehaviorType.none:
+      enum:
+      - none
+      type: string
+    DbWallBehavior:
+      allOf:
+      - properties:
+          disableCollision:
+            type: boolean
+        type: object
+      - anyOf:
+        - properties:
+            type:
+              $ref: '#/components/schemas/WallBehaviorType.none'
+          required:
+          - type
+          type: object
+        - properties:
+            data:
+              properties:
+                hinge:
+                  type: string
+                  enum:
+                  - left
+                  - right
+              required:
+              - hinge
+              type: object
+            type:
+              $ref: '#/components/schemas/WallBehaviorType.door'
+          required:
+          - data
+          - type
+          type: object
+    DbStockWall:
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        thumbnailUrl:
+          type: string
+        behavior:
+          $ref: '#/components/schemas/DbWallBehavior'
+        textures:
+          properties:
+            '0':
+              $ref: '#/components/schemas/DbStockWallTexture'
+            '90':
+              $ref: '#/components/schemas/DbStockWallTexture'
+            '180':
+              $ref: '#/components/schemas/DbStockWallTexture'
+            '270':
+              $ref: '#/components/schemas/DbStockWallTexture'
+            corner:
+              $ref: '#/components/schemas/DbStockWallTexture'
+          required:
+          - '90'
+          - '0'
+          type: object
+        isDraft:
+          type: boolean
+        isDeleted:
+          type: boolean
+      required:
+      - title
+      - description
+      - thumbnailUrl
+      - behavior
+      - textures
+      - isDraft
+      type: object
+      additionalProperties: false
+    PaginatedResponse_ApiStockWall_:
+      description: A page of items.  Useful for breaking up a large dataset into smaller chunks.
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/ApiStockWall'
+          type: array
+          description: The page of items.
+        metadata:
+          properties:
+            count:
+              type: number
+              format: double
+              description: The number of items sent.
+            next:
+              type: string
+              description: 'A pagination cursor.  If specified, there is another page of results that
+
+                can be requested by appending this value as a query parameter called
+
+                "next".'
+          required:
+          - count
+          type: object
+          description: 'Metadata about the page of items.  Contains a pagination cursor called
+
+            "next" if there is another page of items.'
+      required:
+      - items
+      - metadata
+      type: object
+      additionalProperties: false
+    ApiStockWall:
+      allOf:
+      - $ref: '#/components/schemas/DbStockWall'
+      - properties:
+          id:
+            type: string
+        required:
+        - id
+        type: object
+      description: A wall style that can be applied to a room.
+    WallBehaviorType.door:
+      enum:
+      - door
+      type: string
   securitySchemes:
     firebase:
       type: http
