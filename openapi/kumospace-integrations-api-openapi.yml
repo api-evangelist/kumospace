@@ -168,35 +168,13 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    ZoomDeauthorizedEvent:
-      properties:
-        payload:
-          properties:
-            client_id:
-              type: string
-            deauthorization_time:
-              type: string
-            signature:
-              type: string
-            user_id:
-              type: string
-            account_id:
-              type: string
-          required:
-          - client_id
-          - deauthorization_time
-          - signature
-          - user_id
-          - account_id
-          type: object
-        event:
-          type: string
-          enum:
-          - app_deauthorized
-      required:
-      - payload
-      - event
-      type: object
+    Integration:
+      enum:
+      - microsoft-teams-status
+      - zoom-status
+      - google-calendar
+      - microsoft-outlook
+      type: string
     APIUserIntegration:
       properties:
         connectedAccountName:
@@ -212,13 +190,6 @@ components:
       - integrationType
       - integrationId
       type: object
-    Integration:
-      enum:
-      - microsoft-teams-status
-      - zoom-status
-      - google-calendar
-      - microsoft-outlook
-      type: string
     ZoomParticipantUpdateEvent:
       properties:
         payload:
@@ -275,6 +246,35 @@ components:
       required:
       - payload
       - event_ts
+      - event
+      type: object
+    ZoomDeauthorizedEvent:
+      properties:
+        payload:
+          properties:
+            client_id:
+              type: string
+            deauthorization_time:
+              type: string
+            signature:
+              type: string
+            user_id:
+              type: string
+            account_id:
+              type: string
+          required:
+          - client_id
+          - deauthorization_time
+          - signature
+          - user_id
+          - account_id
+          type: object
+        event:
+          type: string
+          enum:
+          - app_deauthorized
+      required:
+      - payload
       - event
       type: object
   securitySchemes:

@@ -348,9 +348,11 @@ apis:
   humanURL: https://api.kumospace.com/
   baseURL: https://api.kumospace.com
   tags:
+  - Spaces
   - Space
   tags_raw:
   - Spaces
+  - Space
   properties:
   - type: OpenAPI
     url: openapi/kumospace-spaces-api-openapi.yml

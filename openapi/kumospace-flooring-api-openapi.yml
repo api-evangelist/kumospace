@@ -58,64 +58,6 @@ paths:
               $ref: '#/components/schemas/ApiCreateStockBackgroundRequest'
 components:
   schemas:
-    BackgroundType.singleTile:
-      enum:
-      - singleTile
-      type: string
-    SingleTileBackground:
-      description: A background with a single tile repeated across the room.
-      properties:
-        tileUrl:
-          type: string
-          description: A url with the full-size image of the tile.
-          pattern: ^https://
-        width:
-          type: number
-          format: double
-          description: The width of the tile, in pixels.
-        height:
-          type: number
-          format: double
-          description: The height of the tile, in pixels.
-      required:
-      - tileUrl
-      - width
-      - height
-      type: object
-      additionalProperties: false
-    ApiStockBackground:
-      allOf:
-      - properties:
-          thumbnailUrl:
-            type: string
-            description: A url with a 200x200 thumbnail of this background.
-          description:
-            type: string
-            description: The description of this background.
-          title:
-            type: string
-            description: A short title.
-          id:
-            type: string
-            description: The unique id of this background.
-        required:
-        - thumbnailUrl
-        - description
-        - title
-        - id
-        type: object
-      - properties:
-          data:
-            $ref: '#/components/schemas/SingleTileBackground'
-            description: Data associated with the background type.
-          type:
-            $ref: '#/components/schemas/BackgroundType.singleTile'
-            description: The background type.
-        required:
-        - data
-        - type
-        type: object
-      description: A stock background that can be used as a room background.
     PaginatedResponse_ApiStockBackground_:
       description: A page of items.  Useful for breaking up a large dataset into smaller chunks.
       properties:
@@ -180,6 +122,64 @@ components:
         - type
         type: object
       description: A request to create a new room background.
+    SingleTileBackground:
+      description: A background with a single tile repeated across the room.
+      properties:
+        tileUrl:
+          type: string
+          description: A url with the full-size image of the tile.
+          pattern: ^https://
+        width:
+          type: number
+          format: double
+          description: The width of the tile, in pixels.
+        height:
+          type: number
+          format: double
+          description: The height of the tile, in pixels.
+      required:
+      - tileUrl
+      - width
+      - height
+      type: object
+      additionalProperties: false
+    ApiStockBackground:
+      allOf:
+      - properties:
+          thumbnailUrl:
+            type: string
+            description: A url with a 200x200 thumbnail of this background.
+          description:
+            type: string
+            description: The description of this background.
+          title:
+            type: string
+            description: A short title.
+          id:
+            type: string
+            description: The unique id of this background.
+        required:
+        - thumbnailUrl
+        - description
+        - title
+        - id
+        type: object
+      - properties:
+          data:
+            $ref: '#/components/schemas/SingleTileBackground'
+            description: Data associated with the background type.
+          type:
+            $ref: '#/components/schemas/BackgroundType.singleTile'
+            description: The background type.
+        required:
+        - data
+        - type
+        type: object
+      description: A stock background that can be used as a room background.
+    BackgroundType.singleTile:
+      enum:
+      - singleTile
+      type: string
   securitySchemes:
     firebase:
       type: http

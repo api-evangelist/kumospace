@@ -128,64 +128,9 @@ components:
       - 180
       - 270
       description: Rotation in clockwise-degrees.
-    CrosswordPuzzle:
-      properties:
-        stats:
-          properties:
-            numSolves:
-              type: number
-              format: double
-          required:
-          - numSolves
-          type: object
-        isPublic:
-          type: boolean
-        content:
-          properties:
-            info:
-              properties:
-                type:
-                  type: string
-                  enum:
-                  - Mini Puzzle
-                  - Daily Puzzle
-                title:
-                  type: string
-                description:
-                  type: string
-                author:
-                  type: string
-              required:
-              - type
-              - title
-              - description
-              - author
-              type: object
-          required:
-          - info
-          type: object
-        pid:
-          type: string
-      required:
-      - stats
-      - content
-      - pid
-      type: object
-    FurnitureBehaviorType.customImage:
+    FurnitureBehaviorType.crossword:
       enum:
-      - customImage
-      type: string
-    FurnitureBehaviorType.whiteboard:
-      enum:
-      - whiteboard
-      type: string
-    FurnitureBehaviorType.staticMusic:
-      enum:
-      - staticMusic
-      type: string
-    Range.room:
-      enum:
-      - room
+      - crossword
       type: string
     FurnitureSoundEffectAction:
       type: string
@@ -193,6 +138,175 @@ components:
       - playSound
       - showConfetti
       - none
+    ApiCreateFurnitureRequest:
+      properties:
+        rotation:
+          $ref: '#/components/schemas/FurnitureRotation'
+          description: The rotation of this furniture.  Defaults to '0°'.
+        elevation:
+          type: number
+          format: double
+          description: The elevation of the furniture.  Defaults to stock funiture's value.
+          minimum: 0
+          maximum: 10
+        y:
+          type: number
+          format: double
+          description: The y-position of the center of the furniture.  (0,0) is the top left of the room.
+        x:
+          type: number
+          format: double
+          description: The x-position of the center of the furniture.  (0,0) is the top left of the room.
+        stockFurnitureId:
+          type: string
+          description: The stock furniture whose attributes (width, height, image) to copy.
+          minLength: 1
+      required:
+      - y
+      - x
+      - stockFurnitureId
+      type: object
+      description: A request to add a piece of stock furniture to a room.
+    FurnitureBehaviorType.none:
+      enum:
+      - none
+      type: string
+    FurnitureBehaviorType.drink:
+      enum:
+      - drink
+      type: string
+    LinkType.legacy:
+      enum:
+      - legacy
+      type: string
+    ApiCustomLinkWrite:
+      anyOf:
+      - properties:
+          data:
+            properties:
+              openInNewTab:
+                type: boolean
+              url:
+                type: string
+                pattern: ^https://
+              text:
+                type: string
+            required:
+            - url
+            type: object
+          type:
+            $ref: '#/components/schemas/LinkType.custom'
+        required:
+        - data
+        - type
+        type: object
+      - properties:
+          data:
+            properties:
+              openInNewTab:
+                type: boolean
+              url:
+                type: string
+                pattern: ^https://miro.com/app/
+            required:
+            - url
+            type: object
+          type:
+            $ref: '#/components/schemas/LinkType.miro'
+        required:
+        - data
+        - type
+        type: object
+      - properties:
+          data:
+            properties:
+              openInNewTab:
+                type: boolean
+              url:
+                type: string
+                pattern: ^https://metroretro.io
+            required:
+            - url
+            type: object
+          type:
+            $ref: '#/components/schemas/LinkType.metroretro'
+        required:
+        - data
+        - type
+        type: object
+    DrinkType:
+      enum:
+      - boba
+      - beer
+      - champagne
+      - coffee
+      - cola
+      - cookieMitten
+      - cookieStar
+      - cookieTree
+      - cupcakeBlue
+      - cupcakeGreen
+      - cupcakePink
+      - cupcakeRed
+      - donutBlue
+      - donutChocolate
+      - donutGlazed
+      - donutStrawberry
+      - juice
+      - margarita
+      - redWine
+      - water
+      - whiskey
+      - hawaiianPizza
+      - plainPizza
+      - pepperoniPizza
+      - supremePizza
+      - veggiePizza
+      type: string
+    LinkType.miro:
+      enum:
+      - miro
+      type: string
+    FurnitureBehaviorType.link:
+      enum:
+      - link
+      type: string
+    Range.room:
+      enum:
+      - room
+      type: string
+    FurnitureBehaviorType.stickyNote:
+      enum:
+      - stickyNote
+      type: string
+    FurnitureBehaviorType.elevator:
+      enum:
+      - elevator
+      type: string
+    FurnitureBehaviorType.spotify:
+      enum:
+      - spotify
+      type: string
+    FurnitureBehaviorType.chess:
+      enum:
+      - chess
+      type: string
+    Range.nearby:
+      enum:
+      - nearby
+      type: string
+    FurnitureBehaviorType.horsepaste:
+      enum:
+      - horsepaste
+      type: string
+    FurnitureBehaviorType.whiteboard:
+      enum:
+      - whiteboard
+      type: string
+    FurnitureBehaviorType.customImage:
+      enum:
+      - customImage
+      type: string
     ApiBehaviorWrite:
       anyOf:
       - properties:
@@ -508,177 +622,21 @@ components:
         - type
         type: object
       description: Schema for setting the behavior on a piece of furniture.
-    FurnitureBehaviorType.timer:
-      enum:
-      - timer
-      type: string
-    FurnitureBehaviorType.soundCloud:
-      enum:
-      - soundcloud
-      type: string
-    FurnitureBehaviorType.customText:
-      enum:
-      - customText
-      type: string
-    LinkType.metroretro:
-      enum:
-      - metroretro
-      type: string
-    FurnitureBehaviorType.kiosk:
-      enum:
-      - kiosk
-      type: string
-    FurnitureBehaviorType.spotify:
-      enum:
-      - spotify
-      type: string
-    FurnitureBehaviorType.chess:
-      enum:
-      - chess
-      type: string
-    Range.nearby:
-      enum:
-      - nearby
-      type: string
-    FurnitureBehaviorType.horsepaste:
-      enum:
-      - horsepaste
-      type: string
     FurnitureBehaviorType.gif:
       enum:
       - giphy
-      type: string
-    FurnitureBehaviorType.stickyNote:
-      enum:
-      - stickyNote
-      type: string
-    FurnitureBehaviorType.elevator:
-      enum:
-      - elevator
-      type: string
-    LinkType.legacy:
-      enum:
-      - legacy
-      type: string
-    FurnitureBehaviorType.link:
-      enum:
-      - link
-      type: string
-    DrinkType:
-      enum:
-      - boba
-      - beer
-      - champagne
-      - coffee
-      - cola
-      - cookieMitten
-      - cookieStar
-      - cookieTree
-      - cupcakeBlue
-      - cupcakeGreen
-      - cupcakePink
-      - cupcakeRed
-      - donutBlue
-      - donutChocolate
-      - donutGlazed
-      - donutStrawberry
-      - juice
-      - margarita
-      - redWine
-      - water
-      - whiskey
-      - hawaiianPizza
-      - plainPizza
-      - pepperoniPizza
-      - supremePizza
-      - veggiePizza
-      type: string
-    FurnitureBehaviorType.crossword:
-      enum:
-      - crossword
       type: string
     FurnitureBehaviorType.pictureFrame:
       enum:
       - pictureFrame
       type: string
-    LinkType.custom:
-      enum:
-      - custom
-      type: string
-    FurnitureBehaviorType.youtube:
-      enum:
-      - youtube
-      type: string
-    LinkType.miro:
-      enum:
-      - miro
-      type: string
     FurnitureBehaviorType.soundEffect:
       enum:
       - soundEffect
       type: string
-    FurnitureBehaviorType.drink:
+    FurnitureBehaviorType.soundCloud:
       enum:
-      - drink
-      type: string
-    ApiCustomLinkWrite:
-      anyOf:
-      - properties:
-          data:
-            properties:
-              openInNewTab:
-                type: boolean
-              url:
-                type: string
-                pattern: ^https://
-              text:
-                type: string
-            required:
-            - url
-            type: object
-          type:
-            $ref: '#/components/schemas/LinkType.custom'
-        required:
-        - data
-        - type
-        type: object
-      - properties:
-          data:
-            properties:
-              openInNewTab:
-                type: boolean
-              url:
-                type: string
-                pattern: ^https://miro.com/app/
-            required:
-            - url
-            type: object
-          type:
-            $ref: '#/components/schemas/LinkType.miro'
-        required:
-        - data
-        - type
-        type: object
-      - properties:
-          data:
-            properties:
-              openInNewTab:
-                type: boolean
-              url:
-                type: string
-                pattern: ^https://metroretro.io
-            required:
-            - url
-            type: object
-          type:
-            $ref: '#/components/schemas/LinkType.metroretro'
-        required:
-        - data
-        - type
-        type: object
-    FurnitureBehaviorType.none:
-      enum:
-      - none
+      - soundcloud
       type: string
     LegacyApiCustomLinkWrite:
       properties:
@@ -693,35 +651,14 @@ components:
       required:
       - url
       type: object
-    ApiCreateFurnitureRequest:
-      properties:
-        rotation:
-          $ref: '#/components/schemas/FurnitureRotation'
-          description: The rotation of this furniture.  Defaults to '0°'.
-        elevation:
-          type: number
-          format: double
-          description: The elevation of the furniture.  Defaults to stock funiture's value.
-          minimum: 0
-          maximum: 10
-        y:
-          type: number
-          format: double
-          description: The y-position of the center of the furniture.  (0,0) is the top left of the room.
-        x:
-          type: number
-          format: double
-          description: The x-position of the center of the furniture.  (0,0) is the top left of the room.
-        stockFurnitureId:
-          type: string
-          description: The stock furniture whose attributes (width, height, image) to copy.
-          minLength: 1
-      required:
-      - y
-      - x
-      - stockFurnitureId
-      type: object
-      description: A request to add a piece of stock furniture to a room.
+    FurnitureBehaviorType.youtube:
+      enum:
+      - youtube
+      type: string
+    LinkType.custom:
+      enum:
+      - custom
+      type: string
     ApiUpdateFurnitureRequest:
       properties:
         behavior:
@@ -751,6 +688,69 @@ components:
       description: 'A request to update an existing piece of furniture.  Any fields not sent are
 
         preserved.'
+    FurnitureBehaviorType.timer:
+      enum:
+      - timer
+      type: string
+    FurnitureBehaviorType.staticMusic:
+      enum:
+      - staticMusic
+      type: string
+    FurnitureBehaviorType.kiosk:
+      enum:
+      - kiosk
+      type: string
+    LinkType.metroretro:
+      enum:
+      - metroretro
+      type: string
+    CrosswordPuzzle:
+      properties:
+        stats:
+          properties:
+            numSolves:
+              type: number
+              format: double
+          required:
+          - numSolves
+          type: object
+        isPublic:
+          type: boolean
+        content:
+          properties:
+            info:
+              properties:
+                type:
+                  type: string
+                  enum:
+                  - Mini Puzzle
+                  - Daily Puzzle
+                title:
+                  type: string
+                description:
+                  type: string
+                author:
+                  type: string
+              required:
+              - type
+              - title
+              - description
+              - author
+              type: object
+          required:
+          - info
+          type: object
+        pid:
+          type: string
+      required:
+      - stats
+      - content
+      - pid
+      type: object
+    FurnitureBehaviorType.customText:
+      enum:
+      - customText
+      type: string
   securitySchemes:
     firebase:
       type: http

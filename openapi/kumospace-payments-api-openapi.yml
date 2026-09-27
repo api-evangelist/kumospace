@@ -167,16 +167,23 @@ paths:
       parameters: []
 components:
   schemas:
-    ExitSurveyAnswer:
+    ApiPortalSession:
       properties:
-        selected:
-          type: boolean
-          enum:
-          - true
-        additionalText:
+        portalUrl:
           type: string
       required:
-      - selected
+      - portalUrl
+      type: object
+      additionalProperties: false
+    ExitSurvey:
+      properties:
+        answeredQuestions:
+          properties: {}
+          additionalProperties:
+            $ref: '#/components/schemas/ExitSurveyAnsweredQuestion'
+          type: object
+      required:
+      - answeredQuestions
       type: object
       additionalProperties: false
     ApiUpdateReverseTrialSubscriptionRequest:
@@ -194,35 +201,22 @@ components:
       - memberCount
       type: object
       additionalProperties: false
-    AutoManagedSubscriptionTier:
-      anyOf:
-      - $ref: '#/components/schemas/SubscriptionTier.professional'
-      - $ref: '#/components/schemas/SubscriptionTier.business'
-      - $ref: '#/components/schemas/SubscriptionTier.enterprise'
-    ApiPortalSession:
+    SubscriptionTier.business:
+      enum:
+      - business
+      type: string
+    ApiCheckoutSession:
       properties:
-        portalUrl:
+        checkoutUrl:
           type: string
       required:
-      - portalUrl
+      - checkoutUrl
       type: object
       additionalProperties: false
     SubscriptionTier.professional:
       enum:
       - professional
       type: string
-    SubscriptionTier.enterprise:
-      enum:
-      - enterprise
-      type: string
-    ApiRenewSubscriptionRequest:
-      properties:
-        space:
-          type: string
-      required:
-      - space
-      type: object
-      additionalProperties: false
     ApiCancelSubscriptionRequest:
       properties:
         space:
@@ -233,11 +227,11 @@ components:
       - space
       type: object
       additionalProperties: false
-    ExitSurveyAnsweredQuestion:
-      properties: {}
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/ExitSurveyAnswer'
+    AutoManagedSubscriptionTier:
+      anyOf:
+      - $ref: '#/components/schemas/SubscriptionTier.professional'
+      - $ref: '#/components/schemas/SubscriptionTier.business'
+      - $ref: '#/components/schemas/SubscriptionTier.enterprise'
     ApiCreateCheckoutSessionRequest:
       description: A request to create a checkout session
       properties:
@@ -260,11 +254,22 @@ components:
       - billingPeriod
       type: object
       additionalProperties: false
-    BillingPeriod:
+    SubscriptionTier.enterprise:
       enum:
-      - monthly
-      - annually
+      - enterprise
       type: string
+    ExitSurveyAnswer:
+      properties:
+        selected:
+          type: boolean
+          enum:
+          - true
+        additionalText:
+          type: string
+      required:
+      - selected
+      type: object
+      additionalProperties: false
     SubscriptionConfig:
       properties:
         defaultMinimumBillingMembers:
@@ -278,21 +283,11 @@ components:
       - freeTierMemberSeats
       type: object
       additionalProperties: false
-    SubscriptionTier.business:
+    BillingPeriod:
       enum:
-      - business
+      - monthly
+      - annually
       type: string
-    ExitSurvey:
-      properties:
-        answeredQuestions:
-          properties: {}
-          additionalProperties:
-            $ref: '#/components/schemas/ExitSurveyAnsweredQuestion'
-          type: object
-      required:
-      - answeredQuestions
-      type: object
-      additionalProperties: false
     ApiCreatePortalSessionRequest:
       properties:
         space:
@@ -301,14 +296,19 @@ components:
       - space
       type: object
       additionalProperties: false
-    ApiCheckoutSession:
+    ApiRenewSubscriptionRequest:
       properties:
-        checkoutUrl:
+        space:
           type: string
       required:
-      - checkoutUrl
+      - space
       type: object
       additionalProperties: false
+    ExitSurveyAnsweredQuestion:
+      properties: {}
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/ExitSurveyAnswer'
   securitySchemes:
     firebase:
       type: http

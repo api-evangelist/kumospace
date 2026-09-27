@@ -54,12 +54,24 @@ paths:
               description: The fields to update.
 components:
   schemas:
-    ApiWallBehavior:
-      $ref: '#/components/schemas/DbWallBehavior'
+    WallBehaviorType.door:
+      enum:
+      - door
+      type: string
     WallBehaviorType.none:
       enum:
       - none
       type: string
+    ApiWallBehavior:
+      $ref: '#/components/schemas/DbWallBehavior'
+    ApiUpdateWallSegmentRequest:
+      properties:
+        stockWallId:
+          type: string
+        behavior:
+          $ref: '#/components/schemas/ApiWallBehavior'
+      type: object
+      additionalProperties: false
     DbWallBehavior:
       allOf:
       - properties:
@@ -90,18 +102,6 @@ components:
           - data
           - type
           type: object
-    ApiUpdateWallSegmentRequest:
-      properties:
-        stockWallId:
-          type: string
-        behavior:
-          $ref: '#/components/schemas/ApiWallBehavior'
-      type: object
-      additionalProperties: false
-    WallBehaviorType.door:
-      enum:
-      - door
-      type: string
   securitySchemes:
     firebase:
       type: http

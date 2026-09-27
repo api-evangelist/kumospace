@@ -114,17 +114,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    ApiHandleTranscriptionStoppedRequest:
-      properties:
-        endTimestamp:
-          type: number
-          format: double
-        id:
-          type: string
-      required:
-      - endTimestamp
-      - id
-      type: object
     ApiTranscription:
       properties:
         recordingGroupId:
@@ -162,6 +151,17 @@ components:
       - ownerFirebaseUid
       - roomId
       - spaceUid
+      - id
+      type: object
+    ApiHandleTranscriptionStoppedRequest:
+      properties:
+        endTimestamp:
+          type: number
+          format: double
+        id:
+          type: string
+      required:
+      - endTimestamp
       - id
       type: object
     ApiHandleTranscriptionStartedRequest:

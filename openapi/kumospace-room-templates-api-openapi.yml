@@ -111,15 +111,32 @@ paths:
               $ref: '#/components/schemas/ApiUpdateRoomTemplateRequest'
 components:
   schemas:
-    TemplateTag:
+    ApiRoomTemplate:
+      allOf:
+      - $ref: '#/components/schemas/Omit_ApiRoom.-or-audioRange-or-privacySettings-or-features-or-isAccessRestricted-or-accessAllowList_'
+      - properties:
+          tags:
+            items:
+              $ref: '#/components/schemas/TemplateTag'
+            type: array
+          type:
+            $ref: '#/components/schemas/TemplateType'
+          isDraft:
+            type: boolean
+        required:
+        - tags
+        - type
+        - isDraft
+        type: object
+    TemplateType:
       enum:
-      - festive
-      - fun
-      - lounge
-      - outdoor
-      - party
-      - professional
+      - room
+      - game
+      - office
       type: string
+    Omit_ApiRoom.-or-audioRange-or-privacySettings-or-features-or-isAccessRestricted-or-accessAllowList_:
+      $ref: '#/components/schemas/Pick_ApiRoom.Exclude_keyofApiRoom.-or-audioRange-or-privacySettings-or-features-or-isAccessRestricted-or-accessAllowList__'
+      description: Construct a type with the properties of T except for those in type K.
     PaginatedResponse_ApiRoomTemplate_:
       description: A page of items.  Useful for breaking up a large dataset into smaller chunks.
       properties:
@@ -152,67 +169,6 @@ components:
       - metadata
       type: object
       additionalProperties: false
-    ApiCreateRoomTemplateRequest:
-      description: A request to create a new room template from an existing room.
-      properties:
-        spaceName:
-          type: string
-          description: The space name.
-          minLength: 6
-          maxLength: 20
-          pattern: ^[0-9a-z\-_]{6,20}$
-        roomId:
-          type: string
-          description: The room id from which to base the template.
-          minLength: 1
-        type:
-          $ref: '#/components/schemas/TemplateType'
-          description: The intended use for this template.
-        tags:
-          items:
-            $ref: '#/components/schemas/TemplateTag'
-          type: array
-          description: Tags used for grouping / filtering this template.
-        title:
-          type: string
-          description: The title of the template.  Defaults to the displayName of the copied room.
-          minLength: 1
-        isDraft:
-          type: boolean
-          description: 'Whether this template is in draft (i.e., not publicly available).
-
-            Defaults to false.'
-        thumbnails:
-          properties:
-            large:
-              type: string
-              description: A url with a 800x800 image of the room.
-              pattern: ^https://
-            small:
-              type: string
-              description: A url with a 200x200 image of the room.
-              pattern: ^https://
-          required:
-          - large
-          - small
-          type: object
-          description: Thumbnails for displaying the room in various sizes.
-      required:
-      - spaceName
-      - roomId
-      - type
-      - tags
-      - thumbnails
-      type: object
-      additionalProperties: false
-    FloorRole:
-      enum:
-      - floorManager
-      type: string
-    BackgroundType.singleTile:
-      enum:
-      - singleTile
-      type: string
     SingleTileBackground:
       description: A background with a single tile repeated across the room.
       properties:
@@ -234,13 +190,19 @@ components:
       - height
       type: object
       additionalProperties: false
-    Omit_ApiRoom.-or-audioRange-or-privacySettings-or-features-or-isAccessRestricted-or-accessAllowList_:
-      $ref: '#/components/schemas/Pick_ApiRoom.Exclude_keyofApiRoom.-or-audioRange-or-privacySettings-or-features-or-isAccessRestricted-or-accessAllowList__'
-      description: Construct a type with the properties of T except for those in type K.
-    Record_string.never_:
-      properties: {}
-      type: object
-      description: Construct a type with a set of properties K of type T
+    FloorRole:
+      enum:
+      - floorManager
+      type: string
+    TemplateTag:
+      enum:
+      - festive
+      - fun
+      - lounge
+      - outdoor
+      - party
+      - professional
+      type: string
     Pick_ApiRoom.Exclude_keyofApiRoom.-or-audioRange-or-privacySettings-or-features-or-isAccessRestricted-or-accessAllowList__:
       properties:
         id:
@@ -311,29 +273,63 @@ components:
       - thumbnails
       type: object
       description: From T, pick a set of properties whose keys are in the union K
-    TemplateType:
-      enum:
-      - room
-      - game
-      - office
-      type: string
-    ApiRoomTemplate:
-      allOf:
-      - $ref: '#/components/schemas/Omit_ApiRoom.-or-audioRange-or-privacySettings-or-features-or-isAccessRestricted-or-accessAllowList_'
-      - properties:
-          tags:
-            items:
-              $ref: '#/components/schemas/TemplateTag'
-            type: array
-          type:
-            $ref: '#/components/schemas/TemplateType'
-          isDraft:
-            type: boolean
-        required:
-        - tags
-        - type
-        - isDraft
-        type: object
+    Record_string.never_:
+      properties: {}
+      type: object
+      description: Construct a type with a set of properties K of type T
+    ApiCreateRoomTemplateRequest:
+      description: A request to create a new room template from an existing room.
+      properties:
+        spaceName:
+          type: string
+          description: The space name.
+          minLength: 6
+          maxLength: 20
+          pattern: ^[0-9a-z\-_]{6,20}$
+        roomId:
+          type: string
+          description: The room id from which to base the template.
+          minLength: 1
+        type:
+          $ref: '#/components/schemas/TemplateType'
+          description: The intended use for this template.
+        tags:
+          items:
+            $ref: '#/components/schemas/TemplateTag'
+          type: array
+          description: Tags used for grouping / filtering this template.
+        title:
+          type: string
+          description: The title of the template.  Defaults to the displayName of the copied room.
+          minLength: 1
+        isDraft:
+          type: boolean
+          description: 'Whether this template is in draft (i.e., not publicly available).
+
+            Defaults to false.'
+        thumbnails:
+          properties:
+            large:
+              type: string
+              description: A url with a 800x800 image of the room.
+              pattern: ^https://
+            small:
+              type: string
+              description: A url with a 200x200 image of the room.
+              pattern: ^https://
+          required:
+          - large
+          - small
+          type: object
+          description: Thumbnails for displaying the room in various sizes.
+      required:
+      - spaceName
+      - roomId
+      - type
+      - tags
+      - thumbnails
+      type: object
+      additionalProperties: false
     ApiUpdateRoomTemplateRequest:
       allOf:
       - properties:
@@ -385,6 +381,10 @@ components:
       description: 'A request to update an existing room template.  Fields not sent will be
 
         preserved.'
+    BackgroundType.singleTile:
+      enum:
+      - singleTile
+      type: string
   securitySchemes:
     firebase:
       type: http
