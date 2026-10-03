@@ -204,40 +204,25 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    ZoneOrientation:
-      enum:
-      - 0
-      - 90
-      - 180
-      - 270
-      type: number
-    CalendarResource:
-      description: Information required for a calendar integration regarding a Kumospace resource
-      properties:
-        resourceId:
-          type: string
-          description: Auto-generated resource ID by the calendar provider
-        floorId:
-          type: string
-          description: Kumospace floor ID this resource is tied into
-        spaceName:
-          type: string
-          description: Kumospace space this resource is tied into
-        roomId:
-          type: string
-          description: Kumospace room ID this resource is tied into
-      required:
-      - resourceId
-      - floorId
-      - spaceName
-      - roomId
-      type: object
-      additionalProperties: false
     ZoneStatus:
       enum:
       - open
       - closed
       type: string
+    ApiCreateCalendarResource:
+      properties:
+        floorId:
+          type: string
+        resourceId:
+          type: string
+        roomId:
+          type: string
+      required:
+      - floorId
+      - resourceId
+      - roomId
+      type: object
+      additionalProperties: false
     ApiCreateZoneRequest:
       properties:
         orientation:
@@ -258,25 +243,6 @@ components:
       - x
       type: object
       description: A request to create a new zone within a room.
-    ApiCreateCalendarResource:
-      properties:
-        floorId:
-          type: string
-        resourceId:
-          type: string
-        roomId:
-          type: string
-      required:
-      - floorId
-      - resourceId
-      - roomId
-      type: object
-      additionalProperties: false
-    ZoneType:
-      enum:
-      - office
-      - conferenceRoom
-      type: string
     ApiUpdateZoneRequest:
       properties:
         editorIds:
@@ -311,6 +277,40 @@ components:
           format: int32
       type: object
       description: A request to update a zone within a room.
+    ZoneType:
+      enum:
+      - office
+      - conferenceRoom
+      type: string
+    ZoneOrientation:
+      enum:
+      - 0
+      - 90
+      - 180
+      - 270
+      type: number
+    CalendarResource:
+      description: Information required for a calendar integration regarding a Kumospace resource
+      properties:
+        resourceId:
+          type: string
+          description: Auto-generated resource ID by the calendar provider
+        floorId:
+          type: string
+          description: Kumospace floor ID this resource is tied into
+        spaceName:
+          type: string
+          description: Kumospace space this resource is tied into
+        roomId:
+          type: string
+          description: Kumospace room ID this resource is tied into
+      required:
+      - resourceId
+      - floorId
+      - spaceName
+      - roomId
+      type: object
+      additionalProperties: false
     CalendarIntegrationZone:
       properties:
         spaceName:

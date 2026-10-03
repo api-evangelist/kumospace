@@ -167,56 +167,11 @@ paths:
       parameters: []
 components:
   schemas:
-    ApiPortalSession:
-      properties:
-        portalUrl:
-          type: string
-      required:
-      - portalUrl
-      type: object
-      additionalProperties: false
-    ExitSurvey:
-      properties:
-        answeredQuestions:
-          properties: {}
-          additionalProperties:
-            $ref: '#/components/schemas/ExitSurveyAnsweredQuestion'
-          type: object
-      required:
-      - answeredQuestions
-      type: object
-      additionalProperties: false
-    ApiUpdateReverseTrialSubscriptionRequest:
-      properties:
-        billingPeriod:
-          $ref: '#/components/schemas/BillingPeriod'
-        spaceName:
-          type: string
-        memberCount:
-          type: number
-          format: double
-      required:
-      - billingPeriod
-      - spaceName
-      - memberCount
-      type: object
-      additionalProperties: false
-    SubscriptionTier.business:
-      enum:
-      - business
-      type: string
-    ApiCheckoutSession:
-      properties:
-        checkoutUrl:
-          type: string
-      required:
-      - checkoutUrl
-      type: object
-      additionalProperties: false
-    SubscriptionTier.professional:
-      enum:
-      - professional
-      type: string
+    AutoManagedSubscriptionTier:
+      anyOf:
+      - $ref: '#/components/schemas/SubscriptionTier.professional'
+      - $ref: '#/components/schemas/SubscriptionTier.business'
+      - $ref: '#/components/schemas/SubscriptionTier.enterprise'
     ApiCancelSubscriptionRequest:
       properties:
         space:
@@ -225,33 +180,6 @@ components:
           $ref: '#/components/schemas/ExitSurvey'
       required:
       - space
-      type: object
-      additionalProperties: false
-    AutoManagedSubscriptionTier:
-      anyOf:
-      - $ref: '#/components/schemas/SubscriptionTier.professional'
-      - $ref: '#/components/schemas/SubscriptionTier.business'
-      - $ref: '#/components/schemas/SubscriptionTier.enterprise'
-    ApiCreateCheckoutSessionRequest:
-      description: A request to create a checkout session
-      properties:
-        space:
-          type: string
-        tier:
-          $ref: '#/components/schemas/AutoManagedSubscriptionTier'
-        capacity:
-          type: integer
-          format: int32
-          description: The desired space capacity.
-          minimum: 1
-          maximum: 10000
-        billingPeriod:
-          $ref: '#/components/schemas/BillingPeriod'
-        redirectToSpace:
-          type: boolean
-      required:
-      - space
-      - billingPeriod
       type: object
       additionalProperties: false
     SubscriptionTier.enterprise:
@@ -283,17 +211,83 @@ components:
       - freeTierMemberSeats
       type: object
       additionalProperties: false
-    BillingPeriod:
-      enum:
-      - monthly
-      - annually
-      type: string
+    ApiPortalSession:
+      properties:
+        portalUrl:
+          type: string
+      required:
+      - portalUrl
+      type: object
+      additionalProperties: false
     ApiCreatePortalSessionRequest:
       properties:
         space:
           type: string
       required:
       - space
+      type: object
+      additionalProperties: false
+    SubscriptionTier.professional:
+      enum:
+      - professional
+      type: string
+    ExitSurveyAnsweredQuestion:
+      properties: {}
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/ExitSurveyAnswer'
+    BillingPeriod:
+      enum:
+      - monthly
+      - annually
+      type: string
+    ApiCheckoutSession:
+      properties:
+        checkoutUrl:
+          type: string
+      required:
+      - checkoutUrl
+      type: object
+      additionalProperties: false
+    SubscriptionTier.business:
+      enum:
+      - business
+      type: string
+    ApiUpdateReverseTrialSubscriptionRequest:
+      properties:
+        billingPeriod:
+          $ref: '#/components/schemas/BillingPeriod'
+        spaceName:
+          type: string
+        memberCount:
+          type: number
+          format: double
+      required:
+      - billingPeriod
+      - spaceName
+      - memberCount
+      type: object
+      additionalProperties: false
+    ApiCreateCheckoutSessionRequest:
+      description: A request to create a checkout session
+      properties:
+        space:
+          type: string
+        tier:
+          $ref: '#/components/schemas/AutoManagedSubscriptionTier'
+        capacity:
+          type: integer
+          format: int32
+          description: The desired space capacity.
+          minimum: 1
+          maximum: 10000
+        billingPeriod:
+          $ref: '#/components/schemas/BillingPeriod'
+        redirectToSpace:
+          type: boolean
+      required:
+      - space
+      - billingPeriod
       type: object
       additionalProperties: false
     ApiRenewSubscriptionRequest:
@@ -304,11 +298,17 @@ components:
       - space
       type: object
       additionalProperties: false
-    ExitSurveyAnsweredQuestion:
-      properties: {}
+    ExitSurvey:
+      properties:
+        answeredQuestions:
+          properties: {}
+          additionalProperties:
+            $ref: '#/components/schemas/ExitSurveyAnsweredQuestion'
+          type: object
+      required:
+      - answeredQuestions
       type: object
-      additionalProperties:
-        $ref: '#/components/schemas/ExitSurveyAnswer'
+      additionalProperties: false
   securitySchemes:
     firebase:
       type: http

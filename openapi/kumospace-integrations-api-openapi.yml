@@ -168,28 +168,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    Integration:
-      enum:
-      - microsoft-teams-status
-      - zoom-status
-      - google-calendar
-      - microsoft-outlook
-      type: string
-    APIUserIntegration:
-      properties:
-        connectedAccountName:
-          type: string
-        connected:
-          type: boolean
-        integrationType:
-          $ref: '#/components/schemas/Integration'
-        integrationId:
-          type: string
-      required:
-      - connected
-      - integrationType
-      - integrationId
-      type: object
     ZoomParticipantUpdateEvent:
       properties:
         payload:
@@ -227,6 +205,13 @@ components:
       - event_ts
       - event
       type: object
+    Integration:
+      enum:
+      - microsoft-teams-status
+      - zoom-status
+      - google-calendar
+      - microsoft-outlook
+      type: string
     ZoomValidationEvent:
       properties:
         payload:
@@ -276,6 +261,21 @@ components:
       required:
       - payload
       - event
+      type: object
+    APIUserIntegration:
+      properties:
+        connectedAccountName:
+          type: string
+        connected:
+          type: boolean
+        integrationType:
+          $ref: '#/components/schemas/Integration'
+        integrationId:
+          type: string
+      required:
+      - connected
+      - integrationType
+      - integrationId
       type: object
   securitySchemes:
     firebase:

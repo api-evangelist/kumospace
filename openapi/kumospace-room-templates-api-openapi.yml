@@ -111,6 +111,10 @@ paths:
               $ref: '#/components/schemas/ApiUpdateRoomTemplateRequest'
 components:
   schemas:
+    Record_string.never_:
+      properties: {}
+      type: object
+      description: Construct a type with a set of properties K of type T
     ApiRoomTemplate:
       allOf:
       - $ref: '#/components/schemas/Omit_ApiRoom.-or-audioRange-or-privacySettings-or-features-or-isAccessRestricted-or-accessAllowList_'
@@ -128,80 +132,60 @@ components:
         - type
         - isDraft
         type: object
-    TemplateType:
-      enum:
-      - room
-      - game
-      - office
-      type: string
-    Omit_ApiRoom.-or-audioRange-or-privacySettings-or-features-or-isAccessRestricted-or-accessAllowList_:
-      $ref: '#/components/schemas/Pick_ApiRoom.Exclude_keyofApiRoom.-or-audioRange-or-privacySettings-or-features-or-isAccessRestricted-or-accessAllowList__'
-      description: Construct a type with the properties of T except for those in type K.
-    PaginatedResponse_ApiRoomTemplate_:
-      description: A page of items.  Useful for breaking up a large dataset into smaller chunks.
-      properties:
-        items:
-          items:
-            $ref: '#/components/schemas/ApiRoomTemplate'
-          type: array
-          description: The page of items.
-        metadata:
-          properties:
-            count:
-              type: number
-              format: double
-              description: The number of items sent.
-            next:
+    ApiUpdateRoomTemplateRequest:
+      allOf:
+      - properties:
+          tags:
+            items:
+              $ref: '#/components/schemas/TemplateTag'
+            type: array
+            description: Tags used for grouping / filtering this template.
+          thumbnails:
+            properties:
+              large:
+                type: string
+                description: A url with a 800x800 image of the room.
+                pattern: ^https://
+              small:
+                type: string
+                description: A url with a 200x200 image of the room.
+                pattern: ^https://
+            required:
+            - large
+            - small
+            type: object
+            description: Thumbnails for displaying the room in various sizes.
+          isDraft:
+            type: boolean
+            description: Whether this template is in draft (i.e., not publicly available).
+          title:
+            type: string
+            description: The title of the template.
+            minLength: 1
+        type: object
+      - anyOf:
+        - properties:
+            roomId:
               type: string
-              description: 'A pagination cursor.  If specified, there is another page of results that
-
-                can be requested by appending this value as a query parameter called
-
-                "next".'
+              description: The room id from which to base the template.
+              minLength: 1
+            spaceName:
+              type: string
+              description: The space name.
+              minLength: 6
+              maxLength: 20
+              pattern: ^[0-9a-z\-_]{6,20}$
           required:
-          - count
+          - roomId
+          - spaceName
           type: object
-          description: 'Metadata about the page of items.  Contains a pagination cursor called
+        - $ref: '#/components/schemas/Record_string.never_'
+      description: 'A request to update an existing room template.  Fields not sent will be
 
-            "next" if there is another page of items.'
-      required:
-      - items
-      - metadata
-      type: object
-      additionalProperties: false
-    SingleTileBackground:
-      description: A background with a single tile repeated across the room.
-      properties:
-        tileUrl:
-          type: string
-          description: A url with the full-size image of the tile.
-          pattern: ^https://
-        width:
-          type: number
-          format: double
-          description: The width of the tile, in pixels.
-        height:
-          type: number
-          format: double
-          description: The height of the tile, in pixels.
-      required:
-      - tileUrl
-      - width
-      - height
-      type: object
-      additionalProperties: false
+        preserved.'
     FloorRole:
       enum:
       - floorManager
-      type: string
-    TemplateTag:
-      enum:
-      - festive
-      - fun
-      - lounge
-      - outdoor
-      - party
-      - professional
       type: string
     Pick_ApiRoom.Exclude_keyofApiRoom.-or-audioRange-or-privacySettings-or-features-or-isAccessRestricted-or-accessAllowList__:
       properties:
@@ -273,10 +257,6 @@ components:
       - thumbnails
       type: object
       description: From T, pick a set of properties whose keys are in the union K
-    Record_string.never_:
-      properties: {}
-      type: object
-      description: Construct a type with a set of properties K of type T
     ApiCreateRoomTemplateRequest:
       description: A request to create a new room template from an existing room.
       properties:
@@ -330,61 +310,81 @@ components:
       - thumbnails
       type: object
       additionalProperties: false
-    ApiUpdateRoomTemplateRequest:
-      allOf:
-      - properties:
-          tags:
-            items:
-              $ref: '#/components/schemas/TemplateTag'
-            type: array
-            description: Tags used for grouping / filtering this template.
-          thumbnails:
-            properties:
-              large:
-                type: string
-                description: A url with a 800x800 image of the room.
-                pattern: ^https://
-              small:
-                type: string
-                description: A url with a 200x200 image of the room.
-                pattern: ^https://
-            required:
-            - large
-            - small
-            type: object
-            description: Thumbnails for displaying the room in various sizes.
-          isDraft:
-            type: boolean
-            description: Whether this template is in draft (i.e., not publicly available).
-          title:
-            type: string
-            description: The title of the template.
-            minLength: 1
-        type: object
-      - anyOf:
-        - properties:
-            roomId:
+    TemplateType:
+      enum:
+      - room
+      - game
+      - office
+      type: string
+    PaginatedResponse_ApiRoomTemplate_:
+      description: A page of items.  Useful for breaking up a large dataset into smaller chunks.
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/ApiRoomTemplate'
+          type: array
+          description: The page of items.
+        metadata:
+          properties:
+            count:
+              type: number
+              format: double
+              description: The number of items sent.
+            next:
               type: string
-              description: The room id from which to base the template.
-              minLength: 1
-            spaceName:
-              type: string
-              description: The space name.
-              minLength: 6
-              maxLength: 20
-              pattern: ^[0-9a-z\-_]{6,20}$
-          required:
-          - roomId
-          - spaceName
-          type: object
-        - $ref: '#/components/schemas/Record_string.never_'
-      description: 'A request to update an existing room template.  Fields not sent will be
+              description: 'A pagination cursor.  If specified, there is another page of results that
 
-        preserved.'
+                can be requested by appending this value as a query parameter called
+
+                "next".'
+          required:
+          - count
+          type: object
+          description: 'Metadata about the page of items.  Contains a pagination cursor called
+
+            "next" if there is another page of items.'
+      required:
+      - items
+      - metadata
+      type: object
+      additionalProperties: false
+    TemplateTag:
+      enum:
+      - festive
+      - fun
+      - lounge
+      - outdoor
+      - party
+      - professional
+      type: string
+    SingleTileBackground:
+      description: A background with a single tile repeated across the room.
+      properties:
+        tileUrl:
+          type: string
+          description: A url with the full-size image of the tile.
+          pattern: ^https://
+        width:
+          type: number
+          format: double
+          description: The width of the tile, in pixels.
+        height:
+          type: number
+          format: double
+          description: The height of the tile, in pixels.
+      required:
+      - tileUrl
+      - width
+      - height
+      type: object
+      additionalProperties: false
     BackgroundType.singleTile:
       enum:
       - singleTile
       type: string
+    Omit_ApiRoom.-or-audioRange-or-privacySettings-or-features-or-isAccessRestricted-or-accessAllowList_:
+      $ref: '#/components/schemas/Pick_ApiRoom.Exclude_keyofApiRoom.-or-audioRange-or-privacySettings-or-features-or-isAccessRestricted-or-accessAllowList__'
+      description: Construct a type with the properties of T except for those in type K.
   securitySchemes:
     firebase:
       type: http

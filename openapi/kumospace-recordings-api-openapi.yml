@@ -174,17 +174,6 @@ components:
       - id
       type: object
       description: A request to create a new recording meta-data record.
-    ApiShareRecordingRequest:
-      properties:
-        sharedWithFirebaseUids:
-          items:
-            type: string
-          type: array
-        visibility:
-          $ref: '#/components/schemas/RecordingVisibility'
-      required:
-      - sharedWithFirebaseUids
-      type: object
     RecordingVisibility:
       type: string
       enum:
@@ -230,6 +219,17 @@ components:
       - sharedWithFirebaseUids
       type: object
       additionalProperties: false
+    ApiShareRecordingRequest:
+      properties:
+        sharedWithFirebaseUids:
+          items:
+            type: string
+          type: array
+        visibility:
+          $ref: '#/components/schemas/RecordingVisibility'
+      required:
+      - sharedWithFirebaseUids
+      type: object
   securitySchemes:
     firebase:
       type: http

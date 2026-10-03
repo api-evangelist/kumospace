@@ -51,17 +51,19 @@ paths:
               $ref: '#/components/schemas/ApiClaimDemoSpaceRequest'
 components:
   schemas:
-    ApiCreateDemoSpaceResponse:
-      properties:
-        spaceName:
-          type: string
-        uid:
-          type: string
-      required:
-      - spaceName
-      - uid
-      type: object
-      additionalProperties: false
+    UseCase:
+      description: How the user plans to use the space.
+      enum:
+      - culture
+      - productivity
+      - communication
+      - visibility
+      - engagement
+      - other
+      - events
+      - education
+      - friends
+      type: string
     ApiClaimDemoSpaceRequest:
       description: A request for a user to claim a demo space
       properties:
@@ -82,19 +84,6 @@ components:
       - newUseCase
       type: object
       additionalProperties: false
-    UseCase:
-      description: How the user plans to use the space.
-      enum:
-      - culture
-      - productivity
-      - communication
-      - visibility
-      - engagement
-      - other
-      - events
-      - education
-      - friends
-      type: string
     ApiCreateDemoSpaceRequest:
       description: A request to create a new space.
       properties:
@@ -109,6 +98,17 @@ components:
         isDryRun:
           type: boolean
           description: If true, perform all validation, but don't actually create the space.
+      type: object
+      additionalProperties: false
+    ApiCreateDemoSpaceResponse:
+      properties:
+        spaceName:
+          type: string
+        uid:
+          type: string
+      required:
+      - spaceName
+      - uid
       type: object
       additionalProperties: false
   securitySchemes:

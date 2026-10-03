@@ -77,10 +77,65 @@ paths:
               $ref: '#/components/schemas/ApiCreateStockWallRequest'
 components:
   schemas:
-    WallBehaviorType.door:
-      enum:
-      - door
-      type: string
+    ApiStockWall:
+      allOf:
+      - $ref: '#/components/schemas/DbStockWall'
+      - properties:
+          id:
+            type: string
+        required:
+        - id
+        type: object
+      description: A wall style that can be applied to a room.
+    ApiCreateStockWallRequest:
+      properties:
+        isDraft:
+          type: boolean
+          description: 'Whether this wall is in draft (i.e., not viewable in the room builder).
+
+            Defaults to false.'
+        textures:
+          properties:
+            '0':
+              $ref: '#/components/schemas/DbStockWallTexture'
+            '90':
+              $ref: '#/components/schemas/DbStockWallTexture'
+            '180':
+              $ref: '#/components/schemas/DbStockWallTexture'
+            '270':
+              $ref: '#/components/schemas/DbStockWallTexture'
+            corner:
+              $ref: '#/components/schemas/DbStockWallTexture'
+          required:
+          - '90'
+          - '0'
+          type: object
+          description: 'Image URLs for textures on walls. The key is the degrees of
+
+            clockwise rotation from the default (0°).'
+        behavior:
+          $ref: '#/components/schemas/ApiWallBehavior'
+          description: The behavior for this wall.
+        thumbnailUrl:
+          type: string
+          description: An image displayed in the room builder slideout that represents this wall.
+          minLength: 1
+        description:
+          type: string
+          description: The description of the stock wall.
+          minLength: 1
+        title:
+          type: string
+          description: A short title.
+          minLength: 1
+      required:
+      - textures
+      - behavior
+      - thumbnailUrl
+      - description
+      - title
+      type: object
+      description: A request to add a new stock wall to the wall gallery.
     PaginatedResponse_ApiStockWall_:
       description: A page of items.  Useful for breaking up a large dataset into smaller chunks.
       properties:
@@ -152,93 +207,6 @@ components:
       - isDraft
       type: object
       additionalProperties: false
-    WallBehaviorType.none:
-      enum:
-      - none
-      type: string
-    ApiWallBehavior:
-      $ref: '#/components/schemas/DbWallBehavior'
-    DbStockWallTexture:
-      properties:
-        url:
-          type: string
-        width:
-          type: number
-          format: double
-        height:
-          type: number
-          format: double
-        imgWidth:
-          type: number
-          format: double
-        imgHeight:
-          type: number
-          format: double
-      required:
-      - url
-      - width
-      - height
-      type: object
-      additionalProperties: false
-    ApiCreateStockWallRequest:
-      properties:
-        isDraft:
-          type: boolean
-          description: 'Whether this wall is in draft (i.e., not viewable in the room builder).
-
-            Defaults to false.'
-        textures:
-          properties:
-            '0':
-              $ref: '#/components/schemas/DbStockWallTexture'
-            '90':
-              $ref: '#/components/schemas/DbStockWallTexture'
-            '180':
-              $ref: '#/components/schemas/DbStockWallTexture'
-            '270':
-              $ref: '#/components/schemas/DbStockWallTexture'
-            corner:
-              $ref: '#/components/schemas/DbStockWallTexture'
-          required:
-          - '90'
-          - '0'
-          type: object
-          description: 'Image URLs for textures on walls. The key is the degrees of
-
-            clockwise rotation from the default (0°).'
-        behavior:
-          $ref: '#/components/schemas/ApiWallBehavior'
-          description: The behavior for this wall.
-        thumbnailUrl:
-          type: string
-          description: An image displayed in the room builder slideout that represents this wall.
-          minLength: 1
-        description:
-          type: string
-          description: The description of the stock wall.
-          minLength: 1
-        title:
-          type: string
-          description: A short title.
-          minLength: 1
-      required:
-      - textures
-      - behavior
-      - thumbnailUrl
-      - description
-      - title
-      type: object
-      description: A request to add a new stock wall to the wall gallery.
-    ApiStockWall:
-      allOf:
-      - $ref: '#/components/schemas/DbStockWall'
-      - properties:
-          id:
-            type: string
-        required:
-        - id
-        type: object
-      description: A wall style that can be applied to a room.
     DbWallBehavior:
       allOf:
       - properties:
@@ -269,6 +237,38 @@ components:
           - data
           - type
           type: object
+    WallBehaviorType.none:
+      enum:
+      - none
+      type: string
+    ApiWallBehavior:
+      $ref: '#/components/schemas/DbWallBehavior'
+    WallBehaviorType.door:
+      enum:
+      - door
+      type: string
+    DbStockWallTexture:
+      properties:
+        url:
+          type: string
+        width:
+          type: number
+          format: double
+        height:
+          type: number
+          format: double
+        imgWidth:
+          type: number
+          format: double
+        imgHeight:
+          type: number
+          format: double
+      required:
+      - url
+      - width
+      - height
+      type: object
+      additionalProperties: false
   securitySchemes:
     firebase:
       type: http

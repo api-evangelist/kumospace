@@ -95,14 +95,48 @@ paths:
           type: string
 components:
   schemas:
+    RoomSpawn:
+      properties:
+        main:
+          properties:
+            height:
+              type: number
+              format: double
+            width:
+              type: number
+              format: double
+            y:
+              type: number
+              format: double
+            x:
+              type: number
+              format: double
+          required:
+          - y
+          - x
+          type: object
+          description: The main spawn point.
+      required:
+      - main
+      type: object
     RoomPrivacySettingType.password:
       enum:
       - password
       type: string
-    RoomPrivacySettingType.open:
-      enum:
-      - open
-      type: string
+    RoomPrivacySettings:
+      anyOf:
+      - properties:
+          type:
+            $ref: '#/components/schemas/RoomPrivacySettingType.open'
+        required:
+        - type
+        type: object
+      - properties:
+          type:
+            $ref: '#/components/schemas/RoomPrivacySettingType.closed'
+        required:
+        - type
+        type: object
     ApiCreateRoomRequest:
       allOf:
       - properties:
@@ -234,20 +268,6 @@ components:
       description: 'A request to update an existing room.  Any fields not specified are left
 
         unchanged.'
-    RoomPrivacySettings:
-      anyOf:
-      - properties:
-          type:
-            $ref: '#/components/schemas/RoomPrivacySettingType.open'
-        required:
-        - type
-        type: object
-      - properties:
-          type:
-            $ref: '#/components/schemas/RoomPrivacySettingType.closed'
-        required:
-        - type
-        type: object
     ApiRoomPrivacySettings:
       anyOf:
       - $ref: '#/components/schemas/RoomPrivacySettings'
@@ -267,30 +287,10 @@ components:
         - data
         - type
         type: object
-    RoomSpawn:
-      properties:
-        main:
-          properties:
-            height:
-              type: number
-              format: double
-            width:
-              type: number
-              format: double
-            y:
-              type: number
-              format: double
-            x:
-              type: number
-              format: double
-          required:
-          - y
-          - x
-          type: object
-          description: The main spawn point.
-      required:
-      - main
-      type: object
+    RoomPrivacySettingType.open:
+      enum:
+      - open
+      type: string
   securitySchemes:
     firebase:
       type: http

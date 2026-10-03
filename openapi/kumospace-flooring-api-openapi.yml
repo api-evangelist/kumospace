@@ -58,38 +58,31 @@ paths:
               $ref: '#/components/schemas/ApiCreateStockBackgroundRequest'
 components:
   schemas:
-    PaginatedResponse_ApiStockBackground_:
-      description: A page of items.  Useful for breaking up a large dataset into smaller chunks.
+    SingleTileBackground:
+      description: A background with a single tile repeated across the room.
       properties:
-        items:
-          items:
-            $ref: '#/components/schemas/ApiStockBackground'
-          type: array
-          description: The page of items.
-        metadata:
-          properties:
-            count:
-              type: number
-              format: double
-              description: The number of items sent.
-            next:
-              type: string
-              description: 'A pagination cursor.  If specified, there is another page of results that
-
-                can be requested by appending this value as a query parameter called
-
-                "next".'
-          required:
-          - count
-          type: object
-          description: 'Metadata about the page of items.  Contains a pagination cursor called
-
-            "next" if there is another page of items.'
+        tileUrl:
+          type: string
+          description: A url with the full-size image of the tile.
+          pattern: ^https://
+        width:
+          type: number
+          format: double
+          description: The width of the tile, in pixels.
+        height:
+          type: number
+          format: double
+          description: The height of the tile, in pixels.
       required:
-      - items
-      - metadata
+      - tileUrl
+      - width
+      - height
       type: object
       additionalProperties: false
+    BackgroundType.singleTile:
+      enum:
+      - singleTile
+      type: string
     ApiCreateStockBackgroundRequest:
       allOf:
       - properties:
@@ -122,27 +115,6 @@ components:
         - type
         type: object
       description: A request to create a new room background.
-    SingleTileBackground:
-      description: A background with a single tile repeated across the room.
-      properties:
-        tileUrl:
-          type: string
-          description: A url with the full-size image of the tile.
-          pattern: ^https://
-        width:
-          type: number
-          format: double
-          description: The width of the tile, in pixels.
-        height:
-          type: number
-          format: double
-          description: The height of the tile, in pixels.
-      required:
-      - tileUrl
-      - width
-      - height
-      type: object
-      additionalProperties: false
     ApiStockBackground:
       allOf:
       - properties:
@@ -176,10 +148,38 @@ components:
         - type
         type: object
       description: A stock background that can be used as a room background.
-    BackgroundType.singleTile:
-      enum:
-      - singleTile
-      type: string
+    PaginatedResponse_ApiStockBackground_:
+      description: A page of items.  Useful for breaking up a large dataset into smaller chunks.
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/ApiStockBackground'
+          type: array
+          description: The page of items.
+        metadata:
+          properties:
+            count:
+              type: number
+              format: double
+              description: The number of items sent.
+            next:
+              type: string
+              description: 'A pagination cursor.  If specified, there is another page of results that
+
+                can be requested by appending this value as a query parameter called
+
+                "next".'
+          required:
+          - count
+          type: object
+          description: 'Metadata about the page of items.  Contains a pagination cursor called
+
+            "next" if there is another page of items.'
+      required:
+      - items
+      - metadata
+      type: object
+      additionalProperties: false
   securitySchemes:
     firebase:
       type: http
