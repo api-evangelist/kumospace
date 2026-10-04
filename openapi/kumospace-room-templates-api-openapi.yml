@@ -183,10 +183,122 @@ components:
       description: 'A request to update an existing room template.  Fields not sent will be
 
         preserved.'
-    FloorRole:
+    TemplateType:
       enum:
-      - floorManager
+      - room
+      - game
+      - office
       type: string
+    BackgroundType.singleTile:
+      enum:
+      - singleTile
+      type: string
+    PaginatedResponse_ApiRoomTemplate_:
+      description: A page of items.  Useful for breaking up a large dataset into smaller chunks.
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/ApiRoomTemplate'
+          type: array
+          description: The page of items.
+        metadata:
+          properties:
+            count:
+              type: number
+              format: double
+              description: The number of items sent.
+            next:
+              type: string
+              description: 'A pagination cursor.  If specified, there is another page of results that
+
+                can be requested by appending this value as a query parameter called
+
+                "next".'
+          required:
+          - count
+          type: object
+          description: 'Metadata about the page of items.  Contains a pagination cursor called
+
+            "next" if there is another page of items.'
+      required:
+      - items
+      - metadata
+      type: object
+      additionalProperties: false
+    ApiCreateRoomTemplateRequest:
+      description: A request to create a new room template from an existing room.
+      properties:
+        spaceName:
+          type: string
+          description: The space name.
+          minLength: 6
+          maxLength: 20
+          pattern: ^[0-9a-z\-_]{6,20}$
+        roomId:
+          type: string
+          description: The room id from which to base the template.
+          minLength: 1
+        type:
+          $ref: '#/components/schemas/TemplateType'
+          description: The intended use for this template.
+        tags:
+          items:
+            $ref: '#/components/schemas/TemplateTag'
+          type: array
+          description: Tags used for grouping / filtering this template.
+        title:
+          type: string
+          description: The title of the template.  Defaults to the displayName of the copied room.
+          minLength: 1
+        isDraft:
+          type: boolean
+          description: 'Whether this template is in draft (i.e., not publicly available).
+
+            Defaults to false.'
+        thumbnails:
+          properties:
+            large:
+              type: string
+              description: A url with a 800x800 image of the room.
+              pattern: ^https://
+            small:
+              type: string
+              description: A url with a 200x200 image of the room.
+              pattern: ^https://
+          required:
+          - large
+          - small
+          type: object
+          description: Thumbnails for displaying the room in various sizes.
+      required:
+      - spaceName
+      - roomId
+      - type
+      - tags
+      - thumbnails
+      type: object
+      additionalProperties: false
+    SingleTileBackground:
+      description: A background with a single tile repeated across the room.
+      properties:
+        tileUrl:
+          type: string
+          description: A url with the full-size image of the tile.
+          pattern: ^https://
+        width:
+          type: number
+          format: double
+          description: The width of the tile, in pixels.
+        height:
+          type: number
+          format: double
+          description: The height of the tile, in pixels.
+      required:
+      - tileUrl
+      - width
+      - height
+      type: object
+      additionalProperties: false
     Pick_ApiRoom.Exclude_keyofApiRoom.-or-audioRange-or-privacySettings-or-features-or-isAccessRestricted-or-accessAllowList__:
       properties:
         id:
@@ -257,97 +369,10 @@ components:
       - thumbnails
       type: object
       description: From T, pick a set of properties whose keys are in the union K
-    ApiCreateRoomTemplateRequest:
-      description: A request to create a new room template from an existing room.
-      properties:
-        spaceName:
-          type: string
-          description: The space name.
-          minLength: 6
-          maxLength: 20
-          pattern: ^[0-9a-z\-_]{6,20}$
-        roomId:
-          type: string
-          description: The room id from which to base the template.
-          minLength: 1
-        type:
-          $ref: '#/components/schemas/TemplateType'
-          description: The intended use for this template.
-        tags:
-          items:
-            $ref: '#/components/schemas/TemplateTag'
-          type: array
-          description: Tags used for grouping / filtering this template.
-        title:
-          type: string
-          description: The title of the template.  Defaults to the displayName of the copied room.
-          minLength: 1
-        isDraft:
-          type: boolean
-          description: 'Whether this template is in draft (i.e., not publicly available).
-
-            Defaults to false.'
-        thumbnails:
-          properties:
-            large:
-              type: string
-              description: A url with a 800x800 image of the room.
-              pattern: ^https://
-            small:
-              type: string
-              description: A url with a 200x200 image of the room.
-              pattern: ^https://
-          required:
-          - large
-          - small
-          type: object
-          description: Thumbnails for displaying the room in various sizes.
-      required:
-      - spaceName
-      - roomId
-      - type
-      - tags
-      - thumbnails
-      type: object
-      additionalProperties: false
-    TemplateType:
+    FloorRole:
       enum:
-      - room
-      - game
-      - office
+      - floorManager
       type: string
-    PaginatedResponse_ApiRoomTemplate_:
-      description: A page of items.  Useful for breaking up a large dataset into smaller chunks.
-      properties:
-        items:
-          items:
-            $ref: '#/components/schemas/ApiRoomTemplate'
-          type: array
-          description: The page of items.
-        metadata:
-          properties:
-            count:
-              type: number
-              format: double
-              description: The number of items sent.
-            next:
-              type: string
-              description: 'A pagination cursor.  If specified, there is another page of results that
-
-                can be requested by appending this value as a query parameter called
-
-                "next".'
-          required:
-          - count
-          type: object
-          description: 'Metadata about the page of items.  Contains a pagination cursor called
-
-            "next" if there is another page of items.'
-      required:
-      - items
-      - metadata
-      type: object
-      additionalProperties: false
     TemplateTag:
       enum:
       - festive
@@ -356,31 +381,6 @@ components:
       - outdoor
       - party
       - professional
-      type: string
-    SingleTileBackground:
-      description: A background with a single tile repeated across the room.
-      properties:
-        tileUrl:
-          type: string
-          description: A url with the full-size image of the tile.
-          pattern: ^https://
-        width:
-          type: number
-          format: double
-          description: The width of the tile, in pixels.
-        height:
-          type: number
-          format: double
-          description: The height of the tile, in pixels.
-      required:
-      - tileUrl
-      - width
-      - height
-      type: object
-      additionalProperties: false
-    BackgroundType.singleTile:
-      enum:
-      - singleTile
       type: string
     Omit_ApiRoom.-or-audioRange-or-privacySettings-or-features-or-isAccessRestricted-or-accessAllowList_:
       $ref: '#/components/schemas/Pick_ApiRoom.Exclude_keyofApiRoom.-or-audioRange-or-privacySettings-or-features-or-isAccessRestricted-or-accessAllowList__'

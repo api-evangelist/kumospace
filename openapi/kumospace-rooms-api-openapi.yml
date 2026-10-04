@@ -95,46 +95,88 @@ paths:
           type: string
 components:
   schemas:
-    RoomSpawn:
+    ApiUpdateRoomRequest:
       properties:
-        main:
-          properties:
-            height:
-              type: number
-              format: double
-            width:
-              type: number
-              format: double
-            y:
-              type: number
-              format: double
-            x:
-              type: number
-              format: double
-          required:
-          - y
-          - x
-          type: object
-          description: The main spawn point.
-      required:
-      - main
+        spawn:
+          $ref: '#/components/schemas/RoomSpawn'
+          description: Spawn point for users who enter the room.
+        accessAllowList:
+          items:
+            type: string
+          type: array
+        isAccessRestricted:
+          type: boolean
+        disableMemberEditing:
+          type: boolean
+          description: The room's editing restrictions. If true, only floor managers can edit (can be overridden by explicit per-zone permissions)
+        height:
+          type: integer
+          format: int32
+          description: The width of the floor in pixels
+          minimum: 800
+          maximum: 6400
+        width:
+          type: integer
+          format: int32
+          description: The width of the floor in pixels
+          minimum: 800
+          maximum: 6400
+        roomTemplateId:
+          type: string
+          description: 'The room template whose attributes to copy.  If ''stockBackgroundId'' is
+
+            also specified, it is applied after the template.'
+          minLength: 1
+        stockBackgroundId:
+          type: string
+          description: The stock background to apply to the room.
+          minLength: 1
+        privacySettings:
+          $ref: '#/components/schemas/ApiRoomPrivacySettings'
+          description: The privacy settings for the room.
+        audioRange:
+          anyOf:
+          - type: number
+            format: double
+          - type: string
+            enum:
+            - room
+          description: The radius, in pixels, for which a user's voice can be heard.
+        capacity:
+          type: number
+          format: double
+          description: The maximum capacity of the room.
+          maximum: 200
+          minimum: 1
+        displayName:
+          type: string
+          description: The name of the room.
+          minLength: 1
       type: object
-    RoomPrivacySettingType.password:
+      description: 'A request to update an existing room.  Any fields not specified are left
+
+        unchanged.'
+    RoomPrivacySettingType.closed:
       enum:
-      - password
+      - closed
       type: string
-    RoomPrivacySettings:
+    ApiRoomPrivacySettings:
       anyOf:
+      - $ref: '#/components/schemas/RoomPrivacySettings'
       - properties:
+          data:
+            properties:
+              password:
+                type: string
+                description: The password for this room. Attendees will be prompted before joining
+                minLength: 4
+            required:
+            - password
+            type: object
           type:
-            $ref: '#/components/schemas/RoomPrivacySettingType.open'
+            $ref: '#/components/schemas/RoomPrivacySettingType.password'
         required:
-        - type
-        type: object
-      - properties:
-          type:
-            $ref: '#/components/schemas/RoomPrivacySettingType.closed'
-        required:
+        - data
         - type
         type: object
     ApiCreateRoomRequest:
@@ -203,94 +245,52 @@ components:
         stock room (i.e., furniture in the stock room is copied to the new room) or
 
         by specifying the background, width, height, and adding furniture manually.'
-    RoomPrivacySettingType.closed:
-      enum:
-      - closed
-      type: string
-    ApiUpdateRoomRequest:
-      properties:
-        spawn:
-          $ref: '#/components/schemas/RoomSpawn'
-          description: Spawn point for users who enter the room.
-        accessAllowList:
-          items:
-            type: string
-          type: array
-        isAccessRestricted:
-          type: boolean
-        disableMemberEditing:
-          type: boolean
-          description: The room's editing restrictions. If true, only floor managers can edit (can be overridden by explicit per-zone permissions)
-        height:
-          type: integer
-          format: int32
-          description: The width of the floor in pixels
-          minimum: 800
-          maximum: 6400
-        width:
-          type: integer
-          format: int32
-          description: The width of the floor in pixels
-          minimum: 800
-          maximum: 6400
-        roomTemplateId:
-          type: string
-          description: 'The room template whose attributes to copy.  If ''stockBackgroundId'' is
-
-            also specified, it is applied after the template.'
-          minLength: 1
-        stockBackgroundId:
-          type: string
-          description: The stock background to apply to the room.
-          minLength: 1
-        privacySettings:
-          $ref: '#/components/schemas/ApiRoomPrivacySettings'
-          description: The privacy settings for the room.
-        audioRange:
-          anyOf:
-          - type: number
-            format: double
-          - type: string
-            enum:
-            - room
-          description: The radius, in pixels, for which a user's voice can be heard.
-        capacity:
-          type: number
-          format: double
-          description: The maximum capacity of the room.
-          maximum: 200
-          minimum: 1
-        displayName:
-          type: string
-          description: The name of the room.
-          minLength: 1
-      type: object
-      description: 'A request to update an existing room.  Any fields not specified are left
-
-        unchanged.'
-    ApiRoomPrivacySettings:
+    RoomPrivacySettings:
       anyOf:
-      - $ref: '#/components/schemas/RoomPrivacySettings'
       - properties:
-          data:
-            properties:
-              password:
-                type: string
-                description: The password for this room. Attendees will be prompted before joining
-                minLength: 4
-            required:
-            - password
-            type: object
           type:
-            $ref: '#/components/schemas/RoomPrivacySettingType.password'
+            $ref: '#/components/schemas/RoomPrivacySettingType.open'
         required:
-        - data
+        - type
+        type: object
+      - properties:
+          type:
+            $ref: '#/components/schemas/RoomPrivacySettingType.closed'
+        required:
         - type
         type: object
     RoomPrivacySettingType.open:
       enum:
       - open
       type: string
+    RoomPrivacySettingType.password:
+      enum:
+      - password
+      type: string
+    RoomSpawn:
+      properties:
+        main:
+          properties:
+            height:
+              type: number
+              format: double
+            width:
+              type: number
+              format: double
+            y:
+              type: number
+              format: double
+            x:
+              type: number
+              format: double
+          required:
+          - y
+          - x
+          type: object
+          description: The main spawn point.
+      required:
+      - main
+      type: object
   securitySchemes:
     firebase:
       type: http

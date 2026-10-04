@@ -114,10 +114,27 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    ApiHandleTranscriptionStartedRequest:
+    ApiTranscription:
       properties:
         recordingGroupId:
           type: string
+        summaryJob:
+          properties:
+            status:
+              type: string
+              enum:
+              - in-progress
+              - error
+              - finished
+            id:
+              type: string
+          required:
+          - status
+          - id
+          type: object
+        endTimestamp:
+          type: number
+          format: double
         startTimestamp:
           type: number
           format: double
@@ -147,27 +164,10 @@ components:
       - endTimestamp
       - id
       type: object
-    ApiTranscription:
+    ApiHandleTranscriptionStartedRequest:
       properties:
         recordingGroupId:
           type: string
-        summaryJob:
-          properties:
-            status:
-              type: string
-              enum:
-              - in-progress
-              - error
-              - finished
-            id:
-              type: string
-          required:
-          - status
-          - id
-          type: object
-        endTimestamp:
-          type: number
-          format: double
         startTimestamp:
           type: number
           format: double

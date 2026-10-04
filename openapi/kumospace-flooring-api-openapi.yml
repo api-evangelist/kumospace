@@ -58,6 +58,10 @@ paths:
               $ref: '#/components/schemas/ApiCreateStockBackgroundRequest'
 components:
   schemas:
+    BackgroundType.singleTile:
+      enum:
+      - singleTile
+      type: string
     SingleTileBackground:
       description: A background with a single tile repeated across the room.
       properties:
@@ -79,10 +83,6 @@ components:
       - height
       type: object
       additionalProperties: false
-    BackgroundType.singleTile:
-      enum:
-      - singleTile
-      type: string
     ApiCreateStockBackgroundRequest:
       allOf:
       - properties:

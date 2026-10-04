@@ -64,6 +64,22 @@ components:
       - education
       - friends
       type: string
+    ApiCreateDemoSpaceRequest:
+      description: A request to create a new space.
+      properties:
+        useCase:
+          $ref: '#/components/schemas/UseCase'
+          description: The main purpose of this space.
+        roomTemplateId:
+          type: string
+          description: 'The template to use for the default room.  Defaults to a template
+
+            matching the request''s useCase property.'
+        isDryRun:
+          type: boolean
+          description: If true, perform all validation, but don't actually create the space.
+      type: object
+      additionalProperties: false
     ApiClaimDemoSpaceRequest:
       description: A request for a user to claim a demo space
       properties:
@@ -82,22 +98,6 @@ components:
       - newSpaceName
       - newDisplayName
       - newUseCase
-      type: object
-      additionalProperties: false
-    ApiCreateDemoSpaceRequest:
-      description: A request to create a new space.
-      properties:
-        useCase:
-          $ref: '#/components/schemas/UseCase'
-          description: The main purpose of this space.
-        roomTemplateId:
-          type: string
-          description: 'The template to use for the default room.  Defaults to a template
-
-            matching the request''s useCase property.'
-        isDryRun:
-          type: boolean
-          description: If true, perform all validation, but don't actually create the space.
       type: object
       additionalProperties: false
     ApiCreateDemoSpaceResponse:

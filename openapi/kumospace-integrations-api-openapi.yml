@@ -168,6 +168,78 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    ZoomValidationEvent:
+      properties:
+        payload:
+          properties:
+            plainToken:
+              type: string
+          required:
+          - plainToken
+          type: object
+        event_ts:
+          type: number
+          format: double
+        event:
+          type: string
+          enum:
+          - endpoint.url_validation
+      required:
+      - payload
+      - event_ts
+      - event
+      type: object
+    APIUserIntegration:
+      properties:
+        connectedAccountName:
+          type: string
+        connected:
+          type: boolean
+        integrationType:
+          $ref: '#/components/schemas/Integration'
+        integrationId:
+          type: string
+      required:
+      - connected
+      - integrationType
+      - integrationId
+      type: object
+    Integration:
+      enum:
+      - microsoft-teams-status
+      - zoom-status
+      - google-calendar
+      - microsoft-outlook
+      type: string
+    ZoomDeauthorizedEvent:
+      properties:
+        payload:
+          properties:
+            client_id:
+              type: string
+            deauthorization_time:
+              type: string
+            signature:
+              type: string
+            user_id:
+              type: string
+            account_id:
+              type: string
+          required:
+          - client_id
+          - deauthorization_time
+          - signature
+          - user_id
+          - account_id
+          type: object
+        event:
+          type: string
+          enum:
+          - app_deauthorized
+      required:
+      - payload
+      - event
+      type: object
     ZoomParticipantUpdateEvent:
       properties:
         payload:
@@ -204,78 +276,6 @@ components:
       - payload
       - event_ts
       - event
-      type: object
-    Integration:
-      enum:
-      - microsoft-teams-status
-      - zoom-status
-      - google-calendar
-      - microsoft-outlook
-      type: string
-    ZoomValidationEvent:
-      properties:
-        payload:
-          properties:
-            plainToken:
-              type: string
-          required:
-          - plainToken
-          type: object
-        event_ts:
-          type: number
-          format: double
-        event:
-          type: string
-          enum:
-          - endpoint.url_validation
-      required:
-      - payload
-      - event_ts
-      - event
-      type: object
-    ZoomDeauthorizedEvent:
-      properties:
-        payload:
-          properties:
-            client_id:
-              type: string
-            deauthorization_time:
-              type: string
-            signature:
-              type: string
-            user_id:
-              type: string
-            account_id:
-              type: string
-          required:
-          - client_id
-          - deauthorization_time
-          - signature
-          - user_id
-          - account_id
-          type: object
-        event:
-          type: string
-          enum:
-          - app_deauthorized
-      required:
-      - payload
-      - event
-      type: object
-    APIUserIntegration:
-      properties:
-        connectedAccountName:
-          type: string
-        connected:
-          type: boolean
-        integrationType:
-          $ref: '#/components/schemas/Integration'
-        integrationId:
-          type: string
-      required:
-      - connected
-      - integrationType
-      - integrationId
       type: object
   securitySchemes:
     firebase:

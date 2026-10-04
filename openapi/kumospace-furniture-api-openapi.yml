@@ -120,30 +120,6 @@ paths:
           type: string
 components:
   schemas:
-    FurnitureBehaviorType.soundCloud:
-      enum:
-      - soundcloud
-      type: string
-    FurnitureBehaviorType.spotify:
-      enum:
-      - spotify
-      type: string
-    LinkType.miro:
-      enum:
-      - miro
-      type: string
-    FurnitureRotation:
-      type: number
-      enum:
-      - 0
-      - 90
-      - 180
-      - 270
-      description: Rotation in clockwise-degrees.
-    FurnitureBehaviorType.link:
-      enum:
-      - link
-      type: string
     FurnitureBehaviorType.chess:
       enum:
       - chess
@@ -152,80 +128,150 @@ components:
       enum:
       - horsepaste
       type: string
-    Range.nearby:
+    FurnitureBehaviorType.staticMusic:
       enum:
-      - nearby
+      - staticMusic
       type: string
-    FurnitureBehaviorType.customImage:
+    FurnitureBehaviorType.soundCloud:
       enum:
-      - customImage
+      - soundcloud
       type: string
-    FurnitureBehaviorType.drink:
+    FurnitureBehaviorType.spotify:
       enum:
-      - drink
-      type: string
-    FurnitureBehaviorType.elevator:
-      enum:
-      - elevator
-      type: string
-    LinkType.custom:
-      enum:
-      - custom
+      - spotify
       type: string
     Range.room:
       enum:
       - room
       type: string
-    FurnitureSoundEffectAction:
-      type: string
+    FurnitureBehaviorType.none:
       enum:
-      - playSound
-      - showConfetti
       - none
-    LinkType.legacy:
-      enum:
-      - legacy
       type: string
-    FurnitureBehaviorType.timer:
+    ApiUpdateFurnitureRequest:
+      properties:
+        behavior:
+          $ref: '#/components/schemas/ApiBehaviorWrite'
+          description: The new behavior of the furniture.
+        rotation:
+          $ref: '#/components/schemas/FurnitureRotation'
+          description: The new rotation of this furniture.
+        elevation:
+          type: number
+          format: double
+          description: The new elevation of this furniture.  Value should be between 0 and 10 inclusive.
+          minimum: 0
+          maximum: 10
+        y:
+          type: number
+          format: double
+          description: The new y-position of the center of the furniture.  (0,0) is the top left of the room.
+        x:
+          type: number
+          format: double
+          description: The new x-position of the center of the furniture.  (0,0) is the top left of the room.
+        stockFurnitureId:
+          type: string
+          description: The stock furniture whose attributes (width, height, image) to copy.
+      type: object
+      description: 'A request to update an existing piece of furniture.  Any fields not sent are
+
+        preserved.'
+    LinkType.metroretro:
       enum:
-      - timer
+      - metroretro
+      type: string
+    FurnitureBehaviorType.link:
+      enum:
+      - link
+      type: string
+    FurnitureBehaviorType.customImage:
+      enum:
+      - customImage
+      type: string
+    ApiCreateFurnitureRequest:
+      properties:
+        rotation:
+          $ref: '#/components/schemas/FurnitureRotation'
+          description: The rotation of this furniture.  Defaults to '0°'.
+        elevation:
+          type: number
+          format: double
+          description: The elevation of the furniture.  Defaults to stock funiture's value.
+          minimum: 0
+          maximum: 10
+        y:
+          type: number
+          format: double
+          description: The y-position of the center of the furniture.  (0,0) is the top left of the room.
+        x:
+          type: number
+          format: double
+          description: The x-position of the center of the furniture.  (0,0) is the top left of the room.
+        stockFurnitureId:
+          type: string
+          description: The stock furniture whose attributes (width, height, image) to copy.
+          minLength: 1
+      required:
+      - y
+      - x
+      - stockFurnitureId
+      type: object
+      description: A request to add a piece of stock furniture to a room.
+    CrosswordPuzzle:
+      properties:
+        stats:
+          properties:
+            numSolves:
+              type: number
+              format: double
+          required:
+          - numSolves
+          type: object
+        isPublic:
+          type: boolean
+        content:
+          properties:
+            info:
+              properties:
+                type:
+                  type: string
+                  enum:
+                  - Mini Puzzle
+                  - Daily Puzzle
+                title:
+                  type: string
+                description:
+                  type: string
+                author:
+                  type: string
+              required:
+              - type
+              - title
+              - description
+              - author
+              type: object
+          required:
+          - info
+          type: object
+        pid:
+          type: string
+      required:
+      - stats
+      - content
+      - pid
+      type: object
+    FurnitureBehaviorType.crossword:
+      enum:
+      - crossword
+      type: string
+    FurnitureBehaviorType.stickyNote:
+      enum:
+      - stickyNote
       type: string
     FurnitureBehaviorType.youtube:
       enum:
       - youtube
-      type: string
-    FurnitureBehaviorType.soundEffect:
-      enum:
-      - soundEffect
-      type: string
-    DrinkType:
-      enum:
-      - boba
-      - beer
-      - champagne
-      - coffee
-      - cola
-      - cookieMitten
-      - cookieStar
-      - cookieTree
-      - cupcakeBlue
-      - cupcakeGreen
-      - cupcakePink
-      - cupcakeRed
-      - donutBlue
-      - donutChocolate
-      - donutGlazed
-      - donutStrawberry
-      - juice
-      - margarita
-      - redWine
-      - water
-      - whiskey
-      - hawaiianPizza
-      - plainPizza
-      - pepperoniPizza
-      - supremePizza
-      - veggiePizza
       type: string
     ApiBehaviorWrite:
       anyOf:
@@ -546,6 +592,40 @@ components:
       enum:
       - whiteboard
       type: string
+    FurnitureBehaviorType.customText:
+      enum:
+      - customText
+      type: string
+    FurnitureBehaviorType.kiosk:
+      enum:
+      - kiosk
+      type: string
+    FurnitureBehaviorType.drink:
+      enum:
+      - drink
+      type: string
+    FurnitureBehaviorType.gif:
+      enum:
+      - giphy
+      type: string
+    FurnitureBehaviorType.pictureFrame:
+      enum:
+      - pictureFrame
+      type: string
+    LinkType.miro:
+      enum:
+      - miro
+      type: string
+    FurnitureSoundEffectAction:
+      type: string
+      enum:
+      - playSound
+      - showConfetti
+      - none
+    LinkType.custom:
+      enum:
+      - custom
+      type: string
     ApiCustomLinkWrite:
       anyOf:
       - properties:
@@ -601,9 +681,62 @@ components:
         - data
         - type
         type: object
-    FurnitureBehaviorType.customText:
+    LinkType.legacy:
       enum:
-      - customText
+      - legacy
+      type: string
+    DrinkType:
+      enum:
+      - boba
+      - beer
+      - champagne
+      - coffee
+      - cola
+      - cookieMitten
+      - cookieStar
+      - cookieTree
+      - cupcakeBlue
+      - cupcakeGreen
+      - cupcakePink
+      - cupcakeRed
+      - donutBlue
+      - donutChocolate
+      - donutGlazed
+      - donutStrawberry
+      - juice
+      - margarita
+      - redWine
+      - water
+      - whiskey
+      - hawaiianPizza
+      - plainPizza
+      - pepperoniPizza
+      - supremePizza
+      - veggiePizza
+      type: string
+    FurnitureBehaviorType.timer:
+      enum:
+      - timer
+      type: string
+    Range.nearby:
+      enum:
+      - nearby
+      type: string
+    FurnitureRotation:
+      type: number
+      enum:
+      - 0
+      - 90
+      - 180
+      - 270
+      description: Rotation in clockwise-degrees.
+    FurnitureBehaviorType.soundEffect:
+      enum:
+      - soundEffect
+      type: string
+    FurnitureBehaviorType.elevator:
+      enum:
+      - elevator
       type: string
     LegacyApiCustomLinkWrite:
       properties:
@@ -618,139 +751,6 @@ components:
       required:
       - url
       type: object
-    FurnitureBehaviorType.crossword:
-      enum:
-      - crossword
-      type: string
-    FurnitureBehaviorType.staticMusic:
-      enum:
-      - staticMusic
-      type: string
-    LinkType.metroretro:
-      enum:
-      - metroretro
-      type: string
-    FurnitureBehaviorType.pictureFrame:
-      enum:
-      - pictureFrame
-      type: string
-    FurnitureBehaviorType.kiosk:
-      enum:
-      - kiosk
-      type: string
-    CrosswordPuzzle:
-      properties:
-        stats:
-          properties:
-            numSolves:
-              type: number
-              format: double
-          required:
-          - numSolves
-          type: object
-        isPublic:
-          type: boolean
-        content:
-          properties:
-            info:
-              properties:
-                type:
-                  type: string
-                  enum:
-                  - Mini Puzzle
-                  - Daily Puzzle
-                title:
-                  type: string
-                description:
-                  type: string
-                author:
-                  type: string
-              required:
-              - type
-              - title
-              - description
-              - author
-              type: object
-          required:
-          - info
-          type: object
-        pid:
-          type: string
-      required:
-      - stats
-      - content
-      - pid
-      type: object
-    FurnitureBehaviorType.gif:
-      enum:
-      - giphy
-      type: string
-    ApiCreateFurnitureRequest:
-      properties:
-        rotation:
-          $ref: '#/components/schemas/FurnitureRotation'
-          description: The rotation of this furniture.  Defaults to '0°'.
-        elevation:
-          type: number
-          format: double
-          description: The elevation of the furniture.  Defaults to stock funiture's value.
-          minimum: 0
-          maximum: 10
-        y:
-          type: number
-          format: double
-          description: The y-position of the center of the furniture.  (0,0) is the top left of the room.
-        x:
-          type: number
-          format: double
-          description: The x-position of the center of the furniture.  (0,0) is the top left of the room.
-        stockFurnitureId:
-          type: string
-          description: The stock furniture whose attributes (width, height, image) to copy.
-          minLength: 1
-      required:
-      - y
-      - x
-      - stockFurnitureId
-      type: object
-      description: A request to add a piece of stock furniture to a room.
-    ApiUpdateFurnitureRequest:
-      properties:
-        behavior:
-          $ref: '#/components/schemas/ApiBehaviorWrite'
-          description: The new behavior of the furniture.
-        rotation:
-          $ref: '#/components/schemas/FurnitureRotation'
-          description: The new rotation of this furniture.
-        elevation:
-          type: number
-          format: double
-          description: The new elevation of this furniture.  Value should be between 0 and 10 inclusive.
-          minimum: 0
-          maximum: 10
-        y:
-          type: number
-          format: double
-          description: The new y-position of the center of the furniture.  (0,0) is the top left of the room.
-        x:
-          type: number
-          format: double
-          description: The new x-position of the center of the furniture.  (0,0) is the top left of the room.
-        stockFurnitureId:
-          type: string
-          description: The stock furniture whose attributes (width, height, image) to copy.
-      type: object
-      description: 'A request to update an existing piece of furniture.  Any fields not sent are
-
-        preserved.'
-    FurnitureBehaviorType.none:
-      enum:
-      - none
-      type: string
-    FurnitureBehaviorType.stickyNote:
-      enum:
-      - stickyNote
-      type: string
   securitySchemes:
     firebase:
       type: http

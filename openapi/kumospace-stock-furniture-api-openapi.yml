@@ -151,6 +151,463 @@ paths:
           minimum: 1
 components:
   schemas:
+    FurnitureBehaviorType.chess:
+      enum:
+      - chess
+      type: string
+    FurnitureBehaviorType.horsepaste:
+      enum:
+      - horsepaste
+      type: string
+    FurnitureBehaviorType.staticMusic:
+      enum:
+      - staticMusic
+      type: string
+    FurnitureBehaviorType.soundCloud:
+      enum:
+      - soundcloud
+      type: string
+    ApiCreateStockFurnitureRequest:
+      properties:
+        isDraft:
+          type: boolean
+          description: 'Whether this furniture is in draft (i.e., not viewable in the room builder).
+
+            Defaults to false.'
+        behavior:
+          $ref: '#/components/schemas/ApiBehavior'
+          description: The behavior for this piece of furniture.
+        allowedBehaviors:
+          items:
+            $ref: '#/components/schemas/FurnitureBehaviorType'
+          type: array
+          description: 'Behavior that the furniture is allowed to have.  Must always include at
+
+            least the default behavior.'
+        thumbnailUrl:
+          type: string
+          description: 'A url containing a 120x120 thumbnail of the furniture in the 0°
+
+            orientation.'
+          pattern: ^https://
+        imageUrls:
+          properties:
+            '0':
+              $ref: '#/components/schemas/RotatedFurniture'
+            '90':
+              $ref: '#/components/schemas/RotatedFurniture'
+            '180':
+              $ref: '#/components/schemas/RotatedFurniture'
+            '270':
+              $ref: '#/components/schemas/RotatedFurniture'
+          required:
+          - '0'
+          type: object
+          description: 'Full size images of the stock furniture.  The key is the degrees of
+
+            clockwise rotation from the default (0°).  If a furniture only has one
+
+            image at 0°, it cannot not be rotated.'
+        tags:
+          items:
+            type: string
+          type: array
+          description: Tags used for grouping / filtering this furniture.
+        elevation:
+          type: number
+          format: double
+          description: 'The elevation (z-index) of this furniture.  Higher elevation is drawn on
+
+            top of lower elevation.  If unspecified, uses 5 for non-rugs and 0 for
+
+            rugs.'
+          minimum: 0
+          maximum: 10
+        category:
+          $ref: '#/components/schemas/FurnitureCategory'
+          description: The main category used to group this furniture.
+        description:
+          type: string
+          description: The description of the stock furniture.
+          minLength: 1
+        title:
+          type: string
+          description: A short title.
+          minLength: 1
+      required:
+      - behavior
+      - allowedBehaviors
+      - thumbnailUrl
+      - imageUrls
+      - tags
+      - category
+      - description
+      - title
+      type: object
+      description: A request to add a new piece of stock furniture to the furniture gallery.
+    FurnitureBehaviorType.spotify:
+      enum:
+      - spotify
+      type: string
+    FurnitureBehaviorType.jstris:
+      enum:
+      - jstris
+      type: string
+    FurnitureBehaviorType.jumpScare:
+      enum:
+      - jumpScare
+      type: string
+    Range.room:
+      enum:
+      - room
+      type: string
+    FurnitureBehaviorType.none:
+      enum:
+      - none
+      type: string
+    InstrumentType:
+      type: string
+      enum:
+      - banjo
+    FurnitureBehaviorType.link:
+      enum:
+      - link
+      type: string
+    PaginatedResponse_ApiStockFurnitureVariantGroups_:
+      description: A page of items.  Useful for breaking up a large dataset into smaller chunks.
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/ApiStockFurnitureVariantGroups'
+          type: array
+          description: The page of items.
+        metadata:
+          properties:
+            count:
+              type: number
+              format: double
+              description: The number of items sent.
+            next:
+              type: string
+              description: 'A pagination cursor.  If specified, there is another page of results that
+
+                can be requested by appending this value as a query parameter called
+
+                "next".'
+          required:
+          - count
+          type: object
+          description: 'Metadata about the page of items.  Contains a pagination cursor called
+
+            "next" if there is another page of items.'
+      required:
+      - items
+      - metadata
+      type: object
+      additionalProperties: false
+    FurnitureBehaviorType.customImage:
+      enum:
+      - customImage
+      type: string
+    CrosswordPuzzle:
+      properties:
+        stats:
+          properties:
+            numSolves:
+              type: number
+              format: double
+          required:
+          - numSolves
+          type: object
+        isPublic:
+          type: boolean
+        content:
+          properties:
+            info:
+              properties:
+                type:
+                  type: string
+                  enum:
+                  - Mini Puzzle
+                  - Daily Puzzle
+                title:
+                  type: string
+                description:
+                  type: string
+                author:
+                  type: string
+              required:
+              - type
+              - title
+              - description
+              - author
+              type: object
+          required:
+          - info
+          type: object
+        pid:
+          type: string
+      required:
+      - stats
+      - content
+      - pid
+      type: object
+    FurnitureBehaviorType.crossword:
+      enum:
+      - crossword
+      type: string
+    FurnitureBehaviorType.stickyNote:
+      enum:
+      - stickyNote
+      type: string
+    FurnitureBehaviorType.youtube:
+      enum:
+      - youtube
+      type: string
+    FurnitureBehaviorType.whiteboard:
+      enum:
+      - whiteboard
+      type: string
+    LinkType:
+      enum:
+      - legacy
+      - custom
+      - miro
+      - metroretro
+      type: string
+    FurnitureBehaviorType.customText:
+      enum:
+      - customText
+      type: string
+    PaginatedResponse_ApiStockFurniture_:
+      description: A page of items.  Useful for breaking up a large dataset into smaller chunks.
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/ApiStockFurniture'
+          type: array
+          description: The page of items.
+        metadata:
+          properties:
+            count:
+              type: number
+              format: double
+              description: The number of items sent.
+            next:
+              type: string
+              description: 'A pagination cursor.  If specified, there is another page of results that
+
+                can be requested by appending this value as a query parameter called
+
+                "next".'
+          required:
+          - count
+          type: object
+          description: 'Metadata about the page of items.  Contains a pagination cursor called
+
+            "next" if there is another page of items.'
+      required:
+      - items
+      - metadata
+      type: object
+      additionalProperties: false
+    FurnitureBehaviorType.kiosk:
+      enum:
+      - kiosk
+      type: string
+    ApiStockFurniture:
+      properties:
+        variantGroupId:
+          type: string
+          description: If the stock furniture is part of a variant group.
+        releasedAt:
+          type: number
+          format: double
+          description: When the furniture was released, in unix seconds.
+        isDraft:
+          type: boolean
+          description: Whether this furniture is in draft (i.e., not viewable in the room builder).
+        behavior:
+          $ref: '#/components/schemas/ApiBehavior'
+          description: The default behavior for this stock furniture.
+        allowedBehaviors:
+          items:
+            $ref: '#/components/schemas/FurnitureBehaviorType'
+          type: array
+          description: 'Behavior that the furniture is allowed to have.  Will always include at
+
+            least the default behavior.'
+        thumbnailUrl:
+          type: string
+          description: A url with a 120x120 thumbnail of this furniture in the 0° orientation.
+        imageUrls:
+          properties:
+            '0':
+              $ref: '#/components/schemas/RotatedFurniture'
+            '90':
+              $ref: '#/components/schemas/RotatedFurniture'
+            '180':
+              $ref: '#/components/schemas/RotatedFurniture'
+            '270':
+              $ref: '#/components/schemas/RotatedFurniture'
+          required:
+          - '0'
+          type: object
+          description: 'Full size images of the stock furniture.  The key is the degrees of
+
+            clockwise rotation from the default (0°).  If a furniture only has one
+
+            image at 0°, it cannot not be rotated.'
+        imageUrl:
+          type: string
+          description: A url with the full-size image of this furniture in the 0° orientation.
+        imgHeight:
+          type: number
+          format: double
+          description: 'The actual height of the furniture image, in pixels.  This can be different
+
+            from the clickable height to allow for shadows.'
+        imgWidth:
+          type: number
+          format: double
+          description: 'The actual width of the furniture image, in pixels.  This can be different
+
+            from the clickable width to allow for shadows.'
+        height:
+          type: number
+          format: double
+          description: The clickable height of the furniture in pixels, centered in the image.
+        width:
+          type: number
+          format: double
+          description: The clickable width of the furniture in pixels, centered in the image.
+        tags:
+          items:
+            type: string
+          type: array
+          description: Tags used for grouping / filtering this furniture.
+        elevation:
+          type: number
+          format: double
+          description: 'The elevation (z-index) of this furniture.  Higher elevation is drawn on
+
+            top of lower elevation.'
+        category:
+          $ref: '#/components/schemas/FurnitureCategory'
+          description: The main category used to group this furniture.
+        description:
+          type: string
+          description: The description of this furniture.
+        title:
+          type: string
+          description: A short title.
+        id:
+          type: string
+          description: A unique id for this stock furniture.
+      required:
+      - isDraft
+      - behavior
+      - allowedBehaviors
+      - thumbnailUrl
+      - imageUrls
+      - imageUrl
+      - imgHeight
+      - imgWidth
+      - height
+      - width
+      - tags
+      - elevation
+      - category
+      - description
+      - title
+      - id
+      type: object
+      description: Stock furniture that can be placed in a room.
+    FurnitureBehaviorType.drink:
+      enum:
+      - drink
+      type: string
+    FurnitureBehaviorType.gif:
+      enum:
+      - giphy
+      type: string
+    GenericVariantType:
+      properties:
+        name:
+          type: string
+        stockFurnitureId:
+          type: string
+      required:
+      - name
+      - stockFurnitureId
+      type: object
+    FurnitureBehaviorType.pictureFrame:
+      enum:
+      - pictureFrame
+      type: string
+    StaticMusicGenre:
+      enum:
+      - dance
+      - piano
+      - stereo
+      type: string
+    VariantType.color:
+      enum:
+      - color
+      type: string
+    FurnitureSoundEffectAction:
+      type: string
+      enum:
+      - playSound
+      - showConfetti
+      - none
+    ColorVariantType:
+      properties:
+        colors:
+          items:
+            type: string
+          type: array
+          description: The name of the space containing the room to duplicate.
+          minLength: 1
+          maxLength: 2
+        name:
+          type: string
+        stockFurnitureId:
+          type: string
+      required:
+      - colors
+      - name
+      - stockFurnitureId
+      type: object
+    DrinkType:
+      enum:
+      - boba
+      - beer
+      - champagne
+      - coffee
+      - cola
+      - cookieMitten
+      - cookieStar
+      - cookieTree
+      - cupcakeBlue
+      - cupcakeGreen
+      - cupcakePink
+      - cupcakeRed
+      - donutBlue
+      - donutChocolate
+      - donutGlazed
+      - donutStrawberry
+      - juice
+      - margarita
+      - redWine
+      - water
+      - whiskey
+      - hawaiianPizza
+      - plainPizza
+      - pepperoniPizza
+      - supremePizza
+      - veggiePizza
+      type: string
     DbStockFurnitureVariantGroups:
       allOf:
       - properties:
@@ -187,92 +644,62 @@ components:
           - variants
           - type
           type: object
-    FurnitureBehaviorType.soundCloud:
+    FurnitureBehaviorType.timer:
       enum:
-      - soundcloud
+      - timer
       type: string
-    FurnitureBehaviorType.jumpScare:
-      enum:
-      - jumpScare
-      type: string
-    FurnitureBehaviorType.spotify:
-      enum:
-      - spotify
-      type: string
-    FurnitureBehaviorType.link:
-      enum:
-      - link
-      type: string
-    FurnitureBehaviorType.chess:
-      enum:
-      - chess
-      type: string
-    FurnitureBehaviorType.horsepaste:
-      enum:
-      - horsepaste
-      type: string
+    ApiStockFurnitureVariantGroups:
+      allOf:
+      - $ref: '#/components/schemas/DbStockFurnitureVariantGroups'
+      - properties:
+          title:
+            type: string
+            description: Pulled from first variant
+          releasedAt:
+            type: number
+            format: double
+            description: Pulled from the most recent furniture variation
+          id:
+            type: string
+        required:
+        - title
+        - id
+        type: object
+    Record_string.never_:
+      properties: {}
+      type: object
+      description: Construct a type with a set of properties K of type T
     Range.nearby:
       enum:
       - nearby
       type: string
-    FurnitureBehaviorType.customImage:
+    FurnitureBehaviorType:
       enum:
-      - customImage
-      type: string
-    FurnitureBehaviorType.drink:
-      enum:
+      - none
       - drink
-      type: string
-    FurnitureBehaviorType.elevator:
-      enum:
+      - customImage
+      - customText
+      - youtube
       - elevator
+      - whiteboard
+      - spotify
+      - staticMusic
+      - horsepaste
+      - chess
+      - link
+      - giphy
+      - soundEffect
+      - timer
+      - jstris
+      - soundcloud
+      - jumpScare
+      - instrument
+      - broadcast
+      - stickyNote
+      - crossword
+      - kiosk
+      - pictureFrame
       type: string
-    VariantType.color:
-      enum:
-      - color
-      type: string
-    GenericVariantType:
-      properties:
-        name:
-          type: string
-        stockFurnitureId:
-          type: string
-      required:
-      - name
-      - stockFurnitureId
-      type: object
-    PaginatedResponse_ApiStockFurnitureVariantGroups_:
-      description: A page of items.  Useful for breaking up a large dataset into smaller chunks.
-      properties:
-        items:
-          items:
-            $ref: '#/components/schemas/ApiStockFurnitureVariantGroups'
-          type: array
-          description: The page of items.
-        metadata:
-          properties:
-            count:
-              type: number
-              format: double
-              description: The number of items sent.
-            next:
-              type: string
-              description: 'A pagination cursor.  If specified, there is another page of results that
-
-                can be requested by appending this value as a query parameter called
-
-                "next".'
-          required:
-          - count
-          type: object
-          description: 'Metadata about the page of items.  Contains a pagination cursor called
-
-            "next" if there is another page of items.'
-      required:
-      - items
-      - metadata
-      type: object
-      additionalProperties: false
     Dimensions:
       properties:
         width:
@@ -291,23 +718,26 @@ components:
       - width
       - height
       type: object
-    InstrumentType:
+    FurnitureBehaviorType.soundEffect:
+      enum:
+      - soundEffect
       type: string
+    FurnitureBehaviorType.instrument:
       enum:
-      - banjo
-    VariantType.generic:
-      enum:
-      - generic
+      - instrument
       type: string
-    StaticMusicGenre:
+    FurnitureCategory:
+      description: The main categories for grouping furniture.
       enum:
-      - dance
-      - piano
-      - stereo
-      type: string
-    FurnitureBehaviorType.none:
-      enum:
-      - none
+      - seating
+      - tables
+      - decor
+      - plants
+      - ground
+      - rugs
+      - activities
+      - seasonal
+      - custom
       type: string
     ApiBehavior:
       anyOf:
@@ -855,150 +1285,6 @@ components:
         - type
         type: object
       description: Behavior types, as returned by the api.
-    Range.room:
-      enum:
-      - room
-      type: string
-    FurnitureSoundEffectAction:
-      type: string
-      enum:
-      - playSound
-      - showConfetti
-      - none
-    FurnitureBehaviorType.timer:
-      enum:
-      - timer
-      type: string
-    FurnitureBehaviorType.youtube:
-      enum:
-      - youtube
-      type: string
-    FurnitureBehaviorType.jstris:
-      enum:
-      - jstris
-      type: string
-    LinkType:
-      enum:
-      - legacy
-      - custom
-      - miro
-      - metroretro
-      type: string
-    FurnitureBehaviorType.soundEffect:
-      enum:
-      - soundEffect
-      type: string
-    DrinkType:
-      enum:
-      - boba
-      - beer
-      - champagne
-      - coffee
-      - cola
-      - cookieMitten
-      - cookieStar
-      - cookieTree
-      - cupcakeBlue
-      - cupcakeGreen
-      - cupcakePink
-      - cupcakeRed
-      - donutBlue
-      - donutChocolate
-      - donutGlazed
-      - donutStrawberry
-      - juice
-      - margarita
-      - redWine
-      - water
-      - whiskey
-      - hawaiianPizza
-      - plainPizza
-      - pepperoniPizza
-      - supremePizza
-      - veggiePizza
-      type: string
-    FurnitureBehaviorType.whiteboard:
-      enum:
-      - whiteboard
-      type: string
-    ApiCreateStockFurnitureRequest:
-      properties:
-        isDraft:
-          type: boolean
-          description: 'Whether this furniture is in draft (i.e., not viewable in the room builder).
-
-            Defaults to false.'
-        behavior:
-          $ref: '#/components/schemas/ApiBehavior'
-          description: The behavior for this piece of furniture.
-        allowedBehaviors:
-          items:
-            $ref: '#/components/schemas/FurnitureBehaviorType'
-          type: array
-          description: 'Behavior that the furniture is allowed to have.  Must always include at
-
-            least the default behavior.'
-        thumbnailUrl:
-          type: string
-          description: 'A url containing a 120x120 thumbnail of the furniture in the 0°
-
-            orientation.'
-          pattern: ^https://
-        imageUrls:
-          properties:
-            '0':
-              $ref: '#/components/schemas/RotatedFurniture'
-            '90':
-              $ref: '#/components/schemas/RotatedFurniture'
-            '180':
-              $ref: '#/components/schemas/RotatedFurniture'
-            '270':
-              $ref: '#/components/schemas/RotatedFurniture'
-          required:
-          - '0'
-          type: object
-          description: 'Full size images of the stock furniture.  The key is the degrees of
-
-            clockwise rotation from the default (0°).  If a furniture only has one
-
-            image at 0°, it cannot not be rotated.'
-        tags:
-          items:
-            type: string
-          type: array
-          description: Tags used for grouping / filtering this furniture.
-        elevation:
-          type: number
-          format: double
-          description: 'The elevation (z-index) of this furniture.  Higher elevation is drawn on
-
-            top of lower elevation.  If unspecified, uses 5 for non-rugs and 0 for
-
-            rugs.'
-          minimum: 0
-          maximum: 10
-        category:
-          $ref: '#/components/schemas/FurnitureCategory'
-          description: The main category used to group this furniture.
-        description:
-          type: string
-          description: The description of the stock furniture.
-          minLength: 1
-        title:
-          type: string
-          description: A short title.
-          minLength: 1
-      required:
-      - behavior
-      - allowedBehaviors
-      - thumbnailUrl
-      - imageUrls
-      - tags
-      - category
-      - description
-      - title
-      type: object
-      description: A request to add a new piece of stock furniture to the furniture gallery.
     RotatedFurniture:
       description: 'Furniture metadata for a given orientation.  Because furniture is rotated
 
@@ -1042,303 +1328,17 @@ components:
       - imgHeight
       type: object
       additionalProperties: false
-    FurnitureCategory:
-      description: The main categories for grouping furniture.
+    VariantType.generic:
       enum:
-      - seating
-      - tables
-      - decor
-      - plants
-      - ground
-      - rugs
-      - activities
-      - seasonal
-      - custom
-      type: string
-    PaginatedResponse_ApiStockFurniture_:
-      description: A page of items.  Useful for breaking up a large dataset into smaller chunks.
-      properties:
-        items:
-          items:
-            $ref: '#/components/schemas/ApiStockFurniture'
-          type: array
-          description: The page of items.
-        metadata:
-          properties:
-            count:
-              type: number
-              format: double
-              description: The number of items sent.
-            next:
-              type: string
-              description: 'A pagination cursor.  If specified, there is another page of results that
-
-                can be requested by appending this value as a query parameter called
-
-                "next".'
-          required:
-          - count
-          type: object
-          description: 'Metadata about the page of items.  Contains a pagination cursor called
-
-            "next" if there is another page of items.'
-      required:
-      - items
-      - metadata
-      type: object
-      additionalProperties: false
-    ApiStockFurniture:
-      properties:
-        variantGroupId:
-          type: string
-          description: If the stock furniture is part of a variant group.
-        releasedAt:
-          type: number
-          format: double
-          description: When the furniture was released, in unix seconds.
-        isDraft:
-          type: boolean
-          description: Whether this furniture is in draft (i.e., not viewable in the room builder).
-        behavior:
-          $ref: '#/components/schemas/ApiBehavior'
-          description: The default behavior for this stock furniture.
-        allowedBehaviors:
-          items:
-            $ref: '#/components/schemas/FurnitureBehaviorType'
-          type: array
-          description: 'Behavior that the furniture is allowed to have.  Will always include at
-
-            least the default behavior.'
-        thumbnailUrl:
-          type: string
-          description: A url with a 120x120 thumbnail of this furniture in the 0° orientation.
-        imageUrls:
-          properties:
-            '0':
-              $ref: '#/components/schemas/RotatedFurniture'
-            '90':
-              $ref: '#/components/schemas/RotatedFurniture'
-            '180':
-              $ref: '#/components/schemas/RotatedFurniture'
-            '270':
-              $ref: '#/components/schemas/RotatedFurniture'
-          required:
-          - '0'
-          type: object
-          description: 'Full size images of the stock furniture.  The key is the degrees of
-
-            clockwise rotation from the default (0°).  If a furniture only has one
-
-            image at 0°, it cannot not be rotated.'
-        imageUrl:
-          type: string
-          description: A url with the full-size image of this furniture in the 0° orientation.
-        imgHeight:
-          type: number
-          format: double
-          description: 'The actual height of the furniture image, in pixels.  This can be different
-
-            from the clickable height to allow for shadows.'
-        imgWidth:
-          type: number
-          format: double
-          description: 'The actual width of the furniture image, in pixels.  This can be different
-
-            from the clickable width to allow for shadows.'
-        height:
-          type: number
-          format: double
-          description: The clickable height of the furniture in pixels, centered in the image.
-        width:
-          type: number
-          format: double
-          description: The clickable width of the furniture in pixels, centered in the image.
-        tags:
-          items:
-            type: string
-          type: array
-          description: Tags used for grouping / filtering this furniture.
-        elevation:
-          type: number
-          format: double
-          description: 'The elevation (z-index) of this furniture.  Higher elevation is drawn on
-
-            top of lower elevation.'
-        category:
-          $ref: '#/components/schemas/FurnitureCategory'
-          description: The main category used to group this furniture.
-        description:
-          type: string
-          description: The description of this furniture.
-        title:
-          type: string
-          description: A short title.
-        id:
-          type: string
-          description: A unique id for this stock furniture.
-      required:
-      - isDraft
-      - behavior
-      - allowedBehaviors
-      - thumbnailUrl
-      - imageUrls
-      - imageUrl
-      - imgHeight
-      - imgWidth
-      - height
-      - width
-      - tags
-      - elevation
-      - category
-      - description
-      - title
-      - id
-      type: object
-      description: Stock furniture that can be placed in a room.
-    ApiStockFurnitureVariantGroups:
-      allOf:
-      - $ref: '#/components/schemas/DbStockFurnitureVariantGroups'
-      - properties:
-          title:
-            type: string
-            description: Pulled from first variant
-          releasedAt:
-            type: number
-            format: double
-            description: Pulled from the most recent furniture variation
-          id:
-            type: string
-        required:
-        - title
-        - id
-        type: object
-    FurnitureBehaviorType.crossword:
-      enum:
-      - crossword
-      type: string
-    FurnitureBehaviorType.staticMusic:
-      enum:
-      - staticMusic
-      type: string
-    ColorVariantType:
-      properties:
-        colors:
-          items:
-            type: string
-          type: array
-          description: The name of the space containing the room to duplicate.
-          minLength: 1
-          maxLength: 2
-        name:
-          type: string
-        stockFurnitureId:
-          type: string
-      required:
-      - colors
-      - name
-      - stockFurnitureId
-      type: object
-    Record_string.never_:
-      properties: {}
-      type: object
-      description: Construct a type with a set of properties K of type T
-    FurnitureBehaviorType.pictureFrame:
-      enum:
-      - pictureFrame
-      type: string
-    FurnitureBehaviorType.kiosk:
-      enum:
-      - kiosk
-      type: string
-    FurnitureBehaviorType:
-      enum:
-      - none
-      - drink
-      - customImage
-      - customText
-      - youtube
-      - elevator
-      - whiteboard
-      - spotify
-      - staticMusic
-      - horsepaste
-      - chess
-      - link
-      - giphy
-      - soundEffect
-      - timer
-      - jstris
-      - soundcloud
-      - jumpScare
-      - instrument
-      - broadcast
-      - stickyNote
-      - crossword
-      - kiosk
-      - pictureFrame
-      type: string
-    CrosswordPuzzle:
-      properties:
-        stats:
-          properties:
-            numSolves:
-              type: number
-              format: double
-          required:
-          - numSolves
-          type: object
-        isPublic:
-          type: boolean
-        content:
-          properties:
-            info:
-              properties:
-                type:
-                  type: string
-                  enum:
-                  - Mini Puzzle
-                  - Daily Puzzle
-                title:
-                  type: string
-                description:
-                  type: string
-                author:
-                  type: string
-              required:
-              - type
-              - title
-              - description
-              - author
-              type: object
-          required:
-          - info
-          type: object
-        pid:
-          type: string
-      required:
-      - stats
-      - content
-      - pid
-      type: object
-    FurnitureBehaviorType.gif:
-      enum:
-      - giphy
-      type: string
-    FurnitureBehaviorType.customText:
-      enum:
-      - customText
-      type: string
-    FurnitureBehaviorType.stickyNote:
-      enum:
-      - stickyNote
-      type: string
-    FurnitureBehaviorType.instrument:
-      enum:
-      - instrument
+      - generic
       type: string
     FurnitureBehaviorType.broadcast:
       enum:
       - broadcast
+      type: string
+    FurnitureBehaviorType.elevator:
+      enum:
+      - elevator
       type: string
   securitySchemes:
     firebase:

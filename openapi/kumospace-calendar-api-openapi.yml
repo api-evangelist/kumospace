@@ -155,25 +155,6 @@ paths:
       parameters: []
 components:
   schemas:
-    ApiCalendarEventAttendee:
-      description: An object for attendee related information for the client.
-      properties:
-        email:
-          type: string
-        firebaseUid:
-          type: string
-        avatarUrl:
-          type: string
-        displayName:
-          type: string
-        replyStatus:
-          $ref: '#/components/schemas/CalendarEventReplyStatus'
-      required:
-      - email
-      - displayName
-      - replyStatus
-      type: object
-      additionalProperties: false
     ApiUpdateConnectedCalendarsRequest:
       description: A request to update the user's connected calendars preferences.
       properties:
@@ -193,15 +174,29 @@ components:
       - calendarIsConnectedUpdates
       type: object
       additionalProperties: false
-    ApiUpdateCalendarEventReplyRequest:
-      description: A request to update event reply status
+    ApiEnableGcalIntegrationRequest:
+      description: A request to enable Google Calendar integration.
       properties:
-        eventId:
+        authCode:
+          type: string
+      type: object
+      additionalProperties: false
+    ApiCalendarEventAttendee:
+      description: An object for attendee related information for the client.
+      properties:
+        email:
+          type: string
+        firebaseUid:
+          type: string
+        avatarUrl:
+          type: string
+        displayName:
           type: string
         replyStatus:
           $ref: '#/components/schemas/CalendarEventReplyStatus'
       required:
-      - eventId
+      - email
+      - displayName
       - replyStatus
       type: object
       additionalProperties: false
@@ -267,6 +262,26 @@ components:
       - shouldShowAsBusy
       type: object
       additionalProperties: false
+    ApiUpdateCalendarEventReplyRequest:
+      description: A request to update event reply status
+      properties:
+        eventId:
+          type: string
+        replyStatus:
+          $ref: '#/components/schemas/CalendarEventReplyStatus'
+      required:
+      - eventId
+      - replyStatus
+      type: object
+      additionalProperties: false
+    CalendarEventReplyStatus:
+      description: These calendar response statuses match the Google Calendar API.
+      enum:
+      - accepted
+      - declined
+      - tentative
+      - needsAction
+      type: string
     CalendarEventStatus:
       type: string
       enum:
@@ -296,21 +311,6 @@ components:
       - source
       type: object
       additionalProperties: false
-    ApiEnableGcalIntegrationRequest:
-      description: A request to enable Google Calendar integration.
-      properties:
-        authCode:
-          type: string
-      type: object
-      additionalProperties: false
-    CalendarEventReplyStatus:
-      description: These calendar response statuses match the Google Calendar API.
-      enum:
-      - accepted
-      - declined
-      - tentative
-      - needsAction
-      type: string
     ApiCalendarSource:
       description: Identifies the external source where this calendar was fetched from.
       enum:

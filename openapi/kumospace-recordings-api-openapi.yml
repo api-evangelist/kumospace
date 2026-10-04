@@ -149,6 +149,22 @@ paths:
           type: string
 components:
   schemas:
+    RecordingVisibility:
+      type: string
+      enum:
+      - public
+      - private
+    ApiShareRecordingRequest:
+      properties:
+        sharedWithFirebaseUids:
+          items:
+            type: string
+          type: array
+        visibility:
+          $ref: '#/components/schemas/RecordingVisibility'
+      required:
+      - sharedWithFirebaseUids
+      type: object
     ApiCreateRecordingRequest:
       properties:
         recordingGroupId:
@@ -174,11 +190,6 @@ components:
       - id
       type: object
       description: A request to create a new recording meta-data record.
-    RecordingVisibility:
-      type: string
-      enum:
-      - public
-      - private
     ApiRecording:
       description: A recording as returned by the API
       properties:
@@ -219,17 +230,6 @@ components:
       - sharedWithFirebaseUids
       type: object
       additionalProperties: false
-    ApiShareRecordingRequest:
-      properties:
-        sharedWithFirebaseUids:
-          items:
-            type: string
-          type: array
-        visibility:
-          $ref: '#/components/schemas/RecordingVisibility'
-      required:
-      - sharedWithFirebaseUids
-      type: object
   securitySchemes:
     firebase:
       type: http

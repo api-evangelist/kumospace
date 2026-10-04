@@ -77,16 +77,47 @@ paths:
               $ref: '#/components/schemas/ApiCreateStockWallRequest'
 components:
   schemas:
-    ApiStockWall:
-      allOf:
-      - $ref: '#/components/schemas/DbStockWall'
-      - properties:
-          id:
-            type: string
-        required:
-        - id
-        type: object
-      description: A wall style that can be applied to a room.
+    DbStockWall:
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        thumbnailUrl:
+          type: string
+        behavior:
+          $ref: '#/components/schemas/DbWallBehavior'
+        textures:
+          properties:
+            '0':
+              $ref: '#/components/schemas/DbStockWallTexture'
+            '90':
+              $ref: '#/components/schemas/DbStockWallTexture'
+            '180':
+              $ref: '#/components/schemas/DbStockWallTexture'
+            '270':
+              $ref: '#/components/schemas/DbStockWallTexture'
+            corner:
+              $ref: '#/components/schemas/DbStockWallTexture'
+          required:
+          - '90'
+          - '0'
+          type: object
+        isDraft:
+          type: boolean
+        isDeleted:
+          type: boolean
+      required:
+      - title
+      - description
+      - thumbnailUrl
+      - behavior
+      - textures
+      - isDraft
+      type: object
+      additionalProperties: false
+    ApiWallBehavior:
+      $ref: '#/components/schemas/DbWallBehavior'
     ApiCreateStockWallRequest:
       properties:
         isDraft:
@@ -136,6 +167,14 @@ components:
       - title
       type: object
       description: A request to add a new stock wall to the wall gallery.
+    WallBehaviorType.none:
+      enum:
+      - none
+      type: string
+    WallBehaviorType.door:
+      enum:
+      - door
+      type: string
     PaginatedResponse_ApiStockWall_:
       description: A page of items.  Useful for breaking up a large dataset into smaller chunks.
       properties:
@@ -168,45 +207,6 @@ components:
       - metadata
       type: object
       additionalProperties: false
-    DbStockWall:
-      properties:
-        title:
-          type: string
-        description:
-          type: string
-        thumbnailUrl:
-          type: string
-        behavior:
-          $ref: '#/components/schemas/DbWallBehavior'
-        textures:
-          properties:
-            '0':
-              $ref: '#/components/schemas/DbStockWallTexture'
-            '90':
-              $ref: '#/components/schemas/DbStockWallTexture'
-            '180':
-              $ref: '#/components/schemas/DbStockWallTexture'
-            '270':
-              $ref: '#/components/schemas/DbStockWallTexture'
-            corner:
-              $ref: '#/components/schemas/DbStockWallTexture'
-          required:
-          - '90'
-          - '0'
-          type: object
-        isDraft:
-          type: boolean
-        isDeleted:
-          type: boolean
-      required:
-      - title
-      - description
-      - thumbnailUrl
-      - behavior
-      - textures
-      - isDraft
-      type: object
-      additionalProperties: false
     DbWallBehavior:
       allOf:
       - properties:
@@ -237,16 +237,16 @@ components:
           - data
           - type
           type: object
-    WallBehaviorType.none:
-      enum:
-      - none
-      type: string
-    ApiWallBehavior:
-      $ref: '#/components/schemas/DbWallBehavior'
-    WallBehaviorType.door:
-      enum:
-      - door
-      type: string
+    ApiStockWall:
+      allOf:
+      - $ref: '#/components/schemas/DbStockWall'
+      - properties:
+          id:
+            type: string
+        required:
+        - id
+        type: object
+      description: A wall style that can be applied to a room.
     DbStockWallTexture:
       properties:
         url:

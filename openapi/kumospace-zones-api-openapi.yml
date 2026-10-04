@@ -204,25 +204,16 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    ZoneType:
+      enum:
+      - office
+      - conferenceRoom
+      type: string
     ZoneStatus:
       enum:
       - open
       - closed
       type: string
-    ApiCreateCalendarResource:
-      properties:
-        floorId:
-          type: string
-        resourceId:
-          type: string
-        roomId:
-          type: string
-      required:
-      - floorId
-      - resourceId
-      - roomId
-      type: object
-      additionalProperties: false
     ApiCreateZoneRequest:
       properties:
         orientation:
@@ -277,18 +268,28 @@ components:
           format: int32
       type: object
       description: A request to update a zone within a room.
-    ZoneType:
-      enum:
-      - office
-      - conferenceRoom
-      type: string
-    ZoneOrientation:
-      enum:
-      - 0
-      - 90
-      - 180
-      - 270
-      type: number
+    CalendarIntegrationZone:
+      properties:
+        spaceName:
+          type: string
+        floorId:
+          type: string
+        floorName:
+          type: string
+        roomId:
+          type: string
+        roomName:
+          type: string
+        resourceId:
+          type: string
+      required:
+      - spaceName
+      - floorId
+      - floorName
+      - roomId
+      - roomName
+      type: object
+      additionalProperties: false
     CalendarResource:
       description: Information required for a calendar integration regarding a Kumospace resource
       properties:
@@ -311,26 +312,25 @@ components:
       - roomId
       type: object
       additionalProperties: false
-    CalendarIntegrationZone:
+    ZoneOrientation:
+      enum:
+      - 0
+      - 90
+      - 180
+      - 270
+      type: number
+    ApiCreateCalendarResource:
       properties:
-        spaceName:
-          type: string
         floorId:
-          type: string
-        floorName:
-          type: string
-        roomId:
-          type: string
-        roomName:
           type: string
         resourceId:
           type: string
+        roomId:
+          type: string
       required:
-      - spaceName
       - floorId
-      - floorName
+      - resourceId
       - roomId
-      - roomName
       type: object
       additionalProperties: false
   securitySchemes:

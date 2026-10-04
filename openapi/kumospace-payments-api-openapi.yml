@@ -167,37 +167,25 @@ paths:
       parameters: []
 components:
   schemas:
-    AutoManagedSubscriptionTier:
-      anyOf:
-      - $ref: '#/components/schemas/SubscriptionTier.professional'
-      - $ref: '#/components/schemas/SubscriptionTier.business'
-      - $ref: '#/components/schemas/SubscriptionTier.enterprise'
-    ApiCancelSubscriptionRequest:
-      properties:
-        space:
-          type: string
-        exitSurvey:
-          $ref: '#/components/schemas/ExitSurvey'
-      required:
-      - space
-      type: object
-      additionalProperties: false
-    SubscriptionTier.enterprise:
+    SubscriptionTier.business:
       enum:
-      - enterprise
+      - business
       type: string
-    ExitSurveyAnswer:
+    ExitSurvey:
       properties:
-        selected:
-          type: boolean
-          enum:
-          - true
-        additionalText:
-          type: string
+        answeredQuestions:
+          properties: {}
+          additionalProperties:
+            $ref: '#/components/schemas/ExitSurveyAnsweredQuestion'
+          type: object
       required:
-      - selected
+      - answeredQuestions
       type: object
       additionalProperties: false
+    SubscriptionTier.professional:
+      enum:
+      - professional
+      type: string
     SubscriptionConfig:
       properties:
         defaultMinimumBillingMembers:
@@ -211,15 +199,7 @@ components:
       - freeTierMemberSeats
       type: object
       additionalProperties: false
-    ApiPortalSession:
-      properties:
-        portalUrl:
-          type: string
-      required:
-      - portalUrl
-      type: object
-      additionalProperties: false
-    ApiCreatePortalSessionRequest:
+    ApiRenewSubscriptionRequest:
       properties:
         space:
           type: string
@@ -227,47 +207,16 @@ components:
       - space
       type: object
       additionalProperties: false
-    SubscriptionTier.professional:
-      enum:
-      - professional
-      type: string
-    ExitSurveyAnsweredQuestion:
-      properties: {}
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/ExitSurveyAnswer'
+    AutoManagedSubscriptionTier:
+      anyOf:
+      - $ref: '#/components/schemas/SubscriptionTier.professional'
+      - $ref: '#/components/schemas/SubscriptionTier.business'
+      - $ref: '#/components/schemas/SubscriptionTier.enterprise'
     BillingPeriod:
       enum:
       - monthly
       - annually
       type: string
-    ApiCheckoutSession:
-      properties:
-        checkoutUrl:
-          type: string
-      required:
-      - checkoutUrl
-      type: object
-      additionalProperties: false
-    SubscriptionTier.business:
-      enum:
-      - business
-      type: string
-    ApiUpdateReverseTrialSubscriptionRequest:
-      properties:
-        billingPeriod:
-          $ref: '#/components/schemas/BillingPeriod'
-        spaceName:
-          type: string
-        memberCount:
-          type: number
-          format: double
-      required:
-      - billingPeriod
-      - spaceName
-      - memberCount
-      type: object
-      additionalProperties: false
     ApiCreateCheckoutSessionRequest:
       description: A request to create a checkout session
       properties:
@@ -290,7 +239,7 @@ components:
       - billingPeriod
       type: object
       additionalProperties: false
-    ApiRenewSubscriptionRequest:
+    ApiCreatePortalSessionRequest:
       properties:
         space:
           type: string
@@ -298,15 +247,66 @@ components:
       - space
       type: object
       additionalProperties: false
-    ExitSurvey:
+    ApiCheckoutSession:
       properties:
-        answeredQuestions:
-          properties: {}
-          additionalProperties:
-            $ref: '#/components/schemas/ExitSurveyAnsweredQuestion'
-          type: object
+        checkoutUrl:
+          type: string
       required:
-      - answeredQuestions
+      - checkoutUrl
+      type: object
+      additionalProperties: false
+    SubscriptionTier.enterprise:
+      enum:
+      - enterprise
+      type: string
+    ApiUpdateReverseTrialSubscriptionRequest:
+      properties:
+        billingPeriod:
+          $ref: '#/components/schemas/BillingPeriod'
+        spaceName:
+          type: string
+        memberCount:
+          type: number
+          format: double
+      required:
+      - billingPeriod
+      - spaceName
+      - memberCount
+      type: object
+      additionalProperties: false
+    ExitSurveyAnsweredQuestion:
+      properties: {}
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/ExitSurveyAnswer'
+    ApiPortalSession:
+      properties:
+        portalUrl:
+          type: string
+      required:
+      - portalUrl
+      type: object
+      additionalProperties: false
+    ApiCancelSubscriptionRequest:
+      properties:
+        space:
+          type: string
+        exitSurvey:
+          $ref: '#/components/schemas/ExitSurvey'
+      required:
+      - space
+      type: object
+      additionalProperties: false
+    ExitSurveyAnswer:
+      properties:
+        selected:
+          type: boolean
+          enum:
+          - true
+        additionalText:
+          type: string
+      required:
+      - selected
       type: object
       additionalProperties: false
   securitySchemes:

@@ -52,24 +52,6 @@ paths:
               $ref: '#/components/schemas/ApiUpdateMusicTrackRequest'
 components:
   schemas:
-    ApiUpdateMusicTrackRequest:
-      properties:
-        category:
-          $ref: '#/components/schemas/MusicTrackCategory'
-          description: A categorical type for the track. e.g. piano music, dance music, general.
-        volumeModifier:
-          type: number
-          format: double
-          description: 'Normalizes the volume level for tracks. This is to keep some tracks from playing
-
-            either too quiet or too loud.'
-        url:
-          type: string
-          description: CDN URL for the track audio file.
-        name:
-          type: string
-          description: User-visible name of the track.
-      type: object
     MusicTrackCategory:
       enum:
       - piano
@@ -98,6 +80,24 @@ components:
       - volumeModifier
       - url
       - name
+      type: object
+    ApiUpdateMusicTrackRequest:
+      properties:
+        category:
+          $ref: '#/components/schemas/MusicTrackCategory'
+          description: A categorical type for the track. e.g. piano music, dance music, general.
+        volumeModifier:
+          type: number
+          format: double
+          description: 'Normalizes the volume level for tracks. This is to keep some tracks from playing
+
+            either too quiet or too loud.'
+        url:
+          type: string
+          description: CDN URL for the track audio file.
+        name:
+          type: string
+          description: User-visible name of the track.
       type: object
   securitySchemes:
     firebase:

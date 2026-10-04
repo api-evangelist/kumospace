@@ -117,29 +117,6 @@ paths:
       parameters: []
 components:
   schemas:
-    ApiResetPasswordRequest:
-      properties:
-        email:
-          type: string
-      required:
-      - email
-      type: object
-      additionalProperties: false
-    Integration:
-      enum:
-      - microsoft-teams-status
-      - zoom-status
-      - google-calendar
-      - microsoft-outlook
-      type: string
-    ApiIntegrationToken:
-      properties:
-        stateToken:
-          type: string
-      required:
-      - stateToken
-      type: object
-      additionalProperties: false
     ApiCreateCustomTokenRequest:
       properties:
         idToken:
@@ -159,6 +136,29 @@ components:
       - idToken
       type: object
       additionalProperties: false
+    ApiResetPasswordRequest:
+      properties:
+        email:
+          type: string
+      required:
+      - email
+      type: object
+      additionalProperties: false
+    ApiIntegrationToken:
+      properties:
+        stateToken:
+          type: string
+      required:
+      - stateToken
+      type: object
+      additionalProperties: false
+    Integration:
+      enum:
+      - microsoft-teams-status
+      - zoom-status
+      - google-calendar
+      - microsoft-outlook
+      type: string
   securitySchemes:
     firebase:
       type: http
