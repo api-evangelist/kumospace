@@ -95,6 +95,28 @@ paths:
           type: string
 components:
   schemas:
+    RoomPrivacySettings:
+      anyOf:
+      - properties:
+          type:
+            $ref: '#/components/schemas/RoomPrivacySettingType.open'
+        required:
+        - type
+        type: object
+      - properties:
+          type:
+            $ref: '#/components/schemas/RoomPrivacySettingType.closed'
+        required:
+        - type
+        type: object
+    RoomPrivacySettingType.open:
+      enum:
+      - open
+      type: string
+    RoomPrivacySettingType.password:
+      enum:
+      - password
+      type: string
     ApiUpdateRoomRequest:
       properties:
         spawn:
@@ -156,10 +178,6 @@ components:
       description: 'A request to update an existing room.  Any fields not specified are left
 
         unchanged.'
-    RoomPrivacySettingType.closed:
-      enum:
-      - closed
-      type: string
     ApiRoomPrivacySettings:
       anyOf:
       - $ref: '#/components/schemas/RoomPrivacySettings'
@@ -179,6 +197,30 @@ components:
         - data
         - type
         type: object
+    RoomSpawn:
+      properties:
+        main:
+          properties:
+            height:
+              type: number
+              format: double
+            width:
+              type: number
+              format: double
+            y:
+              type: number
+              format: double
+            x:
+              type: number
+              format: double
+          required:
+          - y
+          - x
+          type: object
+          description: The main spawn point.
+      required:
+      - main
+      type: object
     ApiCreateRoomRequest:
       allOf:
       - properties:
@@ -245,52 +287,10 @@ components:
         stock room (i.e., furniture in the stock room is copied to the new room) or
 
         by specifying the background, width, height, and adding furniture manually.'
-    RoomPrivacySettings:
-      anyOf:
-      - properties:
-          type:
-            $ref: '#/components/schemas/RoomPrivacySettingType.open'
-        required:
-        - type
-        type: object
-      - properties:
-          type:
-            $ref: '#/components/schemas/RoomPrivacySettingType.closed'
-        required:
-        - type
-        type: object
-    RoomPrivacySettingType.open:
+    RoomPrivacySettingType.closed:
       enum:
-      - open
+      - closed
       type: string
-    RoomPrivacySettingType.password:
-      enum:
-      - password
-      type: string
-    RoomSpawn:
-      properties:
-        main:
-          properties:
-            height:
-              type: number
-              format: double
-            width:
-              type: number
-              format: double
-            y:
-              type: number
-              format: double
-            x:
-              type: number
-              format: double
-          required:
-          - y
-          - x
-          type: object
-          description: The main spawn point.
-      required:
-      - main
-      type: object
   securitySchemes:
     firebase:
       type: http

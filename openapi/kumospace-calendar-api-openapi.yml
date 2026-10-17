@@ -155,32 +155,6 @@ paths:
       parameters: []
 components:
   schemas:
-    ApiUpdateConnectedCalendarsRequest:
-      description: A request to update the user's connected calendars preferences.
-      properties:
-        calendarIsConnectedUpdates:
-          items:
-            properties:
-              isConnected:
-                type: boolean
-              calendarId:
-                type: string
-            required:
-            - isConnected
-            - calendarId
-            type: object
-          type: array
-      required:
-      - calendarIsConnectedUpdates
-      type: object
-      additionalProperties: false
-    ApiEnableGcalIntegrationRequest:
-      description: A request to enable Google Calendar integration.
-      properties:
-        authCode:
-          type: string
-      type: object
-      additionalProperties: false
     ApiCalendarEventAttendee:
       description: An object for attendee related information for the client.
       properties:
@@ -198,6 +172,28 @@ components:
       - email
       - displayName
       - replyStatus
+      type: object
+      additionalProperties: false
+    ApiCalendar:
+      description: 'ApiCalendar is a Calendar resource identifier, along with any state
+
+        we need. We persist this object as is in firestore, because we want to track the
+
+        `isConnected` field which is toggled by the user.'
+      properties:
+        id:
+          type: string
+        summary:
+          type: string
+        isConnected:
+          type: boolean
+        source:
+          $ref: '#/components/schemas/ApiCalendarSource'
+      required:
+      - id
+      - summary
+      - isConnected
+      - source
       type: object
       additionalProperties: false
     ApiCalendarEvent:
@@ -282,6 +278,25 @@ components:
       - tentative
       - needsAction
       type: string
+    ApiUpdateConnectedCalendarsRequest:
+      description: A request to update the user's connected calendars preferences.
+      properties:
+        calendarIsConnectedUpdates:
+          items:
+            properties:
+              isConnected:
+                type: boolean
+              calendarId:
+                type: string
+            required:
+            - isConnected
+            - calendarId
+            type: object
+          type: array
+      required:
+      - calendarIsConnectedUpdates
+      type: object
+      additionalProperties: false
     CalendarEventStatus:
       type: string
       enum:
@@ -289,34 +304,19 @@ components:
       - tentative
       - cancelled
       description: These calendar statuses match the Google Calendar API.
-    ApiCalendar:
-      description: 'ApiCalendar is a Calendar resource identifier, along with any state
-
-        we need. We persist this object as is in firestore, because we want to track the
-
-        `isConnected` field which is toggled by the user.'
-      properties:
-        id:
-          type: string
-        summary:
-          type: string
-        isConnected:
-          type: boolean
-        source:
-          $ref: '#/components/schemas/ApiCalendarSource'
-      required:
-      - id
-      - summary
-      - isConnected
-      - source
-      type: object
-      additionalProperties: false
     ApiCalendarSource:
       description: Identifies the external source where this calendar was fetched from.
       enum:
       - google-calendar
       - microsoft-outlook
       type: string
+    ApiEnableGcalIntegrationRequest:
+      description: A request to enable Google Calendar integration.
+      properties:
+        authCode:
+          type: string
+      type: object
+      additionalProperties: false
   securitySchemes:
     firebase:
       type: http

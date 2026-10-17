@@ -204,15 +204,58 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    ZoneType:
+    ApiCreateCalendarResource:
+      properties:
+        floorId:
+          type: string
+        resourceId:
+          type: string
+        roomId:
+          type: string
+      required:
+      - floorId
+      - resourceId
+      - roomId
+      type: object
+      additionalProperties: false
+    CalendarIntegrationZone:
+      properties:
+        spaceName:
+          type: string
+        floorId:
+          type: string
+        floorName:
+          type: string
+        roomId:
+          type: string
+        roomName:
+          type: string
+        resourceId:
+          type: string
+      required:
+      - spaceName
+      - floorId
+      - floorName
+      - roomId
+      - roomName
+      type: object
+      additionalProperties: false
+    ZoneOrientation:
       enum:
-      - office
-      - conferenceRoom
-      type: string
+      - 0
+      - 90
+      - 180
+      - 270
+      type: number
     ZoneStatus:
       enum:
       - open
       - closed
+      type: string
+    ZoneType:
+      enum:
+      - office
+      - conferenceRoom
       type: string
     ApiCreateZoneRequest:
       properties:
@@ -268,28 +311,6 @@ components:
           format: int32
       type: object
       description: A request to update a zone within a room.
-    CalendarIntegrationZone:
-      properties:
-        spaceName:
-          type: string
-        floorId:
-          type: string
-        floorName:
-          type: string
-        roomId:
-          type: string
-        roomName:
-          type: string
-        resourceId:
-          type: string
-      required:
-      - spaceName
-      - floorId
-      - floorName
-      - roomId
-      - roomName
-      type: object
-      additionalProperties: false
     CalendarResource:
       description: Information required for a calendar integration regarding a Kumospace resource
       properties:
@@ -309,27 +330,6 @@ components:
       - resourceId
       - floorId
       - spaceName
-      - roomId
-      type: object
-      additionalProperties: false
-    ZoneOrientation:
-      enum:
-      - 0
-      - 90
-      - 180
-      - 270
-      type: number
-    ApiCreateCalendarResource:
-      properties:
-        floorId:
-          type: string
-        resourceId:
-          type: string
-        roomId:
-          type: string
-      required:
-      - floorId
-      - resourceId
       - roomId
       type: object
       additionalProperties: false

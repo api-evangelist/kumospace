@@ -117,17 +117,13 @@ paths:
       parameters: []
 components:
   schemas:
-    ApiCreateCustomTokenRequest:
-      properties:
-        idToken:
-          type: string
-          description: 'Third-party id token.  It must contain an "iss" field and we must have an
-
-            associated public key in our firestore issuers table.'
-      required:
-      - idToken
-      type: object
-      additionalProperties: false
+    Integration:
+      enum:
+      - microsoft-teams-status
+      - zoom-status
+      - google-calendar
+      - microsoft-outlook
+      type: string
     ApiCustomKumoToken:
       properties:
         idToken:
@@ -152,13 +148,17 @@ components:
       - stateToken
       type: object
       additionalProperties: false
-    Integration:
-      enum:
-      - microsoft-teams-status
-      - zoom-status
-      - google-calendar
-      - microsoft-outlook
-      type: string
+    ApiCreateCustomTokenRequest:
+      properties:
+        idToken:
+          type: string
+          description: 'Third-party id token.  It must contain an "iss" field and we must have an
+
+            associated public key in our firestore issuers table.'
+      required:
+      - idToken
+      type: object
+      additionalProperties: false
   securitySchemes:
     firebase:
       type: http

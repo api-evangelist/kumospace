@@ -85,6 +85,59 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    AnalyticsEvent:
+      properties:
+        duration:
+          type: number
+          format: double
+        endTime:
+          type: number
+          format: double
+        startTime:
+          type: number
+          format: double
+        email:
+          type: string
+        displayName:
+          type: string
+        firebaseUid:
+          type: string
+        data:
+          $ref: '#/components/schemas/Availability'
+        type:
+          $ref: '#/components/schemas/HostAnalyticsType.statusSession'
+      required:
+      - startTime
+      - firebaseUid
+      - data
+      - type
+      type: object
+    HostAnalyticsRoomStat:
+      properties:
+        duration:
+          type: number
+          format: double
+        userEmail:
+          type: string
+        userDisplayName:
+          type: string
+        userId:
+          type: string
+        roomDisplayName:
+          type: string
+        roomId:
+          type: string
+      required:
+      - duration
+      - userId
+      - roomId
+      type: object
+    Availability:
+      enum:
+      - available
+      - away
+      - focusing
+      type: string
     PaginatedResponse_AnalyticsEvent_:
       description: A page of items.  Useful for breaking up a large dataset into smaller chunks.
       properties:
@@ -149,63 +202,10 @@ components:
       - metadata
       type: object
       additionalProperties: false
-    AnalyticsEvent:
-      properties:
-        duration:
-          type: number
-          format: double
-        endTime:
-          type: number
-          format: double
-        startTime:
-          type: number
-          format: double
-        email:
-          type: string
-        displayName:
-          type: string
-        firebaseUid:
-          type: string
-        data:
-          $ref: '#/components/schemas/Availability'
-        type:
-          $ref: '#/components/schemas/HostAnalyticsType.statusSession'
-      required:
-      - startTime
-      - firebaseUid
-      - data
-      - type
-      type: object
-    Availability:
-      enum:
-      - available
-      - away
-      - focusing
-      type: string
     HostAnalyticsType.statusSession:
       enum:
       - statusSession
       type: string
-    HostAnalyticsRoomStat:
-      properties:
-        duration:
-          type: number
-          format: double
-        userEmail:
-          type: string
-        userDisplayName:
-          type: string
-        userId:
-          type: string
-        roomDisplayName:
-          type: string
-        roomId:
-          type: string
-      required:
-      - duration
-      - userId
-      - roomId
-      type: object
   securitySchemes:
     firebase:
       type: http
