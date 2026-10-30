@@ -64,6 +64,160 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Kumospace is a company surfaced as a portfolio company of lightspeed-venture-partners and added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+Kumospace is a virtual office platform for remote and distributed teams, providing a persistent spatial workspace where colleagues move between rooms and floors, with proximity-based spatial audio and video, team chat channels, scheduled and ad-hoc meetings, recordings, transcription and meeting summaries, and calendar integrations with Google Calendar and Microsoft Outlook. Spaces are visually customizable through rooms, zones, floors, walls, furniture and music tracks, and the platform integrates presence status with Zoom and Microsoft Teams. Kumospace operates a publicly reachable REST API at api.kumospace.com, documented with a Swagger UI and an OpenAPI 3.0 description covering spaces, rooms, zones, users, invitations, chat, calendar, recordings, transcription, analytics and payments. The company is headquartered in New York and is backed by Lightspeed Venture Partners.
 
-Backed by: lightspeed-venture-partners
+**Areas:** Company · Virtual Office · Remote Work · Collaboration · Video Conferencing · Communications · Real-Time · Productivity · Meetings · Spatial Audio
+
+## Kumospace on APIs.io
+
+Everything profiled for Kumospace is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/kumospace/](https://apis.io/providers/kumospace/)** — or go straight to one of the APIs or properties below.
+
+### APIs (23)
+
+- [Kumospace Account API](https://apis.io/apis/kumospace/kumospace-account-api/) — The Account API from Kumospace — 6 operation(s) for account.
+- [Kumospace Analytics API](https://apis.io/apis/kumospace/kumospace-analytics-api/) — The Analytics API from Kumospace — 2 operation(s) for analytics.
+- [Kumospace Calendar API](https://apis.io/apis/kumospace/kumospace-calendar-api/) — The Calendar API from Kumospace — 7 operation(s) for calendar.
+- [Kumospace Chat API](https://apis.io/apis/kumospace/kumospace-chat-api/) — The Chat API from Kumospace — 8 operation(s) for chat.
+- [Kumospace Daily (Webhook) API](https://apis.io/apis/kumospace/kumospace-daily-webhook-api/) — The Daily (Webhook) API from Kumospace — 1 operation(s) for daily (webhook).
+- [Kumospace Demo API](https://apis.io/apis/kumospace/kumospace-demo-api/) — The Demo API from Kumospace — 2 operation(s) for demo.
+- [Kumospace Flooring API](https://apis.io/apis/kumospace/kumospace-flooring-api/) — The Flooring API from Kumospace — 1 operation(s) for flooring.
+- [Kumospace Furniture API](https://apis.io/apis/kumospace/kumospace-furniture-api/) — The Furniture API from Kumospace — 2 operation(s) for furniture.
+- [Kumospace Integrations API](https://apis.io/apis/kumospace/kumospace-integrations-api/) — The Integrations API from Kumospace — 8 operation(s) for integrations.
+- [Kumospace MusicTrack API](https://apis.io/apis/kumospace/kumospace-musictrack-api/) — The MusicTrack API from Kumospace — 2 operation(s) for musictrack.
+- [Kumospace Payments API](https://apis.io/apis/kumospace/kumospace-payments-api/) — The Payments API from Kumospace — 7 operation(s) for payments.
+- [Kumospace Recordings API](https://apis.io/apis/kumospace/kumospace-recordings-api/) — The Recordings API from Kumospace — 6 operation(s) for recordings.
+- [Kumospace Redirects API](https://apis.io/apis/kumospace/kumospace-redirects-api/) — The Redirects API from Kumospace — 1 operation(s) for redirects.
+- [Kumospace Room Templates API](https://apis.io/apis/kumospace/kumospace-room-templates-api/) — The Room Templates API from Kumospace — 2 operation(s) for room templates.
+- [Kumospace Rooms API](https://apis.io/apis/kumospace/kumospace-rooms-api/) — The Rooms API from Kumospace — 2 operation(s) for rooms.
+- [Kumospace Spaces API](https://apis.io/apis/kumospace/kumospace-spaces-api/) — The Spaces API from Kumospace — 13 operation(s) for spaces.
+- [Kumospace Stock Furniture API](https://apis.io/apis/kumospace/kumospace-stock-furniture-api/) — The Stock Furniture API from Kumospace — 2 operation(s) for stock furniture.
+- [Kumospace Stock Walls API](https://apis.io/apis/kumospace/kumospace-stock-walls-api/) — The Stock Walls API from Kumospace — 1 operation(s) for stock walls.
+- [Kumospace Transcription API](https://apis.io/apis/kumospace/kumospace-transcription-api/) — The Transcription API from Kumospace — 5 operation(s) for transcription.
+- [Kumospace Users API](https://apis.io/apis/kumospace/kumospace-users-api/) — The Users API from Kumospace — 26 operation(s) for users.
+- [Kumospace Walls API](https://apis.io/apis/kumospace/kumospace-walls-api/) — The Walls API from Kumospace — 1 operation(s) for walls.
+- [Kumospace Zone Templates API](https://apis.io/apis/kumospace/kumospace-zone-templates-api/) — The Zone Templates API from Kumospace — 2 operation(s) for zone templates.
+- [Kumospace Zones API](https://apis.io/apis/kumospace/kumospace-zones-api/) — The Zones API from Kumospace — 5 operation(s) for zones.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [kumospace](https://apis.io/servers/kumospace/kumospace/)
+
+#### Collections (23)
+
+Postman and Open Collection request collections.
+
+- [@kumo/api Account API](https://apis.io/collections/kumospace/open-kumospace-account-api/)
+- [@kumo/api Account Analytics API](https://apis.io/collections/kumospace/open-kumospace-analytics-api/)
+- [@kumo/api Account Calendar API](https://apis.io/collections/kumospace/open-kumospace-calendar-api/)
+- [@kumo/api Account Chat API](https://apis.io/collections/kumospace/open-kumospace-chat-api/)
+- [@kumo/api Account Daily (Webhook) API](https://apis.io/collections/kumospace/open-kumospace-daily-webhook-api/)
+- [@kumo/api Account Demo API](https://apis.io/collections/kumospace/open-kumospace-demo-api/)
+- [@kumo/api Account Flooring API](https://apis.io/collections/kumospace/open-kumospace-flooring-api/)
+- [@kumo/api Account Furniture API](https://apis.io/collections/kumospace/open-kumospace-furniture-api/)
+- [@kumo/api Account Integrations API](https://apis.io/collections/kumospace/open-kumospace-integrations-api/)
+- [@kumo/api Account MusicTrack API](https://apis.io/collections/kumospace/open-kumospace-musictrack-api/)
+- [@kumo/api Account Payments API](https://apis.io/collections/kumospace/open-kumospace-payments-api/)
+- [@kumo/api Account Recordings API](https://apis.io/collections/kumospace/open-kumospace-recordings-api/)
+- [@kumo/api Account Redirects API](https://apis.io/collections/kumospace/open-kumospace-redirects-api/)
+- [@kumo/api Account Room Templates API](https://apis.io/collections/kumospace/open-kumospace-room-templates-api/)
+- [@kumo/api Account Rooms API](https://apis.io/collections/kumospace/open-kumospace-rooms-api/)
+- [@kumo/api Account Spaces API](https://apis.io/collections/kumospace/open-kumospace-spaces-api/)
+- [@kumo/api Account Stock Furniture API](https://apis.io/collections/kumospace/open-kumospace-stock-furniture-api/)
+- [@kumo/api Account Stock Walls API](https://apis.io/collections/kumospace/open-kumospace-stock-walls-api/)
+- [@kumo/api Account Transcription API](https://apis.io/collections/kumospace/open-kumospace-transcription-api/)
+- [@kumo/api Account Users API](https://apis.io/collections/kumospace/open-kumospace-users-api/)
+- [@kumo/api Account Walls API](https://apis.io/collections/kumospace/open-kumospace-walls-api/)
+- [@kumo/api Account Zone Templates API](https://apis.io/collections/kumospace/open-kumospace-zone-templates-api/)
+- [@kumo/api Account Zones API](https://apis.io/collections/kumospace/open-kumospace-zones-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Kumospace Api Overlay](https://apis.io/overlays/kumospace/kumospace-api-overlay/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Kumospace Authentication](https://apis.io/security/kumospace/kumospace-authentication/)
+- [Kumospace Domain Security](https://apis.io/security/kumospace/kumospace-domain-security/)
+- [Kumospace Trust Center](https://apis.io/security/kumospace/kumospace-trust-center/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.kumospace.com/)
+- [Documentation](https://www.kumospace.com/help)
+- [Getting started](https://www.kumospace.com/virtual-office-guide/getting-started-guide)
+- [API reference](https://api.kumospace.com/)
+- [Pricing](https://www.kumospace.com/pricing)
+- [Sign up](https://www.kumospace.com/pricing)
+- [Support](https://www.kumospace.com/contact)
+- [Blog](https://www.kumospace.com/blog)
+- [Terms of service](https://www.kumospace.com/terms)
+- [Privacy policy](https://www.kumospace.com/privacy)
+- [GitHub](https://github.com/kumospace)
+- [Status](https://status.kumospace.com/)
+
+## API Evangelist rating
+
+**Kin Score 45.3** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 44.0 |
+| Contract governance | 18.2 |
+| Operational transparency | 10.5 |
+| Developer ergonomics | 49.4 |
+| Access clarity | 60.5 |
+
+**Agent readiness 18.1** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | mostly |
+
+**Regulatory alignment 29.4** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/kumospace/](https://apis.io/providers/kumospace/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Kumospace: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/kumospace/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
